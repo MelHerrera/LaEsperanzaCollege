@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/jeje"
+    android:background="@android:color/white"
+    tools:context=".AgregarPreguntaActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_barActPregunta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layoutActPregunta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="20dp">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtPregunta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pregunta"
+                    app:boxBackgroundColor="@color/colorPrimary"
+                    app:hintTextColor="@color/colorAccent"
+                    app:layout_anchor="@id/toolbar"
+                    app:layout_anchorGravity="bottom|center"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPregunta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Opcion de Respuesta"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/rgbOpciones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    app:chipSpacing="5dp"
+                    app:singleSelection="true">
+
+                </com.google.android.material.chip.ChipGroup>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="parallax"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedPreg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="20dp"
+        tools:context=".AgregarQuizActivity">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pregQuiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/estado_menu_quizz"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="5dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pregs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/txtCantidadPreguntas"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="No hay Preguntas Aun"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnGuar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        style="@style/AgregarPreguntaFABTheme"
+        app:layout_anchor="@id/app_barActPregunta"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/ic_save" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

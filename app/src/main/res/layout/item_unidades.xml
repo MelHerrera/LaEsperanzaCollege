@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/viewUnidad"
+    android:checkable="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/solidColor"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtNumUnidad"
+            android:layout_width="32dp"
+            android:layout_height="31dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/oval_counter"
+            android:text="11"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dinamica de Fluidos"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#000"
+            app:layout_constraintTop_toBottomOf="@+id/solidColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDesc">
+            <TextView
+                android:id="@+id/cantPreguntas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:background="@drawable/oval_counter"
+                android:text="0"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="  Quizzes"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

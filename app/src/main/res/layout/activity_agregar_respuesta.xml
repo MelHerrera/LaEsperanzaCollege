@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="3dp"
+    android:theme="@style/Theme.MaterialComponents.Light"
+    tools:context=".AgregarRespuestaActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtDesRes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Respuesta"
+        app:boxBackgroundColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtDesRes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/txtCorrecta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Es la Correcta?"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDesRes"/>
+
+    <RadioGroup
+        android:id="@+id/RgbCorrecta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtCorrecta">
+        <RadioButton
+            android:id="@+id/rbtSi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Si"/>
+        <RadioButton
+            android:id="@+id/rbtNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"/>
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGuardarRes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/RgbCorrecta"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

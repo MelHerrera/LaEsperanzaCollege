@@ -1,0 +1,4 @@
+include ':LaEsperanzaDAO'
+include ':LaEsperanzaEDM'
+include ':app'
+rootProject.name = "LaEsperanzaCollege"

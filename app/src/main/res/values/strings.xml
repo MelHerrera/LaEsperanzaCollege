@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Mora Math</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_agregar_quiz">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_agregar_pregunta">ScrollingActivity</string>
+    <string name="txtusuario">Usuario</string>
+    <string name="txtcontra">Contraseña</string>
+    <string name="txtentrar">Iniciar Sesión</string>
+    <string name="txtresetear_contra">Olvide mi Contraseña</string>
+    <string name="txtfseguir_face">Siguenos en Facebook</string>
+    <string name="usuario_incorrecto">Usuario o Contraseña Incorrecta</string>
+</resources>
