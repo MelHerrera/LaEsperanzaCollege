@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.app.laesperanzacollege.*
 import com.app.laesperanzacollege.Preferencias
 import com.app.laesperanzaedm.model.Usuario
+import kotlinx.android.synthetic.main.fragment_admin1.*
 import kotlinx.android.synthetic.main.fragment_admin1.view.*
 import java.util.*
 
