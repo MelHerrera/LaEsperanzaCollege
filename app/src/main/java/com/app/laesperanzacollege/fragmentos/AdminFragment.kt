@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Events.*
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -43,7 +45,7 @@ class AdminFragment : Fragment() {
         val cal=Calendar.getInstance()
 
         myView.categoria4.setOnClickListener {
-            val dtp= DatePickerDialog(myView.context,android.R.style.ThemeOverlay_Material_Dialog_Alert, DatePickerDialog.OnDateSetListener
+          /*  val dtp= DatePickerDialog(myView.context,android.R.style.ThemeOverlay_Material_Dialog_Alert, DatePickerDialog.OnDateSetListener
             { datePicker, day, month, year ->
                 //The month starting from 0 and end to 11
                 var fecha="$day/${month+1}/$year"
@@ -51,7 +53,15 @@ class AdminFragment : Fragment() {
 
             },cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
 
-            dtp.show()
+            dtp.show()*/
+            val intent = Intent(Intent.ACTION_INSERT)
+                .setData(CONTENT_URI)
+                .putExtra(TITLE,"")
+                .putExtra(EVENT_LOCATION,"Aqui")
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,System.currentTimeMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,System.currentTimeMillis()+(60*60*1000))
+
+            startActivity(intent)
         }
 
         myView.categoria5.setOnClickListener {
