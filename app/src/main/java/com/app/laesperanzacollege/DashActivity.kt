@@ -12,6 +12,7 @@ class DashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash)
+        //prueba de hacer un push
 
         val myUsuario: Usuario?= intent.extras?.get("USUARIO") as Usuario
 

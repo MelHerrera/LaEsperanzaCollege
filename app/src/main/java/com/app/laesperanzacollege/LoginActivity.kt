@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
     private val keyName="USUARIO"
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 

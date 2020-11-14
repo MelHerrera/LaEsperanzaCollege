@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Quizzes</string>
+
+
+
+    <string name="app_name">LA ESPERANZA</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_agregar_quiz">ScrollingActivity</string>
