@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     android:layout_height="match_parent"
     tools:context=".QuizzesActivity">
 
@@ -17,8 +20,9 @@
     <TextView
         android:id="@+id/txtCantQuizzes"
         android:layout_width="wrap_content"
+        android:visibility="invisible"
         android:layout_height="wrap_content"
-        android:text="No hay Quizzes Aun"
+        android:text="@string/no_hay_quizzes_aun"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyQuizzes"/>
@@ -29,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

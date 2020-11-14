@@ -16,14 +16,18 @@
         <activity android:name=".RespuestaActivity" />
         <activity
             android:name=".AgregarPreguntaActivity"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AgregarPreguntaTheme" />
         <activity
             android:name=".AgregarQuizActivity"
             android:label="@string/title_activity_agregar_quiz"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".delete" />
         <activity
             android:name=".AgregarUnidActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".DashActivity"
@@ -33,6 +37,7 @@
         <activity android:name=".FormulasActivity" />
         <activity
             android:name=".UnidadesActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity android:name=".QuizzesActivity" />
         <activity

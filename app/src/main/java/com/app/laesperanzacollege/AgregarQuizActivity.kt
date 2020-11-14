@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizPreguntaAdapter
@@ -38,12 +39,17 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
+        var myToolbar=findViewById<Toolbar>(R.id.toolbar)
+        myToolbar.title=""
+        setSupportActionBar(myToolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
 
         app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 toolbar_layout.isTitleEnabled = true
-                toolbar_layout.title = getString(R.string.app_name)
+                toolbar_layout.title = getString(R.string.registro_quizz)
             } else {
                 toolbar_layout.isTitleEnabled = false
             }
@@ -120,7 +126,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     {
         if(edtNombre.text?.isEmpty()!!)
         {
-            txtNombre.error="Nombre Vacio"
+            txtNombre.error="El nombre es requerido"
             return false
         }
         else
@@ -165,5 +171,9 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
         recyPreguntas.layoutManager = LinearLayoutManager(this)
         recyPreguntas.adapter = myQuizPreguntaAdapter
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

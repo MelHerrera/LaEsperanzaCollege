@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mora Math</string>
+    <string name="app_name">Quizzes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_agregar_quiz">ScrollingActivity</string>
@@ -11,4 +11,13 @@
     <string name="txtresetear_contra">Olvide mi Contraseña</string>
     <string name="txtfseguir_face">Siguenos en Facebook</string>
     <string name="usuario_incorrecto">Usuario o Contraseña Incorrecta</string>
+    <string name="finalizado">Finalizado</string>
+    <string name="preguntas">Preguntas</string>
+    <string name="empezar">Empezar</string>
+    <string name="seleccione_la_unidad">*Seleccione la unidad</string>
+    <string name="no_hay_unidades_aun">No hay Unidades aun</string>
+    <string name="registro_quizz">Registro quizz</string>
+    <string name="no_hay_quizzes_aun">No hay Quizzes Aun</string>
+    <string name="tipo_de_respuesta">*Seleccione el tipo de respuesta</string>
+    <string name="no_se_han_agregado_quizzes_aun">No se han Agregado Quizzes aun</string>
 </resources>
