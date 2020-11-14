@@ -44,8 +44,10 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         var myToolbar=findViewById<Toolbar>(R.id.toolbar)
         myToolbar.title=""
         setSupportActionBar(myToolbar)
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        txtNombre.requestFocus()
 
         app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
