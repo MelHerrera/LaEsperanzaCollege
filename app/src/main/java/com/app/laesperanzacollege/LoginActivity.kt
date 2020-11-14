@@ -17,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
         keyName=getString(R.string.keyNameUser)
 
         //Borrar cuando este en produccion
-        edtusuario.setText("hamador")
+        edtusuario.setText("Hamador")
         edtcontra.setText("admin2020")
 
         btnsesion.setOnClickListener {
