@@ -4,6 +4,7 @@ import Observers.PreguntaObserver
 import Observers.QuizzObserver
 import Observers.UnidadObserver
 import android.os.Bundle
+import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     var max: Int? = null
     var CantidadDeUnidades:TextView?=null
     var CantidadQuizz:TextView?=null
+    var quizzEstado:Int=0 //Por defecto sin inciar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
@@ -97,6 +99,14 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
             }
         }
 
+        chkEstado.setOnCheckedChangeListener { _, b ->
+            //-1.finalizado, 0.Sin Iniciar, 1.En Progreso
+            quizzEstado = if (b) {
+                1
+            } else
+                0
+        }
+
         myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
         myListPregunta = myPreguntaDAO?.ListarPreguntas()
 
@@ -113,6 +123,8 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
 
         myQuiz?.nombre = edtNombre.text.toString()
         myQuiz?.numUnidad = numUnidad.toString()
+        myQuiz?.estado=quizzEstado
+
         return myQuiz!!
     }
 

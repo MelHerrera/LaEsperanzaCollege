@@ -72,7 +72,7 @@ class UsuarioDAO(context: Context) {
     fun Buscar(usuario:String, contrase:String):Usuario?
     {
         var miUsuario:Usuario= Usuario()
-        var query=UsuarioContract.COLUMN_USUARIO+"=?"+ " and "+UsuarioContract.COLUMN_CONTRASE+"=?"
+        var query="${UsuarioContract.COLUMN_USUARIO} =? AND ${UsuarioContract.COLUMN_CONTRASE} =?"
         var myCursor:Cursor?=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,query, arrayOf(usuario,contrase),null,null,null)
 
         if(myCursor?.count!! >0)
@@ -100,7 +100,7 @@ class UsuarioDAO(context: Context) {
     {
         var myListEstu:ArrayList<Usuario> = ArrayList()
         var myEstu: Usuario?= null
-        var myQuery=UsuarioContract.COLUMN_TIPODEUSUARIOID+"=?"
+        var myQuery="${UsuarioContract.COLUMN_TIPODEUSUARIOID} =?"
         var myCursor=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,myQuery, arrayOf("2"),null,null,null)
 
         if(myCursor?.count!! >0)
