@@ -92,6 +92,12 @@
                         android:text="@string/no_hay_unidades_aun"
                         android:layout_gravity="center"/>
 
+                    <CheckBox
+                        android:id="@+id/chkEstado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/txt_iniciar"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

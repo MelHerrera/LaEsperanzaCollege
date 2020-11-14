@@ -82,7 +82,8 @@
                 android:text="@string/empezar"
                 android:drawableLeft="@android:drawable/ic_media_play"
                 android:background="@color/colorPrimary"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:drawableStart="@android:drawable/ic_media_play" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import androidx.core.content.contentValuesOf
 import com.app.laesperanzaedm.database.*
 import com.app.laesperanzaedm.model.Quiz
 
@@ -19,9 +20,10 @@ class QuizDAO(context: Context) {
 
     fun Insertar(quiz: Quiz):Boolean
     {
-        var datos= ContentValues()
+        val datos= ContentValues()
         datos.put(QuizContract.COLUMN_NOMBRE,quiz.nombre)
         datos.put(QuizContract.COLUMN_NUMUNIDAD,quiz.numUnidad)
+        datos.put(QuizContract.COLUMN_ESTADO,quiz.estado)
 
         result=mySqlDatabase?.insert(QuizContract.TABLE_NAME,null,datos)
 
@@ -30,10 +32,10 @@ class QuizDAO(context: Context) {
 
     fun actualizar(quiz: Quiz):Boolean
     {
-        var datos= ContentValues()
+        val datos= ContentValues()
         datos.put(QuizContract.COLUMN_NOMBRE,quiz.nombre)
 
-        var query="${QuizContract.COLUMN_ID}=?"
+        val query="${QuizContract.COLUMN_ID}=?"
 
         var res=mySqlDatabase?.update(
             QuizContract.TABLE_NAME,
@@ -64,6 +66,70 @@ class QuizDAO(context: Context) {
                 myQuiz= Quiz()
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+
+                myListQuizzes.add(myQuiz)
+
+                res.moveToNext()
+            }
+        }
+        return myListQuizzes
+    }
+
+    fun listarQuizzesDePractica(myCodGrado:String?):ArrayList<Quiz>
+    {
+        //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
+        var myQuiz:Quiz?=null
+        var myListQuizzes:ArrayList<Quiz> = arrayListOf()
+        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
+                "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
+                "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
+                "WHERE g.CodGrado==? AND q.estado=?" +
+                "GROUP BY u.NumUnidad,g.CodGrado"
+
+        var res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,0.toString()),null)
+
+        if(res?.count!! >0)
+        {
+            res.moveToFirst()
+
+            while (!res.isAfterLast)
+            {
+                myQuiz= Quiz()
+                myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
+                myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                myQuiz.numUnidad=res.getString(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+
+                myListQuizzes.add(myQuiz)
+
+                res.moveToNext()
+            }
+        }
+        return myListQuizzes
+    }
+
+    fun listarQuizzesPrueba(myCodGrado:String?):ArrayList<Quiz>
+    {
+        //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
+        var myQuiz:Quiz?=null
+        var myListQuizzes:ArrayList<Quiz> = arrayListOf()
+        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
+                "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
+                "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
+                "WHERE g.CodGrado==? AND q.estado=?" +
+                "GROUP BY u.NumUnidad,g.CodGrado"
+
+        var res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,1.toString()),null)
+
+        if(res?.count!! >0)
+        {
+            res.moveToFirst()
+
+            while (!res.isAfterLast)
+            {
+                myQuiz= Quiz()
+                myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
+                myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                myQuiz.numUnidad=res.getString(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
 
                 myListQuizzes.add(myQuiz)
 
@@ -152,16 +218,48 @@ class QuizDAO(context: Context) {
 
     fun EstadoQuizz(quizzId:Int):Int
     {
-        var pendiente:Int=0
+        //-1.Finalizado  0. Sin iniciar  1.En progreso
+        var estado:Int=0
 
-        var query="${UsuarioQuizzContract.COLUMN_ID}=?"
-        var result=mySqlDatabase?.query(UsuarioQuizzContract.TABLE_NAME,null,query, arrayOf(quizzId.toString()),null,null,null,null)
+        var query="${QuizContract.COLUMN_ID}=?"
+        var result=mySqlDatabase?.query(QuizContract.TABLE_NAME,null,query, arrayOf(quizzId.toString()),null,null,null,null)
 
         if(result?.count!! >0)
         {
-            pendiente= result.getInt(result.getColumnIndex(UsuarioQuizzContract.COLUMN_PENDIENTE))
+            result.moveToFirst()
+            estado= result.getInt(result.getColumnIndex(QuizContract.COLUMN_ESTADO))
         }
-        return pendiente
+        return estado
+    }
+
+    fun enProgreso(quizId: Int):Boolean
+    {
+        var valores= ContentValues()
+        valores.put(QuizContract.COLUMN_ESTADO,1)//-1.finalizado, 0.Sin Iniciar, 1.En Progreso
+
+        var where="${QuizContract.COLUMN_ID}=?"
+
+        var result=mySqlDatabase?.update(QuizContract.TABLE_NAME,valores,where, arrayOf(quizId.toString()))
+
+        if (result != null) {
+            return result>0
+        }
+        return false
+    }
+
+    fun finalizar(quizId: Int):Boolean
+    {
+        var valores= ContentValues()
+        valores.put(QuizContract.COLUMN_ESTADO,-1)//-1.finalizado, 0.Sin Iniciar, 1.En Progreso
+
+        var where="${QuizContract.COLUMN_ID}=?"
+
+        var result=mySqlDatabase?.update(QuizContract.TABLE_NAME,valores,where, arrayOf(quizId.toString()))
+
+        if (result != null) {
+            return result>0
+        }
+        return false
     }
 
     fun BuscarQuizz(nombre:String): Quiz?
