@@ -16,6 +16,11 @@
         <item name="tint">@android:color/white</item>
     </style>
 
+    <style name="Theme_Camera" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="tint">#CFCECE</item>
+    </style>
+
     <style name="AgregarUnidadFABTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="tint">@android:color/white</item>
     </style>
@@ -29,8 +34,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppSplash" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+    <style name="Activity_Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
     </style>
 
 </resources>

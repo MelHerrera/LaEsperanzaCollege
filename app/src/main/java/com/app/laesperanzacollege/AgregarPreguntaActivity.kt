@@ -2,16 +2,12 @@ package com.app.laesperanzacollege
 
 import Observers.PreguntaObserver
 import Observers.RespuestaObserver
-import android.R.*
-import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,13 +19,10 @@ import com.app.laesperanzaedm.model.OpcionDeRespuesta
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_agregar_pregunta.*
-import kotlinx.android.synthetic.main.activity_agregar_quiz.*
 import kotlin.math.abs
+
 
 class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
     var myPreguntaDAO:PreguntaDAO?=null
@@ -50,17 +43,18 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         var myToolbar=findViewById<Toolbar>(R.id.toolbar)
         myToolbar.title=""
         setSupportActionBar(myToolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+
+
 
         app_barActPregunta.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
-            if (abs(verticalOffset) -appBarLayout.totalScrollRange == 0)
-            {
-                toolbar_layoutActPregunta.isTitleEnabled=true
-                toolbar_layoutActPregunta.title=getString(R.string.app_name)
-            }
-            else
-            {
-                toolbar_layoutActPregunta.isTitleEnabled=false
+            if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                toolbar_layoutActPregunta.isTitleEnabled = true
+                toolbar_layoutActPregunta.title = getString(R.string.preguntas)
+            } else {
+                toolbar_layoutActPregunta.isTitleEnabled = false
             }
 
         })
@@ -100,7 +94,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
                 var myChipChoice:Chip= Chip(this)
                 //var myRadioButton:RadioButton= RadioButton(this)
-
+                myChipChoice.gravity = (Gravity.CENTER_VERTICAL or Gravity.START)
                 //myRadioButton.text =item.descripcion
                 myChipChoice.text=item.descripcion
                 myChipChoice.isCheckable=true
@@ -116,11 +110,14 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         }
 
         myListPregunta=myPreguntaDAO?.ListarPreguntas(quizzId!!)
-        if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(cantidadPreguntas!!,myListPregunta!!)
+        if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(
+            cantidadPreguntas!!,
+            myListPregunta!!
+        )
 
 
         myListRespuesta=myRespuestaDAO?.ListarRespuestas()
-        myPreguntaRespuestaAdapter= PreguntaRespuestaAdapter(myListPregunta!!,myListRespuesta!!)
+        myPreguntaRespuestaAdapter= PreguntaRespuestaAdapter(myListPregunta!!, myListRespuesta!!)
         pregs.layoutManager=LinearLayoutManager(this)
         pregs.adapter=myPreguntaRespuestaAdapter
 
@@ -129,7 +126,11 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
             {
                 var index=rgbOpciones.indexOfChild(findViewById(checkedId))
                 opcionDeRespuestaId=myListOpciones[index].id
-                Toast.makeText(this,"Onchecked in ${myListOpciones[index].descripcion}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Onchecked in ${myListOpciones[index].descripcion}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             else
                 opcionDeRespuestaId=null
@@ -148,12 +149,15 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
                     myListPregunta?.add(myPreguntaToSave)
                     myPreguntaRespuestaAdapter?.notifyDataSetChanged()
-                    if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(cantidadPreguntas!!,myListPregunta!!)
+                    if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(
+                        cantidadPreguntas!!,
+                        myListPregunta!!
+                    )
 
                     myPreguntaObserver?.preguntaSaved(myPreguntaToSave)
                     AgregarRespuestaActivity.myRespuestaObserver=this
 
-                    Toast.makeText(this,"Se Agrego con Exito", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Se Agrego con Exito", Toast.LENGTH_LONG).show()
                     edtPregunta.text?.clear()
 
                     rgbOpciones.clearCheck()
@@ -184,7 +188,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
         if(opcionDeRespuestaId==null)
         {
-            Toast.makeText(this,"Opcion de Respuesta no Seleccionada",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Opcion de Respuesta no Seleccionada", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -197,8 +201,12 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
     override fun respuestaSaved(respuesta: Respuesta) {
         myListRespuesta=myRespuestaDAO?.ListarRespuestas()
-        myPreguntaRespuestaAdapter= PreguntaRespuestaAdapter(myListPregunta!!,myListRespuesta!!)
+        myPreguntaRespuestaAdapter= PreguntaRespuestaAdapter(myListPregunta!!, myListRespuesta!!)
         pregs.layoutManager=LinearLayoutManager(this)
         pregs.adapter=myPreguntaRespuestaAdapter
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

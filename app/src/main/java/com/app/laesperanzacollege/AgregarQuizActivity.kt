@@ -4,9 +4,11 @@ import Observers.PreguntaObserver
 import Observers.QuizzObserver
 import Observers.UnidadObserver
 import android.os.Bundle
+import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizPreguntaAdapter
@@ -35,15 +37,23 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     var max: Int? = null
     var CantidadDeUnidades:TextView?=null
     var CantidadQuizz:TextView?=null
+    var quizzEstado:Int=0 //Por defecto sin inciar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
+        var myToolbar=findViewById<Toolbar>(R.id.toolbar)
+        myToolbar.title=""
+        setSupportActionBar(myToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        txtNombre.requestFocus()
 
         app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 toolbar_layout.isTitleEnabled = true
-                toolbar_layout.title = getString(R.string.app_name)
+                toolbar_layout.title = getString(R.string.registro_quizz)
             } else {
                 toolbar_layout.isTitleEnabled = false
             }
@@ -97,6 +107,14 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
             }
         }
 
+        chkEstado.setOnCheckedChangeListener { _, b ->
+            //-1.finalizado, 0.Sin Iniciar, 1.En Progreso
+            quizzEstado = if (b) {
+                1
+            } else
+                0
+        }
+
         myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
         myListPregunta = myPreguntaDAO?.ListarPreguntas()
 
@@ -113,6 +131,8 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
 
         myQuiz?.nombre = edtNombre.text.toString()
         myQuiz?.numUnidad = numUnidad.toString()
+        myQuiz?.estado=quizzEstado
+
         return myQuiz!!
     }
 
@@ -120,7 +140,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     {
         if(edtNombre.text?.isEmpty()!!)
         {
-            txtNombre.error="Nombre Vacio"
+            txtNombre.error="El nombre es requerido"
             return false
         }
         else
@@ -165,5 +185,9 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
         recyPreguntas.layoutManager = LinearLayoutManager(this)
         recyPreguntas.adapter = myQuizPreguntaAdapter
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

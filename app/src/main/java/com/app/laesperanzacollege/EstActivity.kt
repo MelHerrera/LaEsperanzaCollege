@@ -27,8 +27,10 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
         myUsuario=UsuarioDAO(this)
         cantAlumnos=txtCantAlumnos
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+
         listEstu = myUsuario!!.listarEstudiantes()
-        if(cantAlumnos!=null && listEstu!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
+        if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
 
 
         myLayoutManager=LinearLayoutManager(this)
@@ -73,13 +75,18 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
             listEstu.add(myUsuario)
 
         myAdapter?.notifyDataSetChanged()
-        if(cantAlumnos!=null && listEstu!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
+        if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
     }
 
     override fun usuarioRemoved(posicion: Int) {
         listEstu.removeAt(posicion)
         myAdapter?.notifyDataSetChanged()
-        if(cantAlumnos!=null && listEstu!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
+        if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
 }

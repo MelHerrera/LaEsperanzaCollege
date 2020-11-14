@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //for test user admin
+    <string name="adm_name" translatable="false">Heriberto</string>
+    <string name="adm_ape" translatable="false">Amador</string>
+    <string name="adm_user" translatable="false">Hamador</string>
+    <string name="adm_pass" translatable="false">admin2020</string>
+</resources>

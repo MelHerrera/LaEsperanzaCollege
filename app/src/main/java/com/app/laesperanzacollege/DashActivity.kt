@@ -8,12 +8,14 @@ import com.app.laesperanzacollege.fragmentos.EstudianteFragment
 import com.app.laesperanzaedm.model.Usuario
 
 class DashActivity : AppCompatActivity() {
-    private val keyName="USUARIO"
+    private var keyName=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash)
+        //prueba de hacer un push
 
-        val myUsuario: Usuario?= intent.extras?.get("USUARIO") as Usuario
+        keyName=getString(R.string.keyNameUser)
+        val myUsuario: Usuario?= intent.extras?.get(keyName) as Usuario
 
         if(myUsuario!=null)
         {

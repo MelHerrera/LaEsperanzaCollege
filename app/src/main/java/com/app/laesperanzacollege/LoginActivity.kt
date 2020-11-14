@@ -9,37 +9,50 @@ import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
-    private val keyName="USUARIO"
+    private var keyName=""
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        edtusuario.setText("hamador")
+        keyName=getString(R.string.keyNameUser)
+
+        //Borrar cuando este en produccion
+        edtusuario.setText("Hamador")
         edtcontra.setText("admin2020")
+
         btnsesion.setOnClickListener {
 
             if(verificarErrores())
             {
-
                 val usuarioDAO:UsuarioDAO?= UsuarioDAO(this)
                 val myUsuario:Usuario?=usuarioDAO?.Buscar(edtusuario.text.toString(),edtcontra.text.toString())
 
-                if(myUsuario!=null && myUsuario.id!! >0)
+                if(myUsuario!=null)
                 {
-                    val myIntent=Intent(applicationContext,DashActivity::class.java)
-                    myIntent.putExtra(keyName,myUsuario)
-                    startActivity(myIntent)
+                    if(myUsuario.id!! >0)
+                    {
+                        val prefs = Preferencias()
+
+                        if(!prefs.guardarSharedPrefs(this,
+                                setOf(getString(R.string.keyNameUser),myUsuario.usuario),setOf(getString(R.string.keyNamePass),edtcontra.text.toString())))
+                        {
+                            Toast.makeText(this,"Error al guardar Preferencias",Toast.LENGTH_SHORT).show()
+                        }
+
+                        val myIntent=Intent(applicationContext,DashActivity::class.java)
+                        myIntent.putExtra(keyName,myUsuario)
+                        startActivity(myIntent)
+                    }
                 }
                 else
-                    Toast.makeText(this,getString(R.string.usuario_incorrecto), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,R.string.usuario_incorrecto, Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun verificarErrores():Boolean
     {
-        val error="Campo Requerido"
+        val error=getString(R.string.campo_requerido)
 
         if(edtusuario.text?.isEmpty()!!)
         {

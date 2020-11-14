@@ -7,6 +7,13 @@
     android:background="@color/colorPrimary"
     tools:context=".fragmentos.AdminFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myTool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardPerfil"
                     android:layout_width="wrap_content"
@@ -14,12 +21,20 @@
                     app:cardCornerRadius="70dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/myTool">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="center"
                         android:src="@drawable/profile"/>
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:fabSize="mini"
+                        style="@style/Theme_Camera"
+                        android:layout_margin="@dimen/medium_margin"
+                        android:layout_gravity="bottom|end"
+                        android:src="@drawable/ic_camera"/>
 
                 </androidx.cardview.widget.CardView>
 
