@@ -2,10 +2,12 @@ package com.app.laesperanzacollege
 
 import Observers.QuizzObserver
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,9 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quizzes)
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
 
         myQuizDAO= QuizDAO(this)
         myLayoutManager=GridLayoutManager(this,2)
@@ -48,5 +53,10 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         myListQuizzes?.add(quizz)
         myQuizzesAdapter?.notifyDataSetChanged()
         if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

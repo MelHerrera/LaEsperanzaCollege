@@ -22,6 +22,7 @@
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -29,33 +30,68 @@
                     android:orientation="vertical"
                     android:layout_marginTop="50dp">
 
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/registro_quizz"
+                        android:textColor="@color/icons"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/backgroud_rounded_itemquizzes"
+                        android:orientation="vertical">
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/txtNombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:hint="Nombre del Quizz">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edtNombre"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:textColor="@color/primaryText"
+                            android:layout_marginRight="16dp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Seleccione la Unidad"/>
+                        android:text="@string/seleccione_la_unidad"
+                        android:textColor="@color/primaryText"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="12sp"
+                        android:layout_marginRight="16dp"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyUnid"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content"
+                        />
+                    </LinearLayout>
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/txtcantidadDeUnidades"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No hay Unidades aun"
+                        android:text="@string/no_hay_unidades_aun"
                         android:layout_gravity="center"/>
+
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -63,7 +99,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="parallax"
+                    app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -79,6 +115,8 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -89,10 +127,11 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/txtCantidadQuizz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No se han Agregado Quizzes aun"
+                android:text="@string/no_se_han_agregado_quizzes_aun"
                 android:layout_gravity="center"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 

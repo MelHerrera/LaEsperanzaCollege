@@ -12,20 +12,22 @@
         <View
             android:id="@+id/view_He"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:background="@drawable/view_menu_quizzes"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/quizzEstado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Finalizado"
+            android:text="@string/finalizado"
+            android:textSize="12sp"
             android:layout_margin="5dp"
             android:padding="5dp"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:background="@drawable/estado_menu_quizz"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -41,6 +43,7 @@
 
             <TextView
                 android:id="@+id/txtNombre"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -63,17 +66,20 @@
                     android:background="@drawable/oval_counter"
                     android:text="0"/>
                 <TextView
+                    android:paddingLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="  Preguntas"/>
+                    android:text="@string/preguntas"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <Button
                 android:id="@+id/btnPractica"
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Empezar"
+                android:layout_height="30dp"
+                android:text="@string/empezar"
                 android:drawableLeft="@android:drawable/ic_media_play"
                 android:background="@color/colorPrimary"
                 android:textColor="@android:color/white" />
