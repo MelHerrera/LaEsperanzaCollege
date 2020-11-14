@@ -4,8 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.app.laesperanzaedm.R
 
-class MyDbHelper(context: Context, nombre:String, factory:SQLiteDatabase.CursorFactory?, version:Int):SQLiteOpenHelper(
+class MyDbHelper(var context: Context, nombre:String, factory:SQLiteDatabase.CursorFactory?, version:Int):SQLiteOpenHelper(
     context,nombre,factory,version)
 {
     override fun onCreate(db: SQLiteDatabase?) {
@@ -89,10 +90,10 @@ class MyDbHelper(context: Context, nombre:String, factory:SQLiteDatabase.CursorF
         //Add User Admin
 
         var rootUser= ContentValues()
-        rootUser.put(UsuarioContract.COLUMN_NOMBRE,"Heriberto")
-        rootUser.put(UsuarioContract.COLUMN_APELLIDO,"Amador")
-        rootUser.put(UsuarioContract.COLUMN_USUARIO,"hamador")
-        rootUser.put(UsuarioContract.COLUMN_CONTRASE,"admin2020")
+        rootUser.put(UsuarioContract.COLUMN_NOMBRE,context.getString(R.string.adm_name))
+        rootUser.put(UsuarioContract.COLUMN_APELLIDO,context.getString(R.string.adm_ape))
+        rootUser.put(UsuarioContract.COLUMN_USUARIO,context.getString(R.string.adm_user))
+        rootUser.put(UsuarioContract.COLUMN_CONTRASE,context.getString(R.string.adm_pass))
         rootUser.put(UsuarioContract.COLUMN_CODGRADO,1)
         rootUser.put(UsuarioContract.COLUMN_TIPODEUSUARIOID,1)
 
