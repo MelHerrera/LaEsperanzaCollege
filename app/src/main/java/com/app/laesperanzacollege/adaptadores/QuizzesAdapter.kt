@@ -22,6 +22,11 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>):
         return myListQuiz.size
     }
 
+    fun filterItem(text:String):Quiz?
+    {
+        return myListQuiz.find { x-> x.nombre!!.startsWith(text)}
+    }
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.BindItem(myListQuiz[position])
     }

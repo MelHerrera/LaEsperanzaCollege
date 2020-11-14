@@ -4,7 +4,7 @@ import Observers.PreguntaObserver
 import Observers.QuizzObserver
 import Observers.UnidadObserver
 import android.os.Bundle
-import android.widget.CompoundButton
+import android.view.Menu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,8 +20,10 @@ import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Unidad
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.activity_agregar_quiz.*
 import kotlin.math.abs
+
 
 class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver {
     var myListUnidad: ArrayList<Unidad>? = null
@@ -42,10 +44,11 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
         var myToolbar=findViewById<Toolbar>(R.id.toolbar)
-        myToolbar.title=""
+
         setSupportActionBar(myToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.title=getString(R.string.registro_quizz)
 
         txtNombre.requestFocus()
 
@@ -54,6 +57,17 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 toolbar_layout.isTitleEnabled = true
                 toolbar_layout.title = getString(R.string.registro_quizz)
+
+                val params = toolbar.layoutParams
+                val newParams: CollapsingToolbarLayout.LayoutParams
+                newParams = if (params is CollapsingToolbarLayout.LayoutParams) {
+                    params as CollapsingToolbarLayout.LayoutParams
+                } else {
+                    CollapsingToolbarLayout.LayoutParams(params)
+                }
+                newParams.collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+                toolbar.layoutParams = newParams
+                toolbar.requestLayout()
             } else {
                 toolbar_layout.isTitleEnabled = false
             }

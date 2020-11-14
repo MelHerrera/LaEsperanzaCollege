@@ -28,4 +28,7 @@
     <string name="no_hay_quizzes_aun">No hay Quizzes Aun</string>
     <string name="tipo_de_respuesta">*Seleccione el tipo de respuesta</string>
     <string name="no_se_han_agregado_quizzes_aun">No se han Agregado Quizzes aun</string>
+    <string name="txt_quizzes">Quizzes</string>
+    <string name="txt_unidades">Unidades</string>
+    <string name="txt_sin_elementos">No se Encontraron Elementos</string>
 </resources>

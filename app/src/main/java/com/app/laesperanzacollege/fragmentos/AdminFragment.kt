@@ -57,17 +57,6 @@ class AdminFragment : Fragment() {
         val cal=Calendar.getInstance()
 
         myView.categoria4.setOnClickListener {
-          /*  val dtp= DatePickerDialog(myView.context,android.R.style.ThemeOverlay_Material_Dialog_Alert, DatePickerDialog.OnDateSetListener
-            { datePicker, day, month, year ->
-            val dtp= DatePickerDialog(myView.context,android.R.style.TextAppearance_Theme, DatePickerDialog.OnDateSetListener
-            { _, day, month, year ->
-                //The month starting from 0 and end to 11
-                val fecha="$day/${month+1}/$year"
-                Toast.makeText(myView.context,fecha,Toast.LENGTH_SHORT).show()
-
-            },cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
-
-            dtp.show()*/
             val intent = Intent(Intent.ACTION_INSERT)
                 .setData(CONTENT_URI)
                 .putExtra(TITLE,"")

@@ -4,7 +4,12 @@ import Observers.QuizzObserver
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.Menu
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +17,8 @@ import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     private var myQuizzesAdapter:QuizzesAdapter?=null
@@ -25,6 +32,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title=getString(R.string.txt_quizzes)
 
         //validar que no se pueda poner en progreso cuando el quiz no tenga preguntas aun
         myQuizDAO= QuizDAO(this)
@@ -50,6 +58,40 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         myListQuizzes?.add(quizz)
         myQuizzesAdapter?.notifyDataSetChanged()
         if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_estudiante,menu)
+
+        val search = menu?.findItem(R.id.app_bar_search)
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = "Buscar"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                GlobalScope.launch {
+                    val myQuizSearched=myQuizzesAdapter?.filterItem(newText.toString())
+
+                    if(myQuizSearched==null && newText?.length!! >0)
+                    {
+                        resultados.visibility= View.VISIBLE
+                    }
+                    else
+                    {
+                        resultados.visibility= View.GONE
+                        if (myQuizSearched != null) {
+                            myQuizzesAdapter?.getItemViewType(myListQuizzes!!.indexOf(myQuizSearched))
+                        }
+                    }
+                }
+                return true
+            }
+        })
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

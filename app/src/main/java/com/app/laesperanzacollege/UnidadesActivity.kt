@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.UnidAdapter
@@ -38,9 +39,12 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         setContentView(R.layout.activity_unidades)
 
         myTool=myToolb
-        myTool?.title=getString(R.string.app_name)
+        myTool?.title=getString(R.string.txt_unidades)
         myTool?.setTitleTextColor(Color.WHITE)
+        myTool?.navigationIcon=ResourcesCompat.getDrawable(resources,R.drawable.ic_backspace,null)
         setSupportActionBar(myTool)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         floatingAgregarUnidad.setOnClickListener {
             AgregarUnidActivity.myUnidadObserver=this
@@ -177,6 +181,11 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
     fun removeSelectedItem(myUnidad: Unidad)
     {
         selectedItems.remove(myUnidad)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }
