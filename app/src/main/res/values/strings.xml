@@ -19,4 +19,13 @@
     <string name="txtsearch">Search</string>
     <string name="txt_tipoTest">TIPOTEST</string>
     <string name="txt_iniciar">Iniciar al Guardar</string>
+    <string name="finalizado">Finalizado</string>
+    <string name="preguntas">Preguntas</string>
+    <string name="empezar">Empezar</string>
+    <string name="seleccione_la_unidad">*Seleccione la unidad</string>
+    <string name="no_hay_unidades_aun">No hay Unidades aun</string>
+    <string name="registro_quizz">Registro quizz</string>
+    <string name="no_hay_quizzes_aun">No hay Quizzes Aun</string>
+    <string name="tipo_de_respuesta">*Seleccione el tipo de respuesta</string>
+    <string name="no_se_han_agregado_quizzes_aun">No se han Agregado Quizzes aun</string>
 </resources>
