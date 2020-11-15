@@ -43,7 +43,7 @@
     <string name="seccion_a">A</string>
     <string name="SeccionB">B</string>
     <string name="SeccionC">C</string>
-    <string name="error_grado">Debe Seleccionar un Grado</string>
+    <string name="error_seccion">Debe Seleccionar una Seccion</string>
     <string name="informacion_personal">Informacion Personal</string>
     <string name="nombres">Nombres</string>
     <string name="apellidos">Apellidos</string>

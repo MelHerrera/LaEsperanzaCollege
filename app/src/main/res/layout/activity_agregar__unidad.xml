@@ -141,17 +141,18 @@
         android:id="@+id/btnGuard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Guardar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewGrad"
+        android:text="@string/guardar"
+        android:padding="@dimen/large_padding"
         app:layout_constraintEnd_toStartOf="@id/btnSalir"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewGrad" />
 
     <Button
         android:id="@+id/btnSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Salir"
+        android:text="@string/salir"
+        android:padding="@dimen/large_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/btnGuard"
         app:layout_constraintStart_toEndOf="@id/btnGuard"
