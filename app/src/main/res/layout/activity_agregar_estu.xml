@@ -224,6 +224,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/txtcontra"
                         app:helperText="Requerido*"
+                        app:endIconMode="password_toggle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/txtUsuario">
 
