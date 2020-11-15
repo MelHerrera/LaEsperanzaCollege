@@ -143,7 +143,7 @@ class AgregarEstuActivity : AppCompatActivity() {
 
         if(mySeccion==null)
         {
-            Toast.makeText(this,getString(R.string.error_grado),Toast.LENGTH_LONG).show()
+            Toast.makeText(this,getString(R.string.error_seccion),Toast.LENGTH_LONG).show()
             return false
         }
 
