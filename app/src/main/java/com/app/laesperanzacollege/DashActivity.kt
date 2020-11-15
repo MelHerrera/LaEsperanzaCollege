@@ -1,7 +1,11 @@
 package com.app.laesperanzacollege
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.app.laesperanzacollege.fragmentos.AdminFragment
@@ -19,6 +23,9 @@ class DashActivity : AppCompatActivity() {
 
         keyName=getString(R.string.keyNameUser)
         val myUsuario: Usuario?= intent.extras?.get(keyName) as Usuario
+
+        supportActionBar?.title=""
+        supportActionBar?.elevation=0.0f
 
         if(myUsuario!=null)
         {
@@ -42,6 +49,35 @@ class DashActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().replace(R.id.viewContainer,myFrag,null).commit()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_preferencias,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId)
+        {
+            R.id.itemCerrar->
+            {
+
+                val myAlert = AlertDialog.Builder(this)
+                myAlert.setTitle(getString(R.string.text_cerrarsesion))
+                myAlert.setMessage(getString(R.string.confirmar_cerrarsesion))
+                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                }
+
+                myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
+                    val mySharedPrefs= Preferencias()
+                    if(mySharedPrefs.limpiarSharedPrefs(this))
+                        startActivity(Intent(this, LoginActivity::class.java))
+                }
+
+                myAlert.show()
+            }
+        }
+        return true
     }
 
     override fun onBackPressed() {

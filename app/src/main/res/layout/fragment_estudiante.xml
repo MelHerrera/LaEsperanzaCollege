@@ -43,9 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:fabSize="mini"
-                app:backgroundTint="@color/colorPrimary"
-                android:layout_gravity="center|bottom"
-                android:src="@drawable/ic_edit"/>
+                style="@style/Theme_Camera"
+                android:layout_margin="@dimen/medium_margin"
+                android:layout_gravity="bottom|end" />
 
         </androidx.cardview.widget.CardView>
 
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
         android:padding="@dimen/default_padding"
-        android:text="Prueba"
+        android:text="@string/prueba"
         android:drawableStart="@android:drawable/ic_media_play"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
@@ -96,7 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:text="Practicar"
+        android:text="@string/practica"
         android:id="@+id/btnPractica"
         android:padding="@dimen/default_padding"
         android:background="@color/colorPrimary"

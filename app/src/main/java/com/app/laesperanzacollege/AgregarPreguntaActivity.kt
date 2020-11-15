@@ -40,11 +40,13 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_pregunta)
-        var myToolbar=findViewById<Toolbar>(R.id.toolbar)
+
+        edtPregunta.requestFocus()
+        val myToolbar=findViewById<Toolbar>(R.id.toolbar)
         myToolbar.title=""
         setSupportActionBar(myToolbar)
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
 
 
@@ -87,12 +89,12 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         myOpcionDeRespuestaDAO= OpcionesDeRespuestaDAO(this)
         myListOpciones= myOpcionDeRespuestaDAO!!.listarOpciones()
 
-        if(myListOpciones?.size!!>0)
+        if(myListOpciones.size>0)
         {
-            for (item in myListOpciones!!)
+            for (item in myListOpciones)
             {
 
-                var myChipChoice:Chip= Chip(this)
+                val myChipChoice= Chip(this)
                 //var myRadioButton:RadioButton= RadioButton(this)
                 myChipChoice.gravity = (Gravity.CENTER_VERTICAL or Gravity.START)
                 //myRadioButton.text =item.descripcion
@@ -110,10 +112,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         }
 
         myListPregunta=myPreguntaDAO?.ListarPreguntas(quizzId!!)
-        if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(
-            cantidadPreguntas!!,
-            myListPregunta!!
-        )
+        if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(cantidadPreguntas!!, myListPregunta!!)
 
 
         myListRespuesta=myRespuestaDAO?.ListarRespuestas()
@@ -124,7 +123,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         rgbOpciones.setOnCheckedChangeListener { group, checkedId ->
             if(checkedId!=-1)
             {
-                var index=rgbOpciones.indexOfChild(findViewById(checkedId))
+                val index=rgbOpciones.indexOfChild(findViewById(checkedId))
                 opcionDeRespuestaId=myListOpciones[index].id
                 Toast.makeText(
                     this,
@@ -169,7 +168,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
     fun Asignar():Pregunta
     {
-        var myPregunta=Pregunta()
+        val myPregunta=Pregunta()
         myPregunta.quizzId=quizzId
         myPregunta.descripcion=edtPregunta.text.toString()
         myPregunta.opcionDeRespuestaId=opcionDeRespuestaId

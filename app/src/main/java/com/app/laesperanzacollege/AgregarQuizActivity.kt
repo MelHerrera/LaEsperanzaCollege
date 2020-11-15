@@ -43,7 +43,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
-        var myToolbar=findViewById<Toolbar>(R.id.toolbar)
+        val myToolbar=findViewById<Toolbar>(R.id.toolbar)
 
         setSupportActionBar(myToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -61,7 +61,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
                 val params = toolbar.layoutParams
                 val newParams: CollapsingToolbarLayout.LayoutParams
                 newParams = if (params is CollapsingToolbarLayout.LayoutParams) {
-                    params as CollapsingToolbarLayout.LayoutParams
+                    params
                 } else {
                     CollapsingToolbarLayout.LayoutParams(params)
                 }
@@ -102,7 +102,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
                        edtNombre.text?.clear()
                     numUnidad=null
 
-                    myQuizzObserver?.QuizzSaved(myQuizzToSave)
+                        myQuizzObserver?.QuizzSaved(myQuizzToSave)
                         myUnidadesAdapter?.notifyDataSetChanged()
                         UnidAdapter1.allowCardChecked=null
                         UnidAdapter1.intChecked=0
