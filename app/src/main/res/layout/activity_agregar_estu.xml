@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/small_margin"
     tools:context=".AgregarEstuActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardPerfil"
@@ -27,15 +27,7 @@
                 app:cardCornerRadius="70dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:src="@drawable/profile" />
-
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/infoPersonal"
@@ -58,7 +50,7 @@
                         android:id="@+id/txtpersonal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Informacion Personal"
+                        android:text="@string/informacion_personal"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,7 +59,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombres"
+                        android:hint="@string/nombres"
                         app:helperText="Requerido*"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/txtpersonal">
@@ -86,7 +78,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Apellidos"
+                        android:hint="@string/apellidos"
                         app:helperText="Requerido*"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/txtnombres">
@@ -100,6 +92,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
+                        android:id="@+id/contenedorGrad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -110,7 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Grado" />
+                            android:text="@string/grado" />
 
                         <Spinner
                             android:id="@+id/spGrados"
@@ -118,6 +111,65 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtSec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/seccion"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/contenedorGrad"/>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtSec">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipSec"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            app:chipSpacingHorizontal="16dp"
+                            app:chipSpacingVertical="16dp"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/txtSecA"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/seccion_a"
+                                android:textAlignment="center"
+                                android:checkable="true"
+                                app:chipBackgroundColor="@color/colorAccent"
+                                android:textColor="@android:color/white"
+                                />
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/txtSecB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/SeccionB"
+                                android:textAlignment="center"
+                                android:checkable="true"
+                                app:chipBackgroundColor="@color/colorAccent"
+                                android:textColor="@android:color/white"
+                                />
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/txtSecC"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/SeccionC"
+                                android:textAlignment="center"
+                                android:checkable="true"
+                                app:chipBackgroundColor="@color/colorAccent"
+                                android:textColor="@android:color/white"
+                                />
+                        </com.google.android.material.chip.ChipGroup>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -143,7 +195,7 @@
                         android:id="@+id/txtinfoUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Informacion de Usuario"
+                        android:text="@string/informacion_de_usuario"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,7 +204,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Usuario"
+                        android:hint="@string/txtusuario"
                         app:helperText="Requerido*"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/txtinfoUsuario">
@@ -170,8 +222,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Contraseña"
+                        android:hint="@string/txtcontra"
                         app:helperText="Requerido*"
+                        app:endIconMode="password_toggle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/txtUsuario">
 
@@ -179,7 +232,7 @@
                             android:id="@+id/edtContra"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textVisiblePassword"/>
+                            android:inputType="textPassword"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -199,7 +252,9 @@
                     android:id="@+id/btnGuardar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Guardar"
+                    android:text="@string/guardar"
+                    android:backgroundTint="@color/colorAccent"
+                    android:padding="@dimen/large_padding"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnCancelar"
                     app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +264,9 @@
                     android:id="@+id/btnCancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Salir"
+                    android:text="@string/salir"
+                    android:backgroundTint="@color/colorAccent"
+                    android:padding="@dimen/large_padding"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btnGuardar"

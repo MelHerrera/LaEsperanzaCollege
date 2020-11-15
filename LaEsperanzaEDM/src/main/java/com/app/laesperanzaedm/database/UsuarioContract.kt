@@ -9,6 +9,7 @@ class UsuarioContract {
         const val COLUMN_APELLIDO="Apellido"
         const val COLUMN_USUARIO="Usuario"
         const val COLUMN_CONTRASE="Contraseña"
+        const val COLUMN_SECCION="Seccion"
         const val COLUMN_CODGRADO= GradoContract.COLUMN_CODGRADO
         const val COLUMN_TIPODEUSUARIOID= TipoDeUsuarioContract.COLUMN_ID
 
@@ -20,6 +21,7 @@ class UsuarioContract {
                     "$COLUMN_APELLIDO TEXT," +
                     "$COLUMN_USUARIO TEXT," +
                     "$COLUMN_CONTRASE TEXT," +
+                    "$COLUMN_SECCION TEXT, "+
                     "$COLUMN_CODGRADO TEXT,"+
                     "$COLUMN_TIPODEUSUARIOID INTEGER" +
                     ")"
