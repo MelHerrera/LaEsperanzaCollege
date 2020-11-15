@@ -71,7 +71,7 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
                 if (myListRespuesta.size==0)
                 {
                     cantidadElementos.visibility=View.VISIBLE
-                    cantidadElementos.text="No Hay Respuestas Aun"
+                    cantidadElementos.text="No hay respuestas aun"
                 }
                 else
                 {

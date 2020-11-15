@@ -114,9 +114,11 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedPreg"
         android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         tools:context=".AgregarQuizActivity">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -126,8 +128,9 @@
 
             <TextView
                 android:id="@+id/pregQuiz"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:background="@drawable/estado_menu_quizz"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
@@ -145,7 +148,7 @@
                 android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="No hay Preguntas Aun"/>
+                android:text="No hay preguntas aun"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

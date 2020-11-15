@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="3dp"
-    android:theme="@style/Theme.MaterialComponents.Light"
+    android:layout_marginRight="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="5dp"
+    android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert"
     tools:context=".AgregarRespuestaActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtDesRes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Respuesta"
+        android:hint="@string/respuesta"
+        android:textColorHint="@color/colorAccent"
         app:boxBackgroundColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,14 +26,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:layout_marginTop="10dp"
         android:id="@+id/txtCorrecta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Es la Correcta?"
+        android:text="@string/opcion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtDesRes"/>
 
     <RadioGroup
+
         android:id="@+id/RgbCorrecta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,19 +49,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Si"/>
+            android:text="@string/afirmativa"/>
         <RadioButton
             android:id="@+id/rbtNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No"/>
+            android:text="@string/negativa"/>
     </RadioGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGuardarRes"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"        
         android:layout_height="wrap_content"
-        android:text="Guardar"
+        android:text="@string/text_guardar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/RgbCorrecta"/>

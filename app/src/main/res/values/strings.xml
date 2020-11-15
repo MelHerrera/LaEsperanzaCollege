@@ -35,4 +35,9 @@
     <string name="txt_finalizar">Finalizar</string>
     <string name="txt_enprogreso">En Progreso</string>
     <string name="txt_noiniciado">No Iniciado</string>
+    <string name="respuesta">Respuesta</string>
+    <string name="opcion">*Elija la opciòn</string>
+    <string name="afirmativa">Si</string>
+    <string name="negativa">No</string>
+    <string name="text_guardar">Guardar</string>
 </resources>
