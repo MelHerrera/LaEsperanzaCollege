@@ -28,8 +28,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         setContentView(R.layout.activity_quizzes)
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title=getString(R.string.txt_quizzes)
+
 
         //validar que no se pueda poner en progreso cuando el quiz no tenga preguntas aun
         myQuizDAO= QuizDAO(this)

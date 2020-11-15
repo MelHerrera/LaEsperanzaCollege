@@ -57,14 +57,7 @@ class AdminFragment : Fragment() {
         val cal=Calendar.getInstance()
 
         myView.categoria4.setOnClickListener {
-            val intent = Intent(Intent.ACTION_INSERT)
-                .setData(CONTENT_URI)
-                .putExtra(TITLE,"")
-                .putExtra(EVENT_LOCATION,"Aqui")
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,System.currentTimeMillis())
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,System.currentTimeMillis()+(60*60*1000))
-
-            startActivity(intent)
+            startActivity(Intent(myView.context,ActividadesActivity::class.java))
         }
 
         myView.categoria5.setOnClickListener {

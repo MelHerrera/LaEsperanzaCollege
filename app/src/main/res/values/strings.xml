@@ -44,6 +44,7 @@
     <string name="apellidos">Apellidos</string>
     <string name="grado">Grado</string>
     <string name="seccion">Sección</string>
+    <string name="txtActividades">Actividades</string>
     <string name="informacion_de_usuario">Informacion de Usuario</string>
     <string name="guardar">Guardar</string>
     <string name="salir">Salir</string>

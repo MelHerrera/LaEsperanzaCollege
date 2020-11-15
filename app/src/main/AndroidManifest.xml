@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ActividadesActivity"></activity>
         <activity android:name=".ListarQuizzesActivity" />
         <activity
             android:name=".SplashScreen"
@@ -25,14 +26,14 @@
         <activity android:name=".RespuestaActivity" />
         <activity
             android:name=".AgregarPreguntaActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AgregarPreguntaTheme" />
+            android:theme="@style/AgregarPreguntaTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarQuizActivity"
             android:label="@string/title_activity_agregar_quiz"
-            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarUnidActivity"
             android:screenOrientation="portrait"
