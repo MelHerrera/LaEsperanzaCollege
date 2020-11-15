@@ -5,11 +5,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +14,8 @@ import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     private var myQuizzesAdapter:QuizzesAdapter?=null
@@ -65,29 +62,14 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
 
         val search = menu?.findItem(R.id.app_bar_search)
         val searchView = search?.actionView as SearchView
-        searchView.queryHint = "Buscar"
+        searchView.queryHint = getString(R.string.txt_buscar)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-
-                GlobalScope.launch {
-                    val myQuizSearched=myQuizzesAdapter?.filterItem(newText.toString())
-
-                    if(myQuizSearched==null && newText?.length!! >0)
-                    {
-                        resultados.visibility= View.VISIBLE
-                    }
-                    else
-                    {
-                        resultados.visibility= View.GONE
-                        if (myQuizSearched != null) {
-                            myQuizzesAdapter?.getItemViewType(myListQuizzes!!.indexOf(myQuizSearched))
-                        }
-                    }
-                }
+                myQuizzesAdapter?.filter?.filter(newText.toString().toUpperCase(Locale.ROOT))
                 return true
             }
         })

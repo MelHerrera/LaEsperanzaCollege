@@ -3,18 +3,26 @@ package com.app.laesperanzacollege.adaptadores
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Button
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.R
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.item_quizzes.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>):
-    RecyclerView.Adapter<QuizzesAdapter.MyViewHolder>()
-{
+    RecyclerView.Adapter<QuizzesAdapter.MyViewHolder>(), Filterable {
+    var myQuizFilterList= arrayListOf<Quiz>()
+    init {
+        myQuizFilterList.addAll(myListQuiz)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var myView=LayoutInflater.from(parent.context).inflate(R.layout.item_quizzes,parent,false)
+        val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_quizzes,parent,false)
         return MyViewHolder(myView)
     }
 
@@ -22,56 +30,50 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>):
         return myListQuiz.size
     }
 
-    fun filterItem(text:String):Quiz?
-    {
-        return myListQuiz.find { x-> x.nombre!!.startsWith(text)}
-    }
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.BindItem(myListQuiz[position])
+        holder.bindItem(myListQuiz[position])
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
-        var myQuizDAO=QuizDAO(itemView.context)
-        var nombre=itemView.txtNombre
-        var cantPreguntas=itemView.cantPreguntas
-        var quizzEstado=itemView.quizzEstado
-        var btnPractica=itemView.btnPractica
+        private var myQuizDAO=QuizDAO(itemView.context)
+        var nombre: TextView =itemView.txtNombre
+        private var cantPreguntas: TextView =itemView.cantPreguntas
+        private var quizzEstado: TextView =itemView.quizzEstado
+        private var btnPractica: Button =itemView.btnPractica
 
-        fun BindItem(myQuizz:Quiz)
+        fun bindItem(myQuizz:Quiz)
         {
             nombre.text=myQuizz.nombre
-            cantPreguntas.text=ObtenerCantidad(myQuizz.quizId!!)
+            cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!)
             quizzEstado.text=ObtenerEstado(myQuizz.quizId!!)
 
             btnPractica.setOnClickListener {
-                val estado=ObtenerEstado(myQuizz.quizId!!)
 
-                when(estado)
+                when(ObtenerEstado(myQuizz.quizId!!))
                 {
-                    "No Iniciado"->
+                    itemView.context.getString(R.string.txt_noiniciado)->
                     {
                         val result=myQuizDAO.enProgreso(myQuizz.quizId!!)
                         if(result)
                         {
-                            btnPractica.text="Finalizar"
-                            quizzEstado.text="En Progreso"
+                            btnPractica.text=itemView.context.getString(R.string.txt_finalizar)
+                            quizzEstado.text=itemView.context.getString(R.string.txt_enprogreso)
                         }
                     }
-                    "Finalizado"->
+                    itemView.context.getString(R.string.finalizado)->
                     {
                         btnPractica.isEnabled=false
-                        quizzEstado.text="Finalizado"
+                        quizzEstado.text=itemView.context.getString(R.string.finalizado)
                     }
-                    "En Progreso"->
+                    itemView.context.getString(R.string.txt_enprogreso)->
                     {
                         val result=myQuizDAO.finalizar(myQuizz.quizId!!)
                         if(result)
                         {
-                            btnPractica.text="Finalizado"
+                            btnPractica.text=itemView.context.getString(R.string.finalizado)
                             btnPractica.isEnabled=false
-                            quizzEstado.text="Finalizado"
+                            quizzEstado.text=itemView.context.getString(R.string.finalizado)
                         }
                     }
                 }
@@ -81,7 +83,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>):
 
         private fun ObtenerEstado(quizId: Int): String {
 
-            var result=myQuizDAO.EstadoQuizz(quizId)
+            val result=myQuizDAO.EstadoQuizz(quizId)
 
             if(result==0)
             {
@@ -103,11 +105,35 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>):
 
         }
 
-        private fun ObtenerCantidad(quizId: Int): String? {
+        private fun obtenerCantidad(quizId: Int): String? {
 
-            var result=myQuizDAO.CantPreguntas(quizId)
+            return myQuizDAO.CantPreguntas(quizId).toString()
+        }
+    }
 
-            return result.toString()
+    override fun getFilter(): Filter {
+        return object : Filter()
+        {
+            override fun performFiltering(wordToSearch: CharSequence?): FilterResults {
+                val myFilter= FilterResults()
+
+                if(wordToSearch?.length==0)
+                {
+                    myFilter.values=myQuizFilterList
+                }
+                else
+                {
+                    myFilter.values = myListQuiz.filter { x->x.nombre?.toUpperCase(Locale.ROOT)!!.contains(wordToSearch.toString()) }
+                }
+                return myFilter
+            }
+
+            override fun publishResults(p0: CharSequence?, results: FilterResults?) {
+             myListQuiz.clear()
+                myListQuiz.addAll(results?.values as Collection<Quiz>)
+                notifyDataSetChanged()
+            }
+
         }
     }
 }

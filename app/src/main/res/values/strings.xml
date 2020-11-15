@@ -31,4 +31,8 @@
     <string name="txt_quizzes">Quizzes</string>
     <string name="txt_unidades">Unidades</string>
     <string name="txt_sin_elementos">No se Encontraron Elementos</string>
+    <string name="txt_buscar">Buscar</string>
+    <string name="txt_finalizar">Finalizar</string>
+    <string name="txt_enprogreso">En Progreso</string>
+    <string name="txt_noiniciado">No Iniciado</string>
 </resources>

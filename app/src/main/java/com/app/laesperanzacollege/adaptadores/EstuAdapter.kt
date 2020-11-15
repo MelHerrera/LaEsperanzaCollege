@@ -2,15 +2,12 @@ package com.app.laesperanzacollege.adaptadores
 
 import Observers.UsuarioObserver
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.AgregarEstuActivity
@@ -20,11 +17,15 @@ import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.item_estu.view.*
-import java.util.zip.Inflater
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
-    RecyclerView.Adapter<EstuAdapter.MyViewHolder>() {
-
+    RecyclerView.Adapter<EstuAdapter.MyViewHolder>(), Filterable {
+    var myEstFilterList= arrayListOf<Usuario>()
+    init {
+        myEstFilterList.addAll(listEstudiantes)
+    }
     companion object
     {
         var myUsuarioObserver:UsuarioObserver?=null
@@ -47,39 +48,37 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
 
         fun bindholder(myEstu:Usuario)
         {
-            var nombres=itemView.nombres
-            var grado=itemView.grad
-            var btnBorrar=itemView.imgbtnEliminar
-            var btnEditar=itemView.imgBtnEditar
-            var img=itemView.imgPer
+            val nombres=itemView.nombres
+            val grado=itemView.grad
+            val btnBorrar=itemView.imgbtnEliminar
+            val btnEditar=itemView.imgBtnEditar
+            val img=itemView.imgPer
 
 
-            var myGrado:GradoDAO= GradoDAO(itemView.context)
-            var myUsuDAO=UsuarioDAO(itemView.context)
+            val myGrado= GradoDAO(itemView.context)
+            val myUsuDAO=UsuarioDAO(itemView.context)
 
-            var gra=myGrado.Buscar(myEstu.codGrado.toString())
+            val gra=myGrado.Buscar(myEstu.codGrado.toString())
             img.setBackgroundResource(R.drawable.profile)
 
             nombres.text=myEstu.nombre+" "+myEstu.apellido
             grado.text=gra
 
             btnBorrar.setOnClickListener {
-                var myAlert=AlertDialog.Builder(itemView.context)
+                val myAlert=AlertDialog.Builder(itemView.context)
 
                 myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
 
                 myAlert.setNegativeButton("No") { _, _ ->
                 }
 
-                myAlert.setPositiveButton("Si",DialogInterface.OnClickListener { _, i ->
-                    if(myUsuDAO.Eliminar(myEstu.id))
-                    {
-                        var posicion:Int=adapterPosition
+                myAlert.setPositiveButton("Si") { _, _ ->
+                    if(myUsuDAO.Eliminar(myEstu.id)) {
+                        val posicion:Int=adapterPosition
                         myUsuarioObserver?.usuarioRemoved(posicion)
-                    }
-                    else
-                       Toast.makeText(itemView.context,"No se pudo Eliminar",Toast.LENGTH_SHORT).show()
-                })
+                    } else
+                        Toast.makeText(itemView.context,"No se pudo Eliminar",Toast.LENGTH_SHORT).show()
+                }
 
                 myAlert.show()
 
@@ -87,7 +86,7 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
 
             btnEditar.setOnClickListener {
 
-                var myNewActivity=Intent(itemView.context,AgregarEstuActivity::class.java)
+                val myNewActivity=Intent(itemView.context,AgregarEstuActivity::class.java)
                 myNewActivity.putExtra("OPERACION", OperacionesCrud.Editar)
                 myNewActivity.putExtra("USUARIO",myEstu)
                 AgregarEstuActivity.myUsuarioObserver=this
@@ -103,4 +102,30 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
           //nothing
        }
    }
+
+    override fun getFilter(): Filter {
+        return object : Filter()
+        {
+            override fun performFiltering(wordToSearch: CharSequence?): FilterResults {
+                val myFilter= FilterResults()
+
+                if(wordToSearch?.length==0)
+                {
+                    myFilter.values=myEstFilterList
+                }
+                else
+                {
+                    myFilter.values = listEstudiantes.filter { x->x.nombre?.toUpperCase(Locale.ROOT)!!.contains(wordToSearch.toString()) }
+                }
+                return myFilter
+            }
+
+            override fun publishResults(p0: CharSequence?, results: FilterResults?) {
+                listEstudiantes.clear()
+                listEstudiantes.addAll(results?.values as ArrayList<Usuario>)
+                notifyDataSetChanged()
+            }
+
+        }
+    }
 }

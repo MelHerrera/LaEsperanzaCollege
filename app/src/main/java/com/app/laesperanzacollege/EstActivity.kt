@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +52,21 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_estudiante,menu)
+        val search = menu?.findItem(R.id.app_bar_search)
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = "Buscar"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                myAdapter?.filter?.filter(newText.toString().toUpperCase())
+
+                return true
+            }
+        })
+
         return true
     }
 
