@@ -5,6 +5,8 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.view.View
+import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import com.app.laesperanzadao.enums.OperacionesCrud
@@ -19,6 +21,13 @@ class ActividadesActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title=getString(R.string.txtActividades)
+
+        prueba.setBackgroundColor(Color.TRANSPARENT)
+        prueba.settings.javaScriptEnabled = true
+        prueba.settings.loadsImagesAutomatically = true
+        prueba.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+        prueba.webViewClient = WebViewClient()
+        prueba.loadUrl("https://www.google.com/calendar")
 
         floatingAgregarActividad.setOnClickListener {
             val intent = Intent(Intent.ACTION_INSERT)
