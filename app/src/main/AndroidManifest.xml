@@ -38,8 +38,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".DashActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:name=".DashActivity" />
         <activity android:name=".EstActivity" />
         <activity android:name=".CuriosidadesActivity" />
         <activity android:name=".FormulasActivity" />

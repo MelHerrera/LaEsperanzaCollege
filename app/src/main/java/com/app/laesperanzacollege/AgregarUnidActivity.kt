@@ -1,26 +1,18 @@
 package com.app.laesperanzacollege
 
 import Observers.UnidadObserver
-import android.graphics.Color
-import android.icu.number.IntegerWidth
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
-import androidx.core.widget.addTextChangedListener
 import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Unidad
-import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.activity_agregar__unidad.*
-import kotlinx.android.synthetic.main.activity_agregar_estu.*
 
 class AgregarUnidActivity : AppCompatActivity() {
     var myGradoDAO: GradoDAO?=null
@@ -33,7 +25,7 @@ class AgregarUnidActivity : AppCompatActivity() {
         setContentView(R.layout.activity_agregar__unidad)
 
         myOperacion=intent.extras?.get("OPERACION").toString()
-        var extras=intent.extras?.get("UNIDAD")
+        val extras=intent.extras?.get("UNIDAD")
 
 
         myGradoDAO=GradoDAO(this)
@@ -100,16 +92,24 @@ class AgregarUnidActivity : AppCompatActivity() {
         btnGuard.setOnClickListener {
             if(validar())
             {
-                var myUnidadDAO=UnidadDAO(this)
+                val myUnidadDAO=UnidadDAO(this)
                 myUnidad=Asignar(myUnidad)
 
                 if(myOperacion==OperacionesCrud.Agregar.toString())
                 {
                     if(myUnidadDAO.Insertar(myUnidad!!))
                     {
-                        myUnidadObserver?.unidadSaved(myUnidad!!)
+                        val myUnidadToObserver:Unidad?=Unidad()
+
+                        myUnidadToObserver.let {
+                            it?.codGrado=myUnidad?.codGrado
+                            it?.descripcion=myUnidad?.descripcion
+                            it?.numUnidad=myUnidad?.numUnidad
+                        }
+
+                        myUnidadObserver?.unidadSaved(myUnidadToObserver!!)
                         edtDes.setText("")
-                        txtDesc.text = "Texto Predeterminado"
+                        txtDesc.text = getString(R.string.texto_predeterminado)
                         edtNumUnidad.setText("")
                         NumUnidad.text="0"
 
@@ -144,8 +144,8 @@ class AgregarUnidActivity : AppCompatActivity() {
         NumUnidad.text=myUnidad.numUnidad.toString()
         txtDesc.text=myUnidad.descripcion
 
-        var gradoSelected=listGrados?.find{ x->x.codGrado==myUnidad.codGrado }
-        var posSelected:Int?= listGrados?.indexOf(gradoSelected)
+        val gradoSelected=listGrados?.find{ x->x.codGrado==myUnidad.codGrado }
+        val posSelected:Int?= listGrados?.indexOf(gradoSelected)
 
         if(posSelected!=null)
         {
@@ -179,7 +179,7 @@ class AgregarUnidActivity : AppCompatActivity() {
         else
             txtNumUnidad.error=null
 
-        if(edtNumUnidad.text.toString()!! == "0")
+        if(edtNumUnidad.text.toString()== "0")
         {
             txtNumUnidad.error="Debe ser mayor a 0"
             return false

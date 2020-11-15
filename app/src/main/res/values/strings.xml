@@ -52,7 +52,8 @@
     <string name="informacion_de_usuario">Informacion de Usuario</string>
     <string name="guardar">Guardar</string>
     <string name="salir">Salir</string>
-
-
-
+    <string name="texto_predeterminado">Texto Predeterminado</string>
+    <string name="nombre_del_quizz">Nombre del Quizz</string>
+    <string name="practica">Practica</string>
+    <string name="prueba">Prueba</string>
 </resources>

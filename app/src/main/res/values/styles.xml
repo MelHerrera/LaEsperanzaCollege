@@ -18,7 +18,8 @@
 
     <style name="Theme_Camera" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="backgroundTint">@android:color/transparent</item>
-        <item name="tint">#CFCECE</item>
+        <item name="tint">#F8F7F7</item>
+        <item name="android:src">@drawable/ic_camera</item>
     </style>
 
     <style name="AgregarUnidadFABTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
