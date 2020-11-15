@@ -35,4 +35,16 @@
     <string name="txt_finalizar">Finalizar</string>
     <string name="txt_enprogreso">En Progreso</string>
     <string name="txt_noiniciado">No Iniciado</string>
+    <string name="seccion_a">A</string>
+    <string name="SeccionB">B</string>
+    <string name="SeccionC">C</string>
+    <string name="error_grado">Debe Seleccionar un Grado</string>
+    <string name="informacion_personal">Informacion Personal</string>
+    <string name="nombres">Nombres</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="grado">Grado</string>
+    <string name="seccion">Sección</string>
+    <string name="informacion_de_usuario">Informacion de Usuario</string>
+    <string name="guardar">Guardar</string>
+    <string name="salir">Salir</string>
 </resources>

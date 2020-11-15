@@ -23,7 +23,7 @@ class UsuarioDAO(context: Context) {
 
     fun Eliminar(usuarioId: Int?):Boolean
     {
-        var result=mySqlDatabase?.delete(UsuarioContract.TABLE_NAME,UsuarioContract.COLUMN_ID+"=?", arrayOf(usuarioId.toString()))
+        val result=mySqlDatabase?.delete(UsuarioContract.TABLE_NAME,UsuarioContract.COLUMN_ID+"=?", arrayOf(usuarioId.toString()))
 
         if (result != null) {
             return result>0
@@ -33,13 +33,14 @@ class UsuarioDAO(context: Context) {
 
     fun insertar(usuario:Usuario):Boolean
     {
-        var datos= ContentValues()
+        val datos= ContentValues()
         datos.put(UsuarioContract.COLUMN_NOMBRE,usuario.nombre)
         datos.put(UsuarioContract.COLUMN_APELLIDO,usuario.apellido)
         datos.put(UsuarioContract.COLUMN_USUARIO,usuario.usuario)
         datos.put(UsuarioContract.COLUMN_CONTRASE,usuario.contrase)
         datos.put(UsuarioContract.COLUMN_CODGRADO,usuario.codGrado)
         datos.put(UsuarioContract.COLUMN_TIPODEUSUARIOID,usuario.tipoDeUsuarioId)
+        datos.put(UsuarioContract.COLUMN_SECCION,usuario.seccion)
 
         result=mySqlDatabase?.insert(UsuarioContract.TABLE_NAME,null,datos)
 
@@ -48,15 +49,16 @@ class UsuarioDAO(context: Context) {
 
     fun actualizar(usuario:Usuario):Boolean
     {
-        var datos= ContentValues()
+        val datos= ContentValues()
         datos.put(UsuarioContract.COLUMN_NOMBRE,usuario.nombre)
         datos.put(UsuarioContract.COLUMN_APELLIDO,usuario.apellido)
         datos.put(UsuarioContract.COLUMN_USUARIO,usuario.usuario)
         datos.put(UsuarioContract.COLUMN_CODGRADO,usuario.codGrado)
+        datos.put(UsuarioContract.COLUMN_SECCION,usuario.seccion)
 
-        var query="${UsuarioContract.COLUMN_ID}=?"
+        val query="${UsuarioContract.COLUMN_ID}=?"
 
-        var res=mySqlDatabase?.update(
+        val res=mySqlDatabase?.update(
             UsuarioContract.TABLE_NAME,
             datos,
             query,
@@ -71,9 +73,9 @@ class UsuarioDAO(context: Context) {
 
     fun Buscar(usuario:String, contrase:String):Usuario?
     {
-        var miUsuario:Usuario= Usuario()
-        var query="${UsuarioContract.COLUMN_USUARIO} =? AND ${UsuarioContract.COLUMN_CONTRASE} =?"
-        var myCursor:Cursor?=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,query, arrayOf(usuario,contrase),null,null,null)
+        val miUsuario= Usuario()
+        val query="${UsuarioContract.COLUMN_USUARIO} =? AND ${UsuarioContract.COLUMN_CONTRASE} =?"
+        val myCursor:Cursor?=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,query, arrayOf(usuario,contrase),null,null,null)
 
         if(myCursor?.count!! >0)
         {
@@ -98,10 +100,10 @@ class UsuarioDAO(context: Context) {
 
     fun listarEstudiantes():ArrayList<Usuario>
     {
-        var myListEstu:ArrayList<Usuario> = ArrayList()
-        var myEstu: Usuario?= null
-        var myQuery="${UsuarioContract.COLUMN_TIPODEUSUARIOID} =?"
-        var myCursor=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,myQuery, arrayOf("2"),null,null,null)
+        val myListEstu:ArrayList<Usuario> = ArrayList()
+        var myEstu: Usuario
+        val myQuery="${UsuarioContract.COLUMN_TIPODEUSUARIOID} =?"
+        val myCursor=mySqlDatabase?.query(UsuarioContract.TABLE_NAME,null,myQuery, arrayOf("2"),null,null,null)
 
         if(myCursor?.count!! >0)
         {

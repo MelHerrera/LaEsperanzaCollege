@@ -22,7 +22,7 @@ class AgregarEstuActivity : AppCompatActivity() {
     var listGrados:ArrayList<Grado>?=null
     var myOperacion:String?=null
     var myUsuario:Usuario?=null
-
+    var mySeccion:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class AgregarEstuActivity : AppCompatActivity() {
         myGradoDAO=GradoDAO(this)
         listGrados=myGradoDAO!!.listarGrados()
         myOperacion=intent.extras?.get("OPERACION").toString()
-        var extras=intent.extras?.get("USUARIO")
+        val extras=intent.extras?.get("USUARIO")
 
         if (myGradoDAO != null) {
             for (item in listGrados!!)
@@ -56,10 +56,20 @@ class AgregarEstuActivity : AppCompatActivity() {
             this.finish()
         }
 
+        chipSec.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId)
+            {
+                R.id.txtSecA->{mySeccion=txtSecA.text.toString()}
+                R.id.txtSecB->{mySeccion=txtSecB.text.toString()}
+                R.id.txtSecC->{mySeccion=txtSecC.text.toString()}
+                else->{mySeccion=null}
+            }
+        }
+
         btnGuardar.setOnClickListener {
             if(Validar())
             {
-                var myUsuarioDAO:UsuarioDAO=UsuarioDAO(this)
+                val myUsuarioDAO=UsuarioDAO(this)
 
                 myUsuario=Asignar(myUsuario)
 
@@ -67,8 +77,7 @@ class AgregarEstuActivity : AppCompatActivity() {
                 {
                     if(myUsuarioDAO.insertar(myUsuario!!))
                     {
-                        var nuevoUsuario=myUsuarioDAO.Buscar(myUsuario!!.usuario.toString(),
-                            myUsuario!!.contrase.toString())
+                        val nuevoUsuario=myUsuarioDAO.Buscar(myUsuario!!.usuario.toString(), myUsuario!!.contrase.toString())
 
                         if(nuevoUsuario!=null)
                         {
@@ -132,6 +141,12 @@ class AgregarEstuActivity : AppCompatActivity() {
         else
             txtContra.helperText=null
 
+        if(mySeccion==null)
+        {
+            Toast.makeText(this,getString(R.string.error_grado),Toast.LENGTH_LONG).show()
+            return false
+        }
+
         return true
     }
 
@@ -150,6 +165,7 @@ class AgregarEstuActivity : AppCompatActivity() {
         myUsuaT.tipoDeUsuarioId=2
         myUsuaT.usuario=edtUsuario.text?.trim().toString()
         myUsuaT.contrase=edtContra.text?.trim().toString()
+        myUsuaT.seccion=mySeccion
 
         return myUsuaT
     }
@@ -158,8 +174,8 @@ class AgregarEstuActivity : AppCompatActivity() {
         edtNombres.setText(myUsu.nombre)
         edtApellidos.setText(myUsu.apellido)
 
-        var gradoSelected=listGrados?.find{ x->x.codGrado==myUsu.codGrado }
-        var posSelected:Int?= listGrados?.indexOf(gradoSelected)
+        val gradoSelected=listGrados?.find{ x->x.codGrado==myUsu.codGrado }
+        val posSelected:Int?= listGrados?.indexOf(gradoSelected)
 
             if(posSelected!=null)
             {
@@ -168,7 +184,7 @@ class AgregarEstuActivity : AppCompatActivity() {
 
         edtUsuario.setText(myUsu.usuario)
         edtContra.setText("********")
-        edtContra.transformationMethod = PasswordTransformationMethod.getInstance();
+        edtContra.transformationMethod = PasswordTransformationMethod.getInstance()
         edtContra.isEnabled=false
 
     }
@@ -179,6 +195,7 @@ class AgregarEstuActivity : AppCompatActivity() {
         edtApellidos.text?.clear()
         edtUsuario.text?.clear()
         edtContra.text?.clear()
+        chipSec.clearCheck()
     }
 
     companion object

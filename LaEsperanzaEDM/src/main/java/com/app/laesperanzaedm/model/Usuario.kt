@@ -11,4 +11,5 @@ class Usuario:Serializable{
     var contrase:String?=null
     var codGrado:String?=null
     var tipoDeUsuarioId:Int?=null
+    var seccion:String?=null
 }
