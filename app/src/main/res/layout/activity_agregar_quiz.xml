@@ -51,15 +51,30 @@
                             android:layout_marginRight="16dp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/seleccione_la_unidad"
-                        android:textColor="@color/primaryText"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="10dp"
-                        android:textSize="12sp"
-                        android:layout_marginRight="16dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/medium_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="16dp"
+                            android:text="@string/seleccione_la_unidad"
+                            android:textColor="@color/primaryText"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/filtroUnidades"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_filter" />
+                    </LinearLayout>
+
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyUnid"
