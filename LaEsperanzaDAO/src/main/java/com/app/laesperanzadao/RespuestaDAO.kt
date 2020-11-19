@@ -67,6 +67,36 @@ class RespuestaDAO(context: Context) {
         return myListRespuesta
     }
 
+    fun ListarRespuestas(preguntaId:Int):ArrayList<Respuesta>
+    {
+        var myRespuesta: Respuesta?=null
+        val myListRespuesta:ArrayList<Respuesta> = arrayListOf()
+        val where="${RespuestaContract.COLUMN_PREGUNTAID}=?"
+
+        val res=mySqlDatabase?.query(RespuestaContract.TABLE_NAME,null,where,
+            arrayOf(preguntaId.toString()),null,null,null,null)
+
+        if(res?.count!! >0)
+        {
+            res.moveToFirst()
+
+            while (!res.isAfterLast)
+            {
+                myRespuesta= Respuesta()
+                myRespuesta.id=res.getInt(res.getColumnIndex(RespuestaContract.COLUMN_ID))
+                myRespuesta.descripcion=res.getString(res.getColumnIndex(PreguntaContract.COLUMN_DESCRIPCION))
+                myRespuesta.preguntaId=res.getInt(res.getColumnIndex(RespuestaContract.COLUMN_PREGUNTAID))
+                myRespuesta.correcta= res.getInt(res.getColumnIndex(RespuestaContract.COLUMN_CORRECTA))==1
+
+                myListRespuesta.add(myRespuesta)
+
+                res.moveToNext()
+            }
+        }
+        res.close()
+        return myListRespuesta
+    }
+
     fun BuscarRespuesta(descripcion: String): Respuesta?
     {
         var miRespuesta = Respuesta()

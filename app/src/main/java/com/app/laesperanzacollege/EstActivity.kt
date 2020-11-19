@@ -43,7 +43,7 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
         recyEstudiantes.adapter=myAdapter
 
         floatingAgregar.setOnClickListener {
-            var myNewActivity=Intent(this,AgregarEstuActivity::class.java)
+            val myNewActivity=Intent(this,AgregarEstuActivity::class.java)
             myNewActivity.putExtra("OPERACION",OperacionesCrud.Agregar)
             AgregarEstuActivity.myUsuarioObserver=this
             startActivity(myNewActivity)

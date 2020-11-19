@@ -1,6 +1,8 @@
 package com.app.laesperanzaedm.model
 
-class Quiz {
+import java.io.Serializable
+
+class Quiz:Serializable{
     var quizId:Int?=null
     var nombre:String?=null
     var numUnidad:String?=null

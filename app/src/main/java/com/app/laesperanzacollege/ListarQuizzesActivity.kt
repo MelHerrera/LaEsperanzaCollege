@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
+import com.app.laesperanzadao.enums.TipoDeUsuarios
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Usuario
+import kotlinx.android.synthetic.main.activity_listar_quizzes.*
 
 class ListarQuizzesActivity : AppCompatActivity() {
     private var keyNameUser=""
@@ -40,6 +42,9 @@ class ListarQuizzesActivity : AppCompatActivity() {
 
 
         myLayoutManager=GridLayoutManager(this,2)
-        myListQuizzesAdapter= QuizzesAdapter(myListQuizzes)
+        myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante)
+        recy_ls.layoutManager=myLayoutManager
+        recy_ls.adapter=myListQuizzesAdapter
+
     }
 }
