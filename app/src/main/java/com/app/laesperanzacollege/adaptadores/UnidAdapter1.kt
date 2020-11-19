@@ -1,23 +1,38 @@
 package com.app.laesperanzacollege.adaptadores
 
 import Observers.UnidadObserver
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.R
+import com.app.laesperanzadao.GradoDAO
+import com.app.laesperanzadao.UnidadDAO
+import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Unidad
 import kotlinx.android.synthetic.main.activity_agregar__unidad.view.*
 import kotlinx.android.synthetic.main.item_unidad.view.*
 import kotlinx.android.synthetic.main.item_unidades.view.txtDesc
 import kotlinx.android.synthetic.main.item_unidades.view.txtNumUnidad
 import kotlinx.android.synthetic.main.item_unidades.view.viewUnidad
+import java.util.*
+import kotlin.collections.ArrayList
 
 class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
-    RecyclerView.Adapter<UnidAdapter1.myViewHolder>() {
+    RecyclerView.Adapter<UnidAdapter1.myViewHolder>(),Filterable {
+    var listaAuxDeUnidades= arrayListOf<Unidad>()
+    var myContext:Context?=null
+    init {
+
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-        var myView=LayoutInflater.from(parent.context).inflate(R.layout.item_unidad,parent,false)
+        val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_unidad,parent,false)
+        myContext=myView.context
+        listaAuxDeUnidades=UnidadDAO(myContext!!).listarUnidades()
         return myViewHolder(myView)
     }
 
@@ -31,9 +46,9 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
 
     inner class myViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindItem(myUnidad: Unidad) {
-            var descripcion = itemView.txtDesc
-            var numUnidad = itemView.txtNumUnidad
-            var cardUnidad=itemView.viewUnidad
+            val descripcion = itemView.txtDesc
+            val numUnidad = itemView.txtNumUnidad
+            val cardUnidad=itemView.viewUnidad
 
             cardUnidad.isChecked=false
             descripcion.text = myUnidad.descripcion
@@ -73,5 +88,32 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
         var myUnidadObserver:UnidadObserver?=null
         var allowCardChecked:Int?=null
         var intChecked:Int=0
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter()
+        {
+            override fun performFiltering(wordToSearch: CharSequence?): FilterResults {
+                val myFilter= FilterResults()
+
+
+                if(wordToSearch?.length==0)
+                {
+                    myFilter.values=listaAuxDeUnidades
+                }
+                else
+                {
+                    val codGrado=GradoDAO(myContext!!).buscarGrado(wordToSearch.toString())
+                    myFilter.values = listaAuxDeUnidades.filter { x-> x.codGrado==codGrado}
+                }
+                return myFilter
+            }
+
+            override fun publishResults(p0: CharSequence?, results: FilterResults?) {
+                listUnidades.clear()
+                listUnidades.addAll(results?.values as Collection<Unidad>)
+                notifyDataSetChanged()
+            }
+        }
     }
 }

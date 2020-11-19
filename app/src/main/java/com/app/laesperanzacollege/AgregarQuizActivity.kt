@@ -3,25 +3,32 @@ package com.app.laesperanzacollege
 import Observers.PreguntaObserver
 import Observers.QuizzObserver
 import Observers.UnidadObserver
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizPreguntaAdapter
 import com.app.laesperanzacollege.adaptadores.UnidAdapter1
+import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.UnidadDAO
+import com.app.laesperanzaedm.database.UnidadContract
+import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Unidad
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.activity_agregar_quiz.*
+import kotlinx.android.synthetic.main.item_estu.*
+import java.util.function.Consumer
 import kotlin.math.abs
 
 
@@ -40,6 +47,8 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     var CantidadDeUnidades:TextView?=null
     var CantidadQuizz:TextView?=null
     var quizzEstado:Int=0 //Por defecto sin inciar
+    var gradoDAO:GradoDAO?=null
+    var listaGrados:ArrayList<Grado>?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
@@ -51,6 +60,8 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         supportActionBar?.title=getString(R.string.registro_quizz)
 
         txtNombre.requestFocus()
+        gradoDAO= GradoDAO(this)
+        listaGrados=gradoDAO?.listarGrados()
 
         app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
@@ -74,6 +85,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
 
         })
 
+
         myUnidadDAO = UnidadDAO(this)
         myQuizDAO = QuizDAO(this)
         max=myQuizDAO?.max()
@@ -90,6 +102,28 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
 
         recyUnid.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recyUnid.adapter = myUnidadesAdapter
+
+        filtroUnidades.setOnClickListener {
+            val misGrados:MutableList<String?> = arrayListOf()
+
+            listaGrados?.forEach {
+                if(it.descripcion!="Sin Grado")  misGrados.add(it.descripcion)
+            }
+
+            val myAlert=AlertDialog.Builder(this)
+            myAlert.setTitle("Filtrar Por")
+            myAlert.setIcon(R.drawable.ic_filter)
+
+            myAlert.setSingleChoiceItems(misGrados.toTypedArray(),-1)
+            {
+                    dialogInterface: DialogInterface?, i: Int ->
+                myUnidadesAdapter?.filter?.filter(misGrados[i].toString())
+                dialogInterface?.dismiss()
+            }
+
+            myAlert.show()
+
+        }
 
         BtnGuardar.setOnClickListener {
             if (validar()) {

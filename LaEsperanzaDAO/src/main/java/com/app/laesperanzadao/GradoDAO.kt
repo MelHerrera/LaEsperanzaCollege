@@ -50,7 +50,7 @@ class GradoDAO(context: Context) {
     fun Buscar(codGrado:String):String
     {
         var grado:String=""
-        var query=GradoContract.COLUMN_CODGRADO+"=?"
+        var query="${GradoContract.COLUMN_CODGRADO}=?"
         var myCursor: Cursor?=mySqlDatabase?.query(GradoContract.TABLE_NAME,
             arrayOf(GradoContract.COLUMN_DESCRIPCION),query, arrayOf(codGrado),null,null,null)
 
@@ -61,6 +61,33 @@ class GradoDAO(context: Context) {
             while (!myCursor.isAfterLast)
             {
                 grado=myCursor.getString(myCursor.getColumnIndex(GradoContract.COLUMN_DESCRIPCION))
+
+                myCursor.moveToNext()
+            }
+
+            mySqlDatabase?.close()
+            myDbAdapter?.close()
+
+            return grado
+        }
+        return ""
+    }
+
+    fun buscarGrado(descripcionGrado:String):String
+    {
+        var grado:String=""
+        var query="${GradoContract.COLUMN_DESCRIPCION}=?"
+
+        var myCursor: Cursor?=mySqlDatabase?.query(GradoContract.TABLE_NAME,
+            arrayOf(GradoContract.COLUMN_CODGRADO),query, arrayOf(descripcionGrado),null,null,null)
+
+        if(myCursor?.count!! >0)
+        {
+            myCursor.moveToFirst()
+
+            while (!myCursor.isAfterLast)
+            {
+                grado=myCursor.getString(myCursor.getColumnIndex(GradoContract.COLUMN_CODGRADO))
 
                 myCursor.moveToNext()
             }
