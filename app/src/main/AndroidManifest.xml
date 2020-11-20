@@ -51,6 +51,7 @@
         <activity android:name=".QuizzesActivity" />
         <activity
             android:name=".AgregarEstuActivity"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".LoginActivity"

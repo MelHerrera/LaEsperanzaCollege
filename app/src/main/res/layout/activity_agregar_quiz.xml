@@ -52,34 +52,45 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:weightSum="1"
+                        android:background="@drawable/backgroud_rounded_itemquizzes"
                         android:layout_margin="@dimen/medium_margin"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="16dp"
-                            android:text="@string/seleccione_la_unidad"
-                            android:textColor="@color/primaryText"
-                            android:textSize="12sp" />
-
-                        <ImageView
+                        <Button
                             android:id="@+id/filtroUnidades"
-                            android:layout_width="30dp"
+                            android:layout_width="40dp"
+                            android:paddingLeft="10dp"
                             android:layout_height="30dp"
+                            android:background="@color/colorAccent"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_filter" />
+                            android:layout_weight="0.9"
+                            android:drawableLeft="@drawable/ic_filter"
+
+                         />
+
+                        <TextView
+                            android:layout_weight="0.1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+
+                            android:gravity="center"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/seleccione_la_unidad"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+
+
                     </LinearLayout>
 
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyUnid"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="10dp"

@@ -111,7 +111,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
             }
 
             val myAlert=AlertDialog.Builder(this)
-            myAlert.setTitle("Filtrar Por")
+            myAlert.setTitle("Listado de grados")
             myAlert.setIcon(R.drawable.ic_filter)
 
             myAlert.setSingleChoiceItems(misGrados.toTypedArray(),-1)
