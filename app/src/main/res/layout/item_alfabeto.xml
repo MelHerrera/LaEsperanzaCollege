@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:textColor="@android:color/white"
     android:text="prueba"
-    android:onClick="alfabetoOnclickListener"
+    android:onClick="alfabe"
     android:background="@drawable/square_letras"
     android:textStyle="bold">
 </Button>

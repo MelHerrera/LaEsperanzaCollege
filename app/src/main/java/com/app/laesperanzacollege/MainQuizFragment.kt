@@ -190,7 +190,11 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                 myView=LayoutInflater.from(context).inflate(R.layout.item_alfabeto,container,false)
             }
 
-            myView?.findViewById<Button>(R.id.opcion)?.text= alfabeto[i].toString()
+           val myButton= myView?.findViewById<Button>(R.id.opcion)
+            myButton?.text= alfabeto[i].toString()
+            myButton?.setOnClickListener {
+                Toast.makeText(context,"Selected ${myButton.text}",Toast.LENGTH_LONG).show()
+            }
 
             return myView
         }
@@ -206,7 +210,6 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         override fun getCount(): Int {
             return alfabeto.size
         }
-
     }
 
    /* fun getRespuesta(respId:Int,listResp:ArrayList<Respuesta>,myButton: Button)
@@ -250,10 +253,5 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         {
             btnContinuar?.visibility=View.GONE
         }
-    }
-
-    fun alfabetoOnclickListener(view:Button)
-    {
-        Toast.makeText(activity!!.applicationContext,"Selected ${view.text}",Toast.LENGTH_LONG).show()
     }
 }
