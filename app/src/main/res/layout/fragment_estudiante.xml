@@ -1,51 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".fragmentos.EstudianteFragment"
-        android:background="@android:color/white">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context=".fragmentos.EstudianteFragment">
 
     <View
         android:id="@+id/imgCabecera"
         android:layout_width="wrap_content"
-        android:layout_height="230dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_perfil_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/top_backlogin"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_marginTop="50dp"
         android:id="@+id/viewPerfil"
         android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgCabecera">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="70dp"
             android:layout_marginTop="@dimen/small_margin"
             app:cardBackgroundColor="#fff"
-            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="70dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/profile"/>
+                android:src="@drawable/profile" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                style="@style/Theme_Camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fabSize="mini"
-                style="@style/Theme_Camera"
+                android:layout_gravity="bottom|end"
                 android:layout_margin="@dimen/medium_margin"
-                android:layout_gravity="bottom|end" />
+                app:fabSize="mini" />
 
         </androidx.cardview.widget.CardView>
 
@@ -53,7 +59,7 @@
             android:id="@+id/txtnombres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="melkin antonio herrera mendoza"
             android:textSize="20sp"
@@ -66,44 +72,60 @@
             android:id="@+id/txtgrad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Undecimo Grado"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_margin"
             android:background="@drawable/estado_menu_quizz"
             android:padding="@dimen/small_padding"
-            android:layout_margin="@dimen/small_margin"
+            android:text="Undecimo Grado"
             android:textColor="@android:color/white"
-            android:layout_gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtnombres"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtnombres" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnPrueba"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        android:padding="@dimen/default_padding"
-        android:text="@string/prueba"
-        android:drawableStart="@android:drawable/ic_media_play"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPerfil" />
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        tools:ignore="MissingConstraints">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        android:text="@string/practica"
-        android:id="@+id/btnPractica"
-        android:padding="@dimen/default_padding"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:drawableStart="@drawable/ic_replay"
-        app:layout_constraintEnd_toEndOf="@+id/btnPrueba"
-        app:layout_constraintStart_toStartOf="@+id/btnPrueba"
-        app:layout_constraintTop_toBottomOf="@+id/btnPrueba"/>
+        <Button
+            android:id="@+id/btnPrueba"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rounded_button_itemquizzes"
+            android:drawableStart="@android:drawable/ic_media_play"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:padding="@dimen/default_padding"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/prueba"
+            android:textColor="@android:color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnPractica"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rounded_button_itemquizzes"
+            android:drawableStart="@drawable/ic_replay"
+            android:drawableLeft="@drawable/ic_replay"
+            android:padding="@dimen/default_padding"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/practica"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>
