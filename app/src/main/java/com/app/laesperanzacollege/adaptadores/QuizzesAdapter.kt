@@ -48,6 +48,11 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
             cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!)
             quizzEstado.text=establecerEstado(myQuizz.quizId!!)
 
+            if(tipoDeUsuario==TipoDeUsuarios.Admin)
+            {
+               ObtenerEstado(myQuizz.quizId!!)
+            }
+
             btnPractica.setOnClickListener {
 
                 if(tipoDeUsuario==TipoDeUsuarios.Admin)

@@ -29,7 +29,5 @@ class TestActivity : FragmentActivity() {
             adapter= QuizPageAdapter(this,listPreguntas)
             viewPager.adapter=adapter
         }
-
-
     }
 }

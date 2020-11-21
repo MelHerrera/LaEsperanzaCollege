@@ -1,20 +1,34 @@
 package com.app.laesperanzacollege
 
+import android.app.ActionBar
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.LinearLayout
+import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.mainquizfragment.view.*
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,private var final:Int): Fragment()
 {
+    var myOpciones:GridView?=null
+    var hasDrawableRight=false
+    var buttonSelected=-1
+    var contador=0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val myFrag=inflater.inflate(R.layout.mainquizfragment,container,false)
 
@@ -22,7 +36,9 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         myFrag.preguntaActual.text=actual.toString()
         myFrag.preguntaFinal.text=final.toString()
 
-        opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas)
+        myOpciones=myFrag.opciones
+
+        opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas,inflater)
 
         return myFrag
     }
@@ -32,7 +48,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         return RespuestaDAO(activity!!.applicationContext).ListarRespuestas(preguntaId!!)
     }
 
-    fun opcionRespuesta(opcionId:Int?,respuestas:ArrayList<Respuesta>,viewResp:LinearLayout)
+    fun opcionRespuesta(opcionId:Int?,respuestas:ArrayList<Respuesta>,viewResp:LinearLayout,inflater: LayoutInflater)
     {
         when(opcionId)
         {
@@ -41,37 +57,159 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                 for (item in respuestas)
                 {
                     val myCheckBox = CheckBox(activity!!.applicationContext)
-                    myCheckBox.text=item.descripcion
+                    myCheckBox.text=item.descripcion?.toUpperCase(Locale.ROOT)
                     myCheckBox.id=item.id!!
 
                     myCheckBox.layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
+                    myCheckBox.setTextColor(Color.WHITE)
+                    myCheckBox.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.colorAccent,null))
 
                     viewResp.addView(myCheckBox)
                 }
             }
             2->
             {
+
+                activity!!.applicationContext.setTheme(R.style.Theme_MaterialComponents)
+                val myChipGroup=ChipGroup(activity!!.applicationContext)
+                val params = ChipGroup.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                myChipGroup.chipSpacingVertical=10
+                myChipGroup.chipSpacingHorizontal=10
+                myChipGroup.isSingleSelection=true
+                myChipGroup.layoutParams=params
+                myChipGroup.setPadding(10,10,10,10)
+                myChipGroup.setOnCheckedChangeListener { group, checkedId ->
+                    if(checkedId!=-1)
+                    {
+                        //val index=rgbOpciones.indexOfChild(findViewById(checkedId))
+                        //opcionDeRespuestaId=myListOpciones[index].id
+                        Toast.makeText(
+                            activity!!.applicationContext,
+                            "Onchecked $checkedId",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
                 for (item in respuestas)
                 {
-                    val myButton=Button(activity!!.applicationContext)
-                    myButton.text=item.descripcion
-                    myButton.id=item.id!!
+                    val myChipChoice= Chip(activity!!.applicationContext)
 
-                    myButton.layoutParams=LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                             ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
+                    myChipChoice.gravity = (Gravity.CENTER_VERTICAL or Gravity.START)
+                    myChipChoice.text=item.descripcion?.toUpperCase(Locale.ROOT)
+                    myChipChoice.id= item.id!!
+                    myChipChoice.isCheckable=true
 
-                    viewResp.addView(myButton)
+                    myChipChoice.setTextColor(Color.WHITE)
+                    myChipChoice.setChipBackgroundColorResource(R.color.colorAccent)
+
+                    myChipGroup.addView(myChipChoice)
                 }
+                viewResp.orientation=LinearLayout.VERTICAL
+                viewResp.addView(myChipGroup)
             }
             3->
             {
+                for (item in respuestas)
+                {
+                    val myLetter=EditText(activity!!.applicationContext)
+                    myLetter.setText(item.descripcion?.toUpperCase())
+                    myLetter.id=item.id!!
 
+                    myLetter.layoutParams=LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+
+                    myLetter.isEnabled=false
+                    myLetter.gravity=Gravity.CENTER
+                    myLetter.setTextColor(Color.WHITE)
+                    myLetter.background=ResourcesCompat.getDrawable(resources,R.drawable.edittext_square,null)
+
+                    val params = ActionBar.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    params.setMargins(5, 0, 3, 0)
+                    myLetter.layoutParams = params
+
+                    viewResp.addView(myLetter)
+
+                    val alfabeto:MutableList<Char> = mutableListOf()
+                    var x:Char='A'
+
+                    while (x<='Z')
+                    {
+                        alfabeto.add(x)
+                        x++
+                    }
+
+                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,alfabeto)
+                    myOpciones?.adapter=alfabetoAdapter
+                }
             }
         }
+    }
+
+    class AlfabetoAdapter(private var context: Context,private var alfabeto:MutableList<Char>):BaseAdapter()
+    {
+        override fun getView(i: Int, view: View?, container: ViewGroup?): View? {
+
+            var myView=view
+
+            if(myView==null)
+            {
+                myView=LayoutInflater.from(context).inflate(R.layout.item_alfabeto,container,false)
+            }
+
+            myView?.findViewById<Button>(R.id.opcion)?.text= alfabeto[i].toString()
+
+            return myView
+        }
+
+        override fun getItem(p0: Int): Any? {
+            return null
+        }
+
+        override fun getItemId(p0: Int): Long {
+            return 0
+        }
+
+        override fun getCount(): Int {
+            return alfabeto.size
+        }
+
+    }
+
+    fun getRespuesta(respId:Int,listResp:ArrayList<Respuesta>,myButton: Button)
+    {
+        val respuesta=listResp.find { x->x.id==respId }
+
+        if(!hasDrawableRight)
+        {
+            hasDrawableRight=true
+
+            if(respuesta!=null)
+            {
+                if(respuesta.correcta!!)
+                {
+                    myButton.setRigthDrawable(R.drawable.ic_check_circle)
+                }
+                else
+                {
+                    myButton.setRigthDrawable(R.drawable.ic_clear)
+                }
+            }
+        }
+    }
+
+    fun Button.setRigthDrawable(rigthDrawable:Int)
+    {
+        this.setCompoundDrawablesWithIntrinsicBounds(0, 0,rigthDrawable, 0)
     }
 }
