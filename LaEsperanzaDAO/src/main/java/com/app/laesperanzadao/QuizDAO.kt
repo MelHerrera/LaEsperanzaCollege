@@ -66,6 +66,7 @@ class QuizDAO(context: Context) {
                 myQuiz= Quiz()
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                myQuiz.numUnidad=res.getString(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
 
                 myListQuizzes.add(myQuiz)
 
@@ -80,7 +81,7 @@ class QuizDAO(context: Context) {
         //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
         var myQuiz:Quiz?=null
         var myListQuizzes:ArrayList<Quiz> = arrayListOf()
-        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
+        val mySelection= "SELECT q.NombreDeQuiz FROM ${QuizContract.TABLE_NAME} as q\n" +
                 "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
                 "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
                 "WHERE g.CodGrado==? AND q.estado=?" +
@@ -112,11 +113,16 @@ class QuizDAO(context: Context) {
         //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
         var myQuiz:Quiz?=null
         var myListQuizzes:ArrayList<Quiz> = arrayListOf()
-        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
+        /*val mySelection= "SELECT ${QuizContract.COLUMN_ID},${QuizContract.COLUMN_NOMBRE},${QuizContract.COLUMN_ESTADO}  FROM ${QuizContract.TABLE_NAME} as q\n" +
                 "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
                 "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
                 "WHERE g.CodGrado==? AND q.estado=?" +
-                "GROUP BY u.NumUnidad,g.CodGrado"
+                " GROUP BY u.NumUnidad,g.CodGrado"*/
+
+        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
+                "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
+                "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
+                "WHERE g.CodGrado==? AND q.estado=?"
 
         var res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,1.toString()),null)
 
@@ -129,8 +135,8 @@ class QuizDAO(context: Context) {
                 myQuiz= Quiz()
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                myQuiz.estado=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ESTADO))
                 myQuiz.numUnidad=res.getString(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
-
                 myListQuizzes.add(myQuiz)
 
                 res.moveToNext()

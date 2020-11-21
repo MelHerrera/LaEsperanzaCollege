@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ActividadesActivity"></activity>
+        <!--activity android:name=".TestActivity"/>-->
         <activity android:name=".ListarQuizzesActivity" />
         <activity
             android:name=".SplashScreen"
@@ -27,14 +28,14 @@
         <activity android:name=".RespuestaActivity" />
         <activity
             android:name=".AgregarPreguntaActivity"
-            android:theme="@style/AgregarPreguntaTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AgregarPreguntaTheme" />
         <activity
             android:name=".AgregarQuizActivity"
             android:label="@string/title_activity_agregar_quiz"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AgregarUnidActivity"
             android:screenOrientation="portrait"
@@ -51,7 +52,6 @@
         <activity android:name=".QuizzesActivity" />
         <activity
             android:name=".AgregarEstuActivity"
-            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".LoginActivity"

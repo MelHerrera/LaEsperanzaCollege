@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
+import com.app.laesperanzadao.enums.TipoDeUsuarios
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
 import java.util.*
@@ -39,7 +40,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
 
         AgregarQuizActivity.myQuizzObserver=this
-        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!)
+        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin)
 
         recyQuizzes.layoutManager=myLayoutManager
         recyQuizzes.adapter=myQuizzesAdapter
