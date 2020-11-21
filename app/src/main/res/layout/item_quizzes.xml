@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/small_margin"
@@ -46,6 +47,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="18"
                 android:layout_marginBottom="5dp"
                 android:gravity="center" />
 
@@ -64,7 +66,7 @@
                     android:textColor="@android:color/white"
                     android:background="@drawable/oval_counter" />
                 <TextView
-                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -75,12 +77,18 @@
                 android:id="@+id/btnPractica"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:text="@string/empezar"
+                android:textAlignment="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:gravity="center_vertical|bottom"
                 android:drawableLeft="@android:drawable/ic_media_play"
-                android:background="@color/colorPrimary"
-                android:textColor="@android:color/white"
-                android:drawableStart="@android:drawable/ic_media_play" />
+                android:background="@drawable/rounded_button_itemquizzes"
+                android:textColor="@color/icons"
+                android:textSize="10sp"
+                android:drawableStart="@android:drawable/ic_media_play"
+                tools:ignore="RtlCompat,SmallSp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

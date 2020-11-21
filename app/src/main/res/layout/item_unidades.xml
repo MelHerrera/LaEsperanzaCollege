@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:maxLength="18"
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="#000"
@@ -61,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_marginRight="@dimen/small_margin"
                 android:layout_marginBottom="@dimen/medium_margin"
                 android:textColor="@android:color/white"
                 android:background="@drawable/oval_counter" />
