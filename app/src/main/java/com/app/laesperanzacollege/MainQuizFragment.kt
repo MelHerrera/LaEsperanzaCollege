@@ -3,7 +3,6 @@ package com.app.laesperanzacollege
 import android.app.ActionBar
 import android.content.Context
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
@@ -23,6 +21,7 @@ import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.mainquizfragment.view.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 
 class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,private var final:Int): Fragment()
@@ -31,6 +30,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
     var hasDrawableRight=false
     var btnContinuar:Button?=null
     var checkedSelected:ArrayList<Respuesta> = arrayListOf()
+    var letrasEditText:ArrayList<EditText> = arrayListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val myFrag=inflater.inflate(R.layout.mainquizfragment,container,false)
@@ -161,6 +161,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                     params.setMargins(5, 0, 3, 0)
                     myLetter.layoutParams = params
 
+                    letrasEditText.add(myLetter)
                     viewResp.addView(myLetter)
 
                     val alfabeto:MutableList<Char> = mutableListOf()
@@ -172,15 +173,16 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                         x++
                     }
 
-                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,alfabeto)
+                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,alfabeto,letrasEditText)
                     myOpciones?.adapter=alfabetoAdapter
                 }
             }
         }
     }
 
-    class AlfabetoAdapter(private var context: Context,private var alfabeto:MutableList<Char>):BaseAdapter()
+    class AlfabetoAdapter(private var context: Context,private var alfabeto:MutableList<Char>,private var letrasEditText:ArrayList<EditText>):BaseAdapter()
     {
+        var alfabettoButtons:ArrayList<Button> = arrayListOf()
         override fun getView(i: Int, view: View?, container: ViewGroup?): View? {
 
             var myView=view
@@ -193,7 +195,11 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
            val myButton= myView?.findViewById<Button>(R.id.opcion)
             myButton?.text= alfabeto[i].toString()
             myButton?.setOnClickListener {
-                Toast.makeText(context,"Selected ${myButton.text}",Toast.LENGTH_LONG).show()
+               myButton.visibility=View.INVISIBLE
+                Toast.makeText(context,myButton.text,Toast.LENGTH_LONG).show()
+            }
+            if (myButton != null) {
+                alfabettoButtons.add(myButton)
             }
 
             return myView
