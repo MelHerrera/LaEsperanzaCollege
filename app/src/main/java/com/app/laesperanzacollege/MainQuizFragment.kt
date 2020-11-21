@@ -3,6 +3,7 @@ package com.app.laesperanzacollege
 import android.app.ActionBar
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.app.laesperanzadao.RespuestaDAO
@@ -26,8 +29,8 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
 {
     var myOpciones:GridView?=null
     var hasDrawableRight=false
-    var buttonSelected=-1
-    var contador=0
+    var btnContinuar:Button?=null
+    var checkedSelected:ArrayList<Respuesta> = arrayListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val myFrag=inflater.inflate(R.layout.mainquizfragment,container,false)
@@ -37,6 +40,9 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         myFrag.preguntaFinal.text=final.toString()
 
         myOpciones=myFrag.opciones
+        btnContinuar=myFrag.btnContinuar
+        //set this theme for use Chip and ChipGroup
+        activity!!.applicationContext.setTheme(R.style.Theme_MaterialComponents)
 
         opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas,inflater)
 
@@ -67,13 +73,28 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                     myCheckBox.setTextColor(Color.WHITE)
                     myCheckBox.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.colorAccent,null))
 
+                    myCheckBox.setOnCheckedChangeListener { compoundButton, checked ->
+                        val resp=respuestas.find { x->x.id==compoundButton.id }
+                        if(resp!=null)
+                        {
+                            if(checked)
+                            {
+                                checkedSelected.add(resp)
+                                mostrarContiuar(checkedSelected)
+                            }
+                            else
+                            {
+                                checkedSelected.remove(resp)
+                                mostrarContiuar(checkedSelected)
+                            }
+                        }
+                    }
+
                     viewResp.addView(myCheckBox)
                 }
             }
             2->
             {
-
-                activity!!.applicationContext.setTheme(R.style.Theme_MaterialComponents)
                 val myChipGroup=ChipGroup(activity!!.applicationContext)
                 val params = ChipGroup.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -84,17 +105,19 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                 myChipGroup.isSingleSelection=true
                 myChipGroup.layoutParams=params
                 myChipGroup.setPadding(10,10,10,10)
+
                 myChipGroup.setOnCheckedChangeListener { group, checkedId ->
                     if(checkedId!=-1)
                     {
-                        //val index=rgbOpciones.indexOfChild(findViewById(checkedId))
-                        //opcionDeRespuestaId=myListOpciones[index].id
-                        Toast.makeText(
-                            activity!!.applicationContext,
-                            "Onchecked $checkedId",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        val mRespuesta=respuestas.find { x->x.id==checkedId }
+
+                        if(mRespuesta!=null)
+                        {
+                            mostrarContiuar(View.VISIBLE)
+                        }
                     }
+                    else
+                       mostrarContiuar(View.GONE)
                 }
                 for (item in respuestas)
                 {
@@ -128,8 +151,8 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
 
                     myLetter.isEnabled=false
                     myLetter.gravity=Gravity.CENTER
-                    myLetter.setTextColor(Color.WHITE)
-                    myLetter.background=ResourcesCompat.getDrawable(resources,R.drawable.edittext_square,null)
+                    myLetter.setTextColor(Color.TRANSPARENT)
+                    myLetter.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE,BlendModeCompat.SRC_IN)
 
                     val params = ActionBar.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -186,7 +209,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
 
     }
 
-    fun getRespuesta(respId:Int,listResp:ArrayList<Respuesta>,myButton: Button)
+   /* fun getRespuesta(respId:Int,listResp:ArrayList<Respuesta>,myButton: Button)
     {
         val respuesta=listResp.find { x->x.id==respId }
 
@@ -211,5 +234,26 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
     fun Button.setRigthDrawable(rigthDrawable:Int)
     {
         this.setCompoundDrawablesWithIntrinsicBounds(0, 0,rigthDrawable, 0)
+    }*/
+
+    fun mostrarContiuar(visibility:Int)
+    {
+        btnContinuar?.visibility=visibility
+    }
+    fun mostrarContiuar(chechedList:ArrayList<Respuesta>)
+    {
+        if(chechedList.isNotEmpty())
+        {
+            btnContinuar?.visibility=View.VISIBLE
+        }
+        else
+        {
+            btnContinuar?.visibility=View.GONE
+        }
+    }
+
+    fun alfabetoOnclickListener(view:Button)
+    {
+        Toast.makeText(activity!!.applicationContext,"Selected ${view.text}",Toast.LENGTH_LONG).show()
     }
 }
