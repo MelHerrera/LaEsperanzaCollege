@@ -27,7 +27,7 @@ class SplashScreen : AppCompatActivity() {
                     }
                 }
                 else
-                    startActivity(Intent(applicationContext,LoginActivity::class.java))
+                    startActivity(Intent(applicationContext,IntroActivity::class.java))
            // delay(1000)
         }
     }

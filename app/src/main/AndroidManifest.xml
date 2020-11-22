@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.laesperanzacollege">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,8 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
         <activity android:name=".ActividadesActivity" />
-        <activity android:name=".TestActivity"/>
+        <activity android:name=".TestActivity" />
         <activity android:name=".ListarQuizzesActivity" />
         <activity
             android:name=".SplashScreen"
@@ -28,20 +33,19 @@
         <activity android:name=".RespuestaActivity" />
         <activity
             android:name=".AgregarPreguntaActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AgregarPreguntaTheme" />
+            android:theme="@style/AgregarPreguntaTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarQuizActivity"
             android:label="@string/title_activity_agregar_quiz"
-            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarUnidActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity
-            android:name=".DashActivity" />
+        <activity android:name=".DashActivity" />
         <activity android:name=".EstActivity" />
         <activity android:name=".CuriosidadesActivity" />
         <activity android:name=".FormulasActivity" />
