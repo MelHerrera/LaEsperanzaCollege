@@ -71,6 +71,26 @@ class UsuarioDAO(context: Context) {
         return false
     }
 
+    fun actualizarImagen(mPhoto:ByteArray,usuarioId: Int?):Boolean
+    {
+        val datos= ContentValues()
+        datos.put(UsuarioContract.COLUMN_IMAGEN,mPhoto)
+
+        val selection="${UsuarioContract.COLUMN_ID}=?"
+
+        val res=mySqlDatabase?.update(
+            UsuarioContract.TABLE_NAME,
+            datos,
+            selection,
+            arrayOf(usuarioId.toString())
+        )
+
+        if (res != null) {
+            return res>0
+        }
+        return false
+    }
+
     fun Buscar(usuario:String, contrase:String):Usuario?
     {
         val miUsuario= Usuario()
@@ -89,6 +109,13 @@ class UsuarioDAO(context: Context) {
                 miUsuario.usuario=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_USUARIO))
                 miUsuario.codGrado=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_CODGRADO))
                 miUsuario.tipoDeUsuarioId=myCursor.getInt(myCursor.getColumnIndex(UsuarioContract.COLUMN_TIPODEUSUARIOID))
+
+                val mImagen=myCursor.getBlob(myCursor.getColumnIndex(UsuarioContract.COLUMN_IMAGEN))
+
+                if(mImagen!=null)
+                {
+                    miUsuario.imagen=mImagen
+                }
 
                 myCursor.moveToNext()
             }

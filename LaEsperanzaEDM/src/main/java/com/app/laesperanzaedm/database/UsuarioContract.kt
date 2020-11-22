@@ -10,6 +10,7 @@ class UsuarioContract {
         const val COLUMN_USUARIO="Usuario"
         const val COLUMN_CONTRASE="Contraseña"
         const val COLUMN_SECCION="Seccion"
+        const val COLUMN_IMAGEN="Foto"
         const val COLUMN_CODGRADO= GradoContract.COLUMN_CODGRADO
         const val COLUMN_TIPODEUSUARIOID= TipoDeUsuarioContract.COLUMN_ID
 
@@ -23,6 +24,7 @@ class UsuarioContract {
                     "$COLUMN_CONTRASE TEXT," +
                     "$COLUMN_SECCION TEXT, "+
                     "$COLUMN_CODGRADO TEXT,"+
+                    "$COLUMN_IMAGEN BLOB,"+
                     "$COLUMN_TIPODEUSUARIOID INTEGER" +
                     ")"
 

@@ -28,10 +28,15 @@ class AgregarRespuestaActivity : AppCompatActivity() {
         }
 
         RgbCorrecta.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { radioGroup, i ->
-         when
+
+            when
          {
-             RgbCorrecta.rbtSi.isChecked->{correcta=true}
-             RgbCorrecta.rbtNo.isChecked->{correcta=false}
+             RgbCorrecta.rbtSi.isChecked->{
+                 correcta=true
+             }
+             RgbCorrecta.rbtNo.isChecked->{
+                 correcta=false
+             }
          }
         })
         btnGuardarRes.setOnClickListener {
