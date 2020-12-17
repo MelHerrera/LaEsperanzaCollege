@@ -27,7 +27,15 @@ class SplashScreen : AppCompatActivity() {
                     }
                 }
                 else
-                    startActivity(Intent(applicationContext,IntroActivity::class.java))
+                {
+                    if(obtenerPreferenciasIntro() <= 0)
+                    {
+                        startActivity(Intent(applicationContext,IntroActivity::class.java))
+                    }
+                    else
+                        startActivity(Intent(applicationContext,LoginActivity::class.java))
+                }
+
            // delay(1000)
         }
     }
@@ -35,7 +43,12 @@ class SplashScreen : AppCompatActivity() {
    private fun obtenerPreferencias():MutableList<String>
     {
         val mySharedPrefs= Preferencias()
-        return mySharedPrefs.obtenerSharedPrefs(this,getString(R.string.keyNameUser),getString(R.string.keyNamePass))
+        return mySharedPrefs.obtenerSharedPrefsUser(this,getString(R.string.keyNameUser),getString(R.string.keyNamePass))
+    }
+    private fun obtenerPreferenciasIntro():Int
+    {
+        val mySharedPrefs= Preferencias()
+        return mySharedPrefs.obtenerSharedPrefsIntro(this,getString(R.string.keyNameIntro))
     }
 
     private fun buscarUsuario(myData:MutableList<String>):Usuario?

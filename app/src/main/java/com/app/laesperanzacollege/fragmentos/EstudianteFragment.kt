@@ -72,7 +72,7 @@ class EstudianteFragment : Fragment() {
 
                 myAlert.setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
                     var mySharedPrefs= Preferencias()
-                    if(mySharedPrefs.limpiarSharedPrefs(myContext!!))
+                    if(mySharedPrefs.limpiarSharedPrefs(myContext!!,Preferencias.sharedPrefsFileUser))
                         startActivity(Intent(myContext!!, LoginActivity::class.java))
                 })
 

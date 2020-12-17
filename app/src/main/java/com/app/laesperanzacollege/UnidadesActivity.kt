@@ -58,7 +58,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
 
         myTxtCantidad=txtCantidadUnidades
 
-        if(myTxtCantidad!=null && myListUnidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
+        if(myTxtCantidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
 
         UnidAdapter.myUnidadObserver=this
         myUnidadesAdapter= UnidAdapter(myListUnidad)

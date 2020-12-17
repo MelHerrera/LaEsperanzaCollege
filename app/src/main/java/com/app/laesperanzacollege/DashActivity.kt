@@ -70,7 +70,7 @@ class DashActivity : AppCompatActivity() {
 
                 myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
                     val mySharedPrefs= Preferencias()
-                    if(mySharedPrefs.limpiarSharedPrefs(this))
+                    if(mySharedPrefs.limpiarSharedPrefs(this,Preferencias.sharedPrefsFileUser))
                         startActivity(Intent(this, LoginActivity::class.java))
                 }
 

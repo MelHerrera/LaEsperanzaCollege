@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
                     {
                         val prefs = Preferencias()
 
-                        if(!prefs.guardarSharedPrefs(this,
+                        if(!prefs.guardarSharedPrefsUser(this,
                                 setOf(getString(R.string.keyNameUser),myUsuario.usuario),setOf(getString(R.string.keyNamePass),edtcontra.text.toString())))
                         {
                             Toast.makeText(this,"Error al guardar Preferencias",Toast.LENGTH_SHORT).show()

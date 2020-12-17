@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/intro"
+        android:id="@+id/BtnIntro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -37,7 +37,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/intro"
+        app:layout_constraintBottom_toTopOf="@+id/Intro"
         app:layout_constraintEnd_toStartOf="@+id/carrusel"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

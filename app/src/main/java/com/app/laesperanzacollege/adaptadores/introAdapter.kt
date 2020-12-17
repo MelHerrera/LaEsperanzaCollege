@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.laesperanzacollege.Intro
 import com.app.laesperanzacollege.R
 
-class introAdapter(private val intro:List<intro>)
+class introAdapter(private val Intro:List<Intro>)
     : RecyclerView.Adapter<introAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: introAdapter.ViewHolder, position: Int) {
-        holder.bindItem(intro[position])
+        holder.bindItem(Intro[position])
 
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  introAdapter.ViewHolder {
@@ -22,7 +23,7 @@ class introAdapter(private val intro:List<intro>)
     }
 
     override fun getItemCount(): Int {
-        return  intro.size
+        return  Intro.size
     }
 
 
@@ -30,11 +31,11 @@ class introAdapter(private val intro:List<intro>)
         private val name: TextView = itemView.findViewById(R.id.name1) as TextView
         private val des: TextView = itemView.findViewById(R.id.des) as TextView
         private val foto1: ImageView = itemView.findViewById(R.id.foto1) as ImageView
-        fun bindItem(intro:intro){
+        fun bindItem(Intro: Intro){
 
-            name.text = intro.name
-            des.text = intro.des
-            foto1.setImageResource(intro.foto!!)
+            name.text = Intro.name
+            des.text = Intro.des
+            foto1.setImageResource(Intro.foto!!)
         }
 
     }

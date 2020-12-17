@@ -7,36 +7,19 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
-import com.app.laesperanzacollege.adaptadores.intro
 import com.app.laesperanzacollege.adaptadores.introAdapter
 import kotlinx.android.synthetic.main.activity_intro.*
 
 class IntroActivity : AppCompatActivity() {
-    private val introAdapter = introAdapter(
-        listOf(
-            intro(
-                "Administra",
-                "Una app para administrar tus estudiantes, crear cuestionarios y guardar formulas utilizadas en cada clase.",
-                R.drawable.administra
-            ),
-            intro(
-                "Crea tus Cuestionarios",
-                "Aprende de forma divertida creando tus cuestionarios para que otros lo puedan resolver.",
-                R.drawable.pregunta
-            ),
-            intro(
-                "Educa",
-                "Enseña a través de esta app interactiva, dividida por grados y mira la mejoría a largo plazo.",
-                R.drawable.educa
-            )
-        )
-    )
+    private val introAdapter = introAdapter(Intro.intros)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
+
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         carrusel.adapter = introAdapter
         setupIndicators()
@@ -50,8 +33,19 @@ class IntroActivity : AppCompatActivity() {
             }
         })
 
-        intro.setOnClickListener {
+        BtnIntro.setOnClickListener {
+            setPreferencias()
             startActivity(Intent(this,LoginActivity::class.java))
+        }
+    }
+
+    private fun setPreferencias() {
+        val prefs = Preferencias()
+
+        if(!prefs.guardarSharedPrefsIntro(this,
+                setOf(getString(R.string.keyNameIntro),1.toString())))
+        {
+            Toast.makeText(this,"Error al guardar Preferencias", Toast.LENGTH_SHORT).show()
         }
     }
 
