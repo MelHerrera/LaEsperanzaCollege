@@ -20,7 +20,7 @@ class IntroActivity : AppCompatActivity() {
             intro(
                 "Administra",
                 "Una app para administrar tus estudiantes, crear cuestionarios y guardar formulas utilizadas en cada clase.",
-                R.drawable.educacion
+                R.drawable.administra
             ),
             intro(
                 "Crea tus Cuestionarios",
@@ -30,7 +30,7 @@ class IntroActivity : AppCompatActivity() {
             intro(
                 "Educa",
                 "Enseña a través de esta app interactiva, dividida por grados y mira la mejoría a largo plazo.",
-                R.drawable.tres
+                R.drawable.educa
             )
         )
     )
@@ -41,6 +41,7 @@ class IntroActivity : AppCompatActivity() {
         carrusel.adapter = introAdapter
         setupIndicators()
         setCurrentIndicator(0)
+
         carrusel.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
