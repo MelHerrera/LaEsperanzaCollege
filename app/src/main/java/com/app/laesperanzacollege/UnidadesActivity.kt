@@ -48,7 +48,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
 
         floatingAgregarUnidad.setOnClickListener {
             AgregarUnidActivity.myUnidadObserver=this
-            var myIntent=Intent(this,AgregarUnidActivity::class.java)
+            val myIntent=Intent(this,AgregarUnidActivity::class.java)
             myIntent.putExtra("OPERACION",OperacionesCrud.Agregar.toString())
             startActivity(myIntent)
         }
@@ -88,7 +88,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         selectedItems=arrayListOf()
         limpiarMenu()
 
-        var myUnid=myListUnidad.find { x->x.numUnidad==myUnidad.numUnidad}
+        val myUnid=myListUnidad.find { x->x.numUnidad==myUnidad.numUnidad}
 
         if(myUnid!=null)
         {
@@ -100,7 +100,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
             myListUnidad.add(myUnidad)
 
         myUnidadesAdapter?.notifyDataSetChanged()
-        if(myTxtCantidad!=null && myListUnidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
+        if(myTxtCantidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

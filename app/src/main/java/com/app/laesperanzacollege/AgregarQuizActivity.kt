@@ -1,11 +1,15 @@
 package com.app.laesperanzacollege
 
+import Observers.FiltroObserver
 import Observers.PreguntaObserver
 import Observers.QuizzObserver
 import Observers.UnidadObserver
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,6 +23,7 @@ import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.UnidadDAO
+import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.database.UnidadContract
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Pregunta
@@ -32,7 +37,7 @@ import java.util.function.Consumer
 import kotlin.math.abs
 
 
-class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver {
+class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,FiltroObserver {
     var myListUnidad: ArrayList<Unidad>? = null
     var myListQuizz: ArrayList<Quiz>? = null
     var myUnidadDAO: UnidadDAO? = null
@@ -44,7 +49,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     var myQuiz: Quiz? = null
     var numUnidad: Int? = null
     var max: Int? = null
-    var CantidadDeUnidades:TextView?=null
+    var CantidadDeUnidades:LinearLayout?=null
     var CantidadQuizz:TextView?=null
     var quizzEstado:Int=0 //Por defecto sin inciar
     var gradoDAO:GradoDAO?=null
@@ -92,37 +97,44 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         myPreguntaDAO = PreguntaDAO(this)
 
         CantidadQuizz=txtCantidadQuizz
-        CantidadDeUnidades=txtcantidadDeUnidades
+        CantidadDeUnidades=linear_validar
         myListUnidad = myUnidadDAO?.listarUnidades()
 
-        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(CantidadDeUnidades!!,myListUnidad!!)
+        imgSinUnidades.setOnClickListener {
+            AgregarUnidActivity.myUnidadObserver=this
+            val myIntent=Intent(this,AgregarUnidActivity::class.java)
+            myIntent.putExtra("OPERACION", OperacionesCrud.Agregar.toString())
+            startActivity(myIntent)
+        }
+
+        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
 
         UnidAdapter1.myUnidadObserver = this
+        UnidAdapter1.myFilterObserver=this
         myUnidadesAdapter = UnidAdapter1(myListUnidad!!)
 
         recyUnid.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recyUnid.adapter = myUnidadesAdapter
 
         filtroUnidades.setOnClickListener {
-            val misGrados:MutableList<String?> = arrayListOf()
+                val misGrados:MutableList<String?> = arrayListOf()
 
-            listaGrados?.forEach {
-                if(it.descripcion!="Sin Grado")  misGrados.add(it.descripcion)
-            }
+            misGrados.add("Todos")
 
-            val myAlert=AlertDialog.Builder(this)
-            myAlert.setTitle("Listado de grados")
-            myAlert.setIcon(R.drawable.ic_filter)
+                listaGrados?.forEach {
+                    if(it.descripcion!="Sin Grado")  misGrados.add(it.descripcion)
+                }
+                val myAlert=AlertDialog.Builder(this)
+                myAlert.setTitle("Listado de grados")
+                myAlert.setIcon(R.drawable.ic_filter)
 
-            myAlert.setSingleChoiceItems(misGrados.toTypedArray(),-1)
-            {
-                    dialogInterface: DialogInterface?, i: Int ->
-                myUnidadesAdapter?.filter?.filter(misGrados[i].toString())
-                dialogInterface?.dismiss()
-            }
+                myAlert.setSingleChoiceItems(misGrados.toTypedArray(),-1) { dialogInterface: DialogInterface?, i: Int ->
+                    myUnidadesAdapter?.filter?.filter(misGrados[i].toString())
+                    categoria.text=misGrados[i]
+                    dialogInterface?.dismiss()
+                }
 
-            myAlert.show()
-
+                myAlert.show()
         }
 
         BtnGuardar.setOnClickListener {
@@ -131,9 +143,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
                 if (myQuizDAO?.Insertar(myQuizzToSave)!!) {
 
                     myQuizzToSave = myQuizDAO?.BuscarQuizz(myQuizzToSave.nombre.toString())!!
-
-                        //Toast.makeText(this, "Guardado con Exito", Toast.LENGTH_LONG).show()
-                       edtNombre.text?.clear()
+                     edtNombre.text?.clear()
                     numUnidad=null
 
                         myQuizzObserver?.QuizzSaved(myQuizzToSave)
@@ -143,7 +153,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
 
                     myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
                     myListPregunta = myPreguntaDAO?.ListarPreguntas()
-                    if(txtCantidadQuizz!=null && myListQuizz!=null) Validador.validarCantidad(txtCantidadQuizz!!,myListQuizz!!)
+                    if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
 
 
 
@@ -166,7 +176,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
         myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
         myListPregunta = myPreguntaDAO?.ListarPreguntas()
 
-        if(txtCantidadQuizz!=null && myListQuizz!=null) Validador.validarCantidad(txtCantidadQuizz!!,myListQuizz!!)
+        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
 
         AgregarPreguntaActivity.myPreguntaObserver=this
         myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
@@ -218,7 +228,10 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     }
 
     override fun unidadSaved(myUnidad: Unidad) {
-        //nothing to do here
+
+        myListUnidad?.add(myUnidad)
+        myUnidadesAdapter?.notifyDataSetChanged()
+        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
     }
 
     companion object
@@ -237,5 +250,14 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun filterElements(encontrado: Boolean) {
+       if(encontrado)
+       {
+           filtroCantidad.visibility=View.GONE
+       }
+        else
+           filtroCantidad.visibility=View.VISIBLE
     }
 }

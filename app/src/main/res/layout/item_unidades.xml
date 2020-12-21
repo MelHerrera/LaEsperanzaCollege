@@ -6,23 +6,24 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
+    app:checkedIconTint="@color/colorPrimaryLight"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="170dp"
     android:layout_margin="@dimen/small_margin"
     app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/solidColor"
             android:layout_width="150dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:background="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtNumUnidad"
@@ -30,48 +31,54 @@
             android:layout_height="31dp"
             android:layout_margin="10dp"
             android:background="@drawable/oval_counter"
-            android:padding="5dp"
             android:gravity="center"
+            android:padding="5dp"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txtDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:maxLength="18"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="3"
+            android:textAlignment="center"
             android:textColor="#000"
-            app:layout_constraintTop_toBottomOf="@+id/solidColor"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/solidColor"
+            app:layout_constraintBottom_toTopOf="@+id/linearQuizzes"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:id="@+id/linearQuizzes"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:padding="@dimen/small_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtDesc">
+            app:layout_constraintStart_toStartOf="parent">
+
             <TextView
                 android:id="@+id/cantPreguntas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
                 android:layout_marginRight="@dimen/small_margin"
-                android:layout_marginBottom="@dimen/medium_margin"
-                android:textColor="@android:color/white"
-                android:background="@drawable/oval_counter" />
+                android:background="@drawable/oval_counter"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textAlignment="center"
-                android:text="@string/txt_quizzes"/>
+                android:text="@string/txt_quizzes"
+                android:textAlignment="center" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,13 +38,15 @@
             app:layout_constraintStart_toStartOf="parent" />
         <TextView
             android:id="@+id/txtDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:textColor="#000"
             android:padding="5dp"
+            android:gravity="center"
+            android:text="Primera ley de la Gravedad"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@+id/solidColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

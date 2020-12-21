@@ -1,5 +1,6 @@
 package com.app.laesperanzacollege.adaptadores
 
+import Observers.FiltroObserver
 import Observers.UnidadObserver
 import android.content.Context
 import android.view.LayoutInflater
@@ -88,6 +89,7 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
         var myUnidadObserver:UnidadObserver?=null
         var allowCardChecked:Int?=null
         var intChecked:Int=0
+        var myFilterObserver:FiltroObserver?=null
     }
 
     override fun getFilter(): Filter {
@@ -97,7 +99,7 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
                 val myFilter= FilterResults()
 
 
-                if(wordToSearch?.length==0)
+                if(wordToSearch?.length==0 || wordToSearch?.equals("Todos")!!)
                 {
                     myFilter.values=listaAuxDeUnidades
                 }
@@ -110,9 +112,19 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
             }
 
             override fun publishResults(p0: CharSequence?, results: FilterResults?) {
-                listUnidades.clear()
-                listUnidades.addAll(results?.values as Collection<Unidad>)
-                notifyDataSetChanged()
+                if(results?.values!=null)
+                {
+                    listUnidades.clear()
+                    listUnidades.addAll(results.values as Collection<Unidad>)
+                    notifyDataSetChanged()
+
+                    if(listUnidades.size>0)
+                    {
+                        myFilterObserver?.filterElements(true)
+                    }
+                    else
+                        myFilterObserver?.filterElements(false)
+                }
             }
         }
     }

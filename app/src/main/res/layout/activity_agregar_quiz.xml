@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@android:color/white"
-    tools:context=".AgregarUnidActivity">
+    tools:context=".AgregarQuizActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -53,40 +53,78 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:weightSum="1"
-                        android:background="@drawable/backgroud_rounded_itemquizzes"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/medium_margin"
                         android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/filtroUnidades"
-                            android:layout_width="40dp"
-                            android:paddingLeft="10dp"
-                            android:layout_height="30dp"
-                            android:background="@color/colorAccent"
-                            android:layout_gravity="center"
-                            android:layout_weight="0.9"
-                            android:drawableLeft="@drawable/ic_filter"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rounded_filter"
+                            android:orientation="horizontal">
 
-                         />
+                            <ImageButton
+                                android:id="@+id/filtroUnidades"
+                                android:layout_width="40dp"
+                                android:layout_height="30dp"
+                                android:background="@color/colorAccent"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_filter"
+                                android:drawableLeft="@drawable/ic_filter" />
+
+                            <TextView
+                                android:layout_weight="0.1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/small_margin"
+                                android:gravity="center"
+                                android:text="@string/seleccione_la_unidad"
+                                android:textColor="@color/colorAccent"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
 
                         <TextView
-                            android:layout_weight="0.1"
+                            android:id="@+id/categoria"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="5dp"
-
                             android:gravity="center"
-                            android:layout_marginRight="10dp"
-                            android:text="@string/seleccione_la_unidad"
-                            android:textColor="@color/colorAccent"
+                            android:layout_marginStart="@dimen/medium_margin"
+                            android:textColor="@color/colorPrimary"
                             android:textStyle="bold"
-                            android:textSize="14sp" />
-
-
+                            android:text="Todos"/>
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:id="@+id/linear_validar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
+                        <TextView
+                            android:id="@+id/txtcantidadDeUnidades"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/no_hay_unidades_aun"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/small_margin"/>
+                        <ImageView
+                            android:id="@+id/imgSinUnidades"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_add"
+                            style="@style/AgregarPreguntaFABTheme"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/filtroCantidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:text="Sin Unidades para este Grado"
+                        android:textColor="@color/colorAccent"
+                        android:layout_gravity="center"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyUnid"
@@ -97,13 +135,6 @@
                         android:layout_height="wrap_content"
                         />
                 </LinearLayout>
-                <TextView
-                    android:visibility="invisible"
-                    android:id="@+id/txtcantidadDeUnidades"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_hay_unidades_aun"
-                    android:layout_gravity="center"/>
 
                 <CheckBox
                     android:id="@+id/chkEstado"
@@ -166,6 +197,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:src="@drawable/ic_save" />
+        android:src="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

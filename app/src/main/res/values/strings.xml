@@ -23,7 +23,7 @@
     <string name="finalizado">Finalizado</string>
     <string name="preguntas">Preguntas</string>
     <string name="empezar">Empezar</string>
-    <string name="seleccione_la_unidad">Filtar * unidad</string>
+    <string name="seleccione_la_unidad">Filtar unidad</string>
     <string name="no_hay_unidades_aun">No hay Unidades aun</string>
     <string name="registro_quizz">Registro quizz</string>
     <string name="no_hay_quizzes_aun">No hay Quizzes Aun</string>

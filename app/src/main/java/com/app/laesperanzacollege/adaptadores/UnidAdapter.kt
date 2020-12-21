@@ -4,15 +4,14 @@ import Observers.UnidadObserver
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.R
-import com.app.laesperanzacollege.UnidadesActivity
 import com.app.laesperanzadao.QuizDAO
-import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzaedm.model.Unidad
 import kotlinx.android.synthetic.main.item_unidades.view.*
-import kotlinx.android.synthetic.main.item_unidades.view.txtDesc
+
+
 class UnidAdapter(var listUnidades:ArrayList<Unidad>):
     RecyclerView.Adapter<UnidAdapter.myViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
@@ -31,10 +30,11 @@ class UnidAdapter(var listUnidades:ArrayList<Unidad>):
     class myViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var myQuizDAO=QuizDAO(itemView.context)
         fun bindItem(myUnidad: Unidad) {
-            var descripcion = itemView.txtDesc
-            var numUnidad = itemView.txtNumUnidad
-            var cardUnidad=itemView.viewUnidad
-            var cantidadPreguntas=itemView.cantPreguntas
+            val descripcion = itemView.txtDesc
+
+            val numUnidad = itemView.txtNumUnidad
+            val cardUnidad=itemView.viewUnidad
+            val cantidadPreguntas=itemView.cantPreguntas
 
             cardUnidad.isChecked=false
             descripcion.text = myUnidad.descripcion
