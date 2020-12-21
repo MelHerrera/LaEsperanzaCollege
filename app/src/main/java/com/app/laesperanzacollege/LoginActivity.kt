@@ -1,7 +1,9 @@
 package com.app.laesperanzacollege
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.laesperanzadao.UsuarioDAO
@@ -67,5 +69,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    fun seguir(view: View) {
+            startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.face_uri))))
     }
 }

@@ -8,20 +8,10 @@
     android:background="@drawable/dashusuario"
     tools:context=".fragmentos.EstudianteFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewPerfil"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
             app:cardBackgroundColor="#fff"
             app:cardCornerRadius="70dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,8 +61,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtnombres" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnPrueba"
