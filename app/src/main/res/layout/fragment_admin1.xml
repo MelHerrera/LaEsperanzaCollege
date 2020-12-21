@@ -18,14 +18,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="center"
-                        android:src="@drawable/profile"/>
+                        android:id="@+id/imagenPerfil"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:src="@drawable/profile"
+                        android:contentDescription="@string/txt_perfil"/>
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/capturarFoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:fabSize="mini"
+                        android:contentDescription="@string/txt_tomar_foto"
                         style="@style/Theme_Camera"
                         android:layout_margin="@dimen/medium_margin"
                         android:layout_gravity="bottom|end" />
@@ -36,9 +39,9 @@
                     android:id="@+id/txtnombres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Heriberto Jose Amador Olivas"
                     android:gravity="center"
                     android:textStyle="bold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@android:color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -78,13 +81,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/estud"
+                        android:contentDescription="@string/txt_estudiantes"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Estudiantes"
+                        android:text="@string/txt_estudiantes"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -119,13 +123,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/unidades"
+                        android:contentDescription="@string/txt_unidades"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unidades"
+                        android:text="@string/txt_unidades"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -160,13 +165,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/quiz"
+                        android:contentDescription="@string/txt_quizzes"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Quizzes"
+                        android:text="@string/txt_quizzes"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -201,13 +207,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/q2uiz"
+                        android:contentDescription="@string/txt_actividades"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Actividades"
+                        android:text="@string/txt_actividades"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -242,13 +249,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/unidades1"
+                        android:contentDescription="@string/txt_formulas"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Formulas"
+                        android:text="@string/txt_formulas"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -284,13 +292,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/quiz1"
+                        android:contentDescription="@string/txt_curiosidades"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Curiosidades"
+                        android:text="@string/txt_curiosidades"
                         android:layout_gravity="center"
                         android:textStyle="bold"
                         android:textColor="#000"

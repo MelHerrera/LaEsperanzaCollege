@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
@@ -16,20 +15,21 @@ import com.app.laesperanzacollege.ListarQuizzesActivity
 import com.app.laesperanzacollege.LoginActivity
 import com.app.laesperanzacollege.Preferencias
 import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.Utils.Companion.setImage
+import com.app.laesperanzacollege.Utils.Companion.toByteArray
 import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.fragment_estudiante.view.*
-import java.io.ByteArrayOutputStream
 
 class EstudianteFragment : Fragment() {
     private var keyName=""
     private var myGradoDAO:GradoDAO?=null
     private var myUsuarioDAO:UsuarioDAO? = null
-    var myContext: Context?= null
-    var myImage:ImageView? = null
-    var estudiante: Usuario?=null
+    private var myContext: Context?= null
+    private var myImage:ImageView? = null
+    private var estudiante: Usuario?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -49,9 +49,8 @@ class EstudianteFragment : Fragment() {
 
             if(estudiante?.imagen!=null)
             {
-                setImage(estudiante?.imagen!!)
+                setImage(estudiante?.imagen!!,myImage)
             }
-
         }
 
         myView.btnPractica.setOnClickListener {
@@ -89,14 +88,14 @@ class EstudianteFragment : Fragment() {
                 val myAlert = AlertDialog.Builder(myContext!!)
                 myAlert.setTitle(getString(R.string.text_cerrarsesion))
                 myAlert.setMessage(getString(R.string.confirmar_cerrarsesion))
-                myAlert.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener { _, _ ->
-                })
+                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                }
 
-                myAlert.setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { _, _ ->
-                    var mySharedPrefs= Preferencias()
+                myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
+                    val mySharedPrefs= Preferencias()
                     if(mySharedPrefs.limpiarSharedPrefs(myContext!!))
                         startActivity(Intent(myContext!!, LoginActivity::class.java))
-                })
+                }
 
                 myAlert.show()
             }
@@ -107,36 +106,22 @@ class EstudianteFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode==0 )
+        if(requestCode==0 && data!=null)
         {
-            val mbitmap=data?.extras?.get("data") as Bitmap
-
-            if(mbitmap.byteCount>0)
+            if(data.extras!=null)
             {
-                setImage(mbitmap.toByteArray())
+                val mbitmap=data.extras?.get("data") as Bitmap
 
-                //convertimos a Byte para luego almacenarlo en el servidor
-
-                guardarImagen(mbitmap.toByteArray())
+                if(mbitmap.byteCount>0)
+                {
+                    setImage(mbitmap.toByteArray(),myImage)
+                    actualizarImagen(mbitmap.toByteArray())
+                }
             }
-
-        }
-
-
-    }
-
-    fun Bitmap.toByteArray():ByteArray{
-        ByteArrayOutputStream().apply {
-            compress(Bitmap.CompressFormat.JPEG,10,this)
-            return toByteArray()
         }
     }
 
-    fun ByteArray.toBitmap():Bitmap{
-        return BitmapFactory.decodeByteArray(this,0,size)
-    }
-
-    fun guardarImagen(mImage:ByteArray)
+    private fun actualizarImagen(mImage:ByteArray)
     {
         if(myUsuarioDAO!=null && estudiante!=null)
         {
@@ -145,11 +130,6 @@ class EstudianteFragment : Fragment() {
                Toast.makeText(myContext,"Ocurrio un Error",Toast.LENGTH_LONG).show()
            }
         }
-    }
-
-    fun setImage(mImage:ByteArray)
-    {
-        myImage?.setImageBitmap(mImage.toBitmap())
     }
 
 
