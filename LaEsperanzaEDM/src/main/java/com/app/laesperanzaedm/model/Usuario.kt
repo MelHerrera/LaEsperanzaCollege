@@ -12,4 +12,5 @@ class Usuario:Serializable{
     var codGrado:String?=null
     var tipoDeUsuarioId:Int?=null
     var seccion:String?=null
+    var imagen:ByteArray?=null
 }

@@ -58,4 +58,11 @@
     <string name="nombre_del_quizz">Nombre del Quizz</string>
     <string name="practica">Practica</string>
     <string name="prueba">Prueba</string>
+    <string name="txt_estudiantes">Estudiantes</string>
+    <string name="txt_actividades">Actividades</string>
+    <string name="txt_formulas">Formulas</string>
+    <string name="txt_curiosidades">Curiosidades</string>
+    <string name="txt_perfil">Perfil</string>
+    <string name="txt_tomar_foto">Tomar Foto</string>
+    <string name="face_uri">https://www.facebook.com/heriberto.amador.5</string>
 </resources>

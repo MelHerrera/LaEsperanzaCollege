@@ -4,33 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/loginbackground"
     tools:context=".LoginActivity" >
-
-    <View
-        android:id="@+id/topBack"
-        android:layout_width="wrap_content"
-        android:layout_height="230dp"
-        android:background="@drawable/top_backlogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_launcher_foreground"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/topBack"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="@dimen/default_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="@dimen/large_padding"
-        app:layout_constraintTop_toBottomOf="@+id/topBack">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.578">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtusuario"
@@ -62,8 +58,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtcontra"
                 android:layout_width="match_parent"
-                android:inputType="textPassword"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -71,30 +67,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/large_padding"
             android:text="@string/txtentrar"
             app:icon="@drawable/ic_account"
-            android:padding="@dimen/large_padding"
-            android:background="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtcontra" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txtresetear_contra"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintTop_toBottomOf="@+id/btnsesion"
-            app:layout_constraintEnd_toEndOf="@+id/btnsesion"/>
+            app:layout_constraintEnd_toEndOf="@+id/btnsesion"
+            app:layout_constraintTop_toBottomOf="@+id/btnsesion" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/facepage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
+        android:onClick="seguir"
         app:layout_constraintBottom_toBottomOf="@+id/txtSeguir"
         app:layout_constraintStart_toEndOf="@+id/txtSeguir"
         app:layout_constraintTop_toTopOf="@+id/txtSeguir"
@@ -104,18 +101,12 @@
         android:id="@+id/txtSeguir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
         android:text="@string/txtfseguir_face"
         android:textColor="@color/colorPrimary"
+        android:onClick="seguir"
+        android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintBottom_toTopOf="@+id/bottomBack" />
-
-    <View
-        android:id="@+id/bottomBack"
-        android:layout_width="200dp"
-        android:layout_height="130dp"
-        android:background="@drawable/bottom_backlogin"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

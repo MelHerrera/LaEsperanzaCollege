@@ -23,7 +23,6 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     private var myLayoutManager:RecyclerView.LayoutManager?=null
     private var myListQuizzes:ArrayList<Quiz>?=null
     private var myQuizDAO:QuizDAO?=null
-    private var txtCantQuizzes:TextView?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quizzes)

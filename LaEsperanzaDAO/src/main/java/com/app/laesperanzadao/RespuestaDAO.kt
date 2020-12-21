@@ -26,13 +26,19 @@ class RespuestaDAO(context: Context) {
     {
         var datos= ContentValues()
         var correcta:Int=0
+
+        datos.put(RespuestaContract.COLUMN_ID,respuesta.id)
         datos.put(RespuestaContract.COLUMN_DESCRIPCION,respuesta.descripcion)
+        datos.put(RespuestaContract.COLUMN_PREGUNTAID,respuesta.preguntaId)
+
         if(respuesta.correcta!!)
         {
             correcta=1
         }
+        else
+            correcta=0
+
         datos.put(RespuestaContract.COLUMN_CORRECTA,correcta)
-        datos.put(RespuestaContract.COLUMN_PREGUNTAID,respuesta.preguntaId)
 
         result=mySqlDatabase?.insert(RespuestaContract.TABLE_NAME,null,datos)
 
