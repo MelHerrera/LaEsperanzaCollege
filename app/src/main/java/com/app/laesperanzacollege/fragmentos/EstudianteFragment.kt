@@ -95,7 +95,7 @@ class EstudianteFragment : Fragment() {
                     var mySharedPrefs= Preferencias()
                     if(mySharedPrefs.limpiarSharedPrefs(myContext!!,Preferencias.sharedPrefsFileUser))
                         startActivity(Intent(myContext!!, LoginActivity::class.java))
-                })
+                }
 
                 myAlert.show()
             }
@@ -131,6 +131,5 @@ class EstudianteFragment : Fragment() {
            }
         }
     }
-
 
 }

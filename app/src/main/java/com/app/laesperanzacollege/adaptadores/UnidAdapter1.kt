@@ -70,7 +70,7 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
                         }
                         else
                         {
-                            intChecked--
+                            intChecked=0
                             allowCardChecked=null
                             myUnidadObserver?.startSelection(adapterPosition,false)
                         }
