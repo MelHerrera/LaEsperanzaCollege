@@ -88,14 +88,14 @@ class EstudianteFragment : Fragment() {
                 val myAlert = AlertDialog.Builder(myContext!!)
                 myAlert.setTitle(getString(R.string.text_cerrarsesion))
                 myAlert.setMessage(getString(R.string.confirmar_cerrarsesion))
-                myAlert.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener { _, _ ->
-                })
+                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                }
 
                 myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
-                    var mySharedPrefs= Preferencias()
+                    val mySharedPrefs= Preferencias()
                     if(mySharedPrefs.limpiarSharedPrefs(myContext!!,Preferencias.sharedPrefsFileUser))
                         startActivity(Intent(myContext!!, LoginActivity::class.java))
-                })
+                }
 
                 myAlert.show()
             }
