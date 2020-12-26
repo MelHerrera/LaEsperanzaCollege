@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.CalendarContract
-import android.provider.CalendarContract.Events.*
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +16,7 @@ import com.app.laesperanzacollege.Utils.Companion.setImage
 import com.app.laesperanzacollege.Utils.Companion.toByteArray
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzaedm.model.Usuario
-import kotlinx.android.synthetic.main.fragment_admin1.view.*
+import kotlinx.android.synthetic.main.fragment_admin.view.*
 
 
 class AdminFragment : Fragment() {
@@ -28,7 +26,7 @@ class AdminFragment : Fragment() {
     private var myContext:Context?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val myView=inflater.inflate(R.layout.fragment_admin1, container, false)
+        val myView=inflater.inflate(R.layout.fragment_admin, container, false)
 
         myUsuario= arguments?.get(getString(R.string.keyNameUser)) as Usuario
         myImage=myView.imagenPerfil

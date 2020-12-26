@@ -6,13 +6,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview_layout"
-        android:layout_width="383dp"
-        android:layout_height="557dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:cardElevation="0dp"
-        app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,13 +22,12 @@
                 android:id="@+id/foto1"
                 android:layout_width="match_parent"
                 android:layout_height="415dp"
-                android:layout_marginTop="16dp"
+                android:layout_margin="@dimen/medium_margin"
                 android:scaleType="centerCrop"
-                android:padding="@dimen/large_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/administra" />
+                app:srcCompat="@drawable/adm" />
 
             <TextView
                 android:id="@+id/name1"
@@ -49,12 +44,12 @@
 
             <TextView
                 android:id="@+id/des"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="Descripcion"
-                android:textSize="16sp"
                 android:textStyle="bold"
+                android:gravity="center"
+                android:layout_margin="@dimen/small_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

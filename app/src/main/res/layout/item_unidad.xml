@@ -10,6 +10,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
     android:layout_margin="3dp"
+    app:checkedIconTint="@android:color/white"
     android:theme="@style/Theme.MaterialComponents.Light">
 
     <androidx.constraintlayout.widget.ConstraintLayout
