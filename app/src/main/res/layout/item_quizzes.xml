@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/small_margin"
@@ -75,20 +74,15 @@
 
             <Button
                 android:id="@+id/btnPractica"
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:text="@string/empezar"
                 android:textAlignment="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:gravity="center_vertical|bottom"
-                android:drawableLeft="@android:drawable/ic_media_play"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/rounded_button_itemquizzes"
                 android:textColor="@color/icons"
-                android:textSize="10sp"
-                android:drawableStart="@android:drawable/ic_media_play"
-                tools:ignore="RtlCompat,SmallSp" />
+                android:drawableStart="@android:drawable/ic_media_play" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
