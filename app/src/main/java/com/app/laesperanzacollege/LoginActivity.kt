@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private var keyName=""
+    private val INTERVALO = 2000 //2 segundos para salir
+    private var tiempoPrimerClick: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -73,5 +75,15 @@ class LoginActivity : AppCompatActivity() {
 
     fun seguir(view: View) {
             startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.face_uri))))
+    }
+
+    override fun onBackPressed() {
+        if (tiempoPrimerClick + INTERVALO > System.currentTimeMillis()){
+            super.onBackPressed()
+            this.finishAffinity()
+        }else {
+            Toast.makeText(this, "Presiona 2 Veces Para Salir", Toast.LENGTH_SHORT).show()
+        }
+        tiempoPrimerClick = System.currentTimeMillis()
     }
 }
