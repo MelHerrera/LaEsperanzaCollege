@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".IntroActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".ActividadesActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".ListarQuizzesActivity" />
@@ -45,7 +48,8 @@
             android:name=".AgregarUnidActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name=".DashActivity" android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize"/>
+        <activity
+            android:name=".DashActivity" />
         <activity android:name=".EstActivity" />
         <activity android:name=".CuriosidadesActivity" />
         <activity android:name=".FormulasActivity" />

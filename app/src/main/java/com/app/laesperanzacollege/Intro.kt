@@ -8,16 +8,16 @@ data class Intro(var name:String, var des:String?, var foto:Int?)
             Intro(
                 "Administra",
                 "Una app para administrar tus estudiantes, crear cuestionarios y guardar formulas utilizadas en cada clase.",
-                R.drawable.administra
+                R.drawable.adm
             ),
             Intro(
                 "Crea tus Cuestionarios",
                 "Aprende de forma divertida creando tus cuestionarios para que otros lo puedan resolver.",
-                R.drawable.pregunta
+                R.drawable.crea
             ),
             Intro(
-                "Educa",
-                "Enseña a través de esta app interactiva, dividida por grados y mira la mejoría a largo plazo.",
+                "Educación",
+                "Enseña a través de esta app interactiva, dividida por grados y mira la mejoría a corto plazo.",
                 R.drawable.educa
             )
         )
