@@ -145,6 +145,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
                     myQuizzToSave = myQuizDAO?.BuscarQuizz(myQuizzToSave.nombre.toString())!!
                      edtNombre.text?.clear()
                     numUnidad=null
+                    chkEstado.isChecked=false
 
                         myQuizzObserver?.QuizzSaved(myQuizzToSave)
                         myUnidadesAdapter?.notifyDataSetChanged()

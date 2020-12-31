@@ -9,6 +9,7 @@
 
     <style name="AgregarPreguntaTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
     <style name="AgregarPreguntaFABTheme" parent="Widget.Design.FloatingActionButton">

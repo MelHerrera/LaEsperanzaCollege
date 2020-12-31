@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.app.laesperanzacollege.MainQuizFragment
 import com.app.laesperanzaedm.model.Pregunta
 
-class QuizPageAdapter(frag: FragmentActivity,private var listPregunta: ArrayList<Pregunta>):FragmentStateAdapter(frag) {
+class QuizPageAdapter(frag:Fragment,private var listPregunta: ArrayList<Pregunta>):FragmentStateAdapter(frag) {
     override fun getItemCount(): Int {
        return listPregunta.size
     }

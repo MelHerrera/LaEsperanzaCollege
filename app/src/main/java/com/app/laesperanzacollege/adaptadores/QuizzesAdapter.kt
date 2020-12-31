@@ -1,6 +1,7 @@
 package com.app.laesperanzacollege.adaptadores
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
         fun bindItem(myQuizz:Quiz,tipoDeUsuario: TipoDeUsuarios)
         {
             nombre.text=myQuizz.nombre
-            cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!)
+            cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!).toString()
             quizzEstado.text=establecerEstado(myQuizz.quizId!!)
 
             if(tipoDeUsuario==TipoDeUsuarios.Admin)
@@ -89,7 +90,10 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
                 {
                     val myIntent=Intent(itemView.context, TestActivity::class.java)
                     myIntent.putExtra(itemView.context.getString(R.string.keyNameUser),myQuizz)
+                    if(obtenerCantidad(myQuizz.quizId!!)>0)
                     itemView.context.startActivity(myIntent)
+                    else
+                        Toast.makeText(itemView.context,"Esta Prueba aun no tiene preguntas",Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -137,9 +141,9 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
                 }
         }
 
-        private fun obtenerCantidad(quizId: Int): String? {
+        private fun obtenerCantidad(quizId: Int): Int {
 
-            return myQuizDAO.CantPreguntas(quizId).toString()
+            return myQuizDAO.CantPreguntas(quizId)
         }
     }
 

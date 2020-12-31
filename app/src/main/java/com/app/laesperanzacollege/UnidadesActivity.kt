@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,6 +21,7 @@ import com.app.laesperanzacollege.adaptadores.UnidAdapter
 import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Unidad
+import kotlinx.android.synthetic.main.activity_quizzes.*
 import kotlinx.android.synthetic.main.activity_unidades.*
 import java.io.Console
 import javax.xml.validation.Validator
@@ -63,6 +65,16 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         UnidAdapter.myUnidadObserver=this
         myUnidadesAdapter= UnidAdapter(myListUnidad)
         myLayoutManager=GridLayoutManager(this,3)
+
+        recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    recyQuizzes.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val newSpanCount=spanCalc()
+                    myLayoutManager=GridLayoutManager(this@UnidadesActivity,newSpanCount)
+                    recyQuizzes.layoutManager=myLayoutManager
+                }
+            })
 
         recyUnidades.layoutManager=myLayoutManager
         recyUnidades.adapter=myUnidadesAdapter
@@ -188,4 +200,10 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         return true
     }
 
+    fun spanCalc():Int
+    {
+        val viewWidth: Int = recyQuizzes.width
+        val cardViewWidth: Float =resources.getDimension(R.dimen.card_quizzes)
+        return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
+    }
 }

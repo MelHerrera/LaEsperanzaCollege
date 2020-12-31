@@ -2,11 +2,10 @@ package com.app.laesperanzacollege
 
 import Observers.QuizzObserver
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +16,8 @@ import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.pow
+
 
 class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     private var myQuizzesAdapter:QuizzesAdapter?=null
@@ -26,13 +27,19 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quizzes)
-        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-
-        //validar que no se pueda poner en progreso cuando el quiz no tenga preguntas aun
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         myQuizDAO= QuizDAO(this)
-        myLayoutManager=GridLayoutManager(this,2)
+
+        recyQuizzes.viewTreeObserver.addOnGlobalLayoutListener(
+            object : OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    recyQuizzes.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val newSpanCount=spanCalc()
+                    myLayoutManager=GridLayoutManager(this@QuizzesActivity,newSpanCount)
+                    recyQuizzes.layoutManager=myLayoutManager
+                }
+            })
 
         myListQuizzes=myQuizDAO?.ListarQuizzes()
 
@@ -41,6 +48,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         AgregarQuizActivity.myQuizzObserver=this
         myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin)
 
+        myLayoutManager=GridLayoutManager(this,2)
         recyQuizzes.layoutManager=myLayoutManager
         recyQuizzes.adapter=myQuizzesAdapter
 
@@ -78,5 +86,12 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun spanCalc():Int
+    {
+        val viewWidth: Int = recyQuizzes.width
+        val cardViewWidth: Float =resources.getDimension(R.dimen.card_quizzes)
+        return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
     }
 }

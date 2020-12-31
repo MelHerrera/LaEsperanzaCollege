@@ -19,8 +19,10 @@ import com.app.laesperanzaedm.model.OpcionDeRespuesta
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_agregar_pregunta.*
+import kotlinx.android.synthetic.main.activity_agregar_pregunta.toolbar
 import kotlin.math.abs
 
 
@@ -43,18 +45,27 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
         edtPregunta.requestFocus()
         val myToolbar=findViewById<Toolbar>(R.id.toolbar)
-        myToolbar.title=""
+        myToolbar.title=getString(R.string.txt_agregarPregunta)
         setSupportActionBar(myToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
-
 
         app_barActPregunta.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
 
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 toolbar_layoutActPregunta.isTitleEnabled = true
-                toolbar_layoutActPregunta.title = getString(R.string.preguntas)
+                toolbar_layoutActPregunta.title = getString(R.string.txt_agregarPregunta)
+
+                val params = toolbar.layoutParams
+                val newParams: CollapsingToolbarLayout.LayoutParams
+                newParams = if (params is CollapsingToolbarLayout.LayoutParams) {
+                    params
+                } else {
+                    CollapsingToolbarLayout.LayoutParams(params)
+                }
+                newParams.collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+                myToolbar.layoutParams = newParams
+                myToolbar.requestLayout()
             } else {
                 toolbar_layoutActPregunta.isTitleEnabled = false
             }
@@ -93,20 +104,13 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         {
             for (item in myListOpciones)
             {
-
                 val myChipChoice= Chip(this)
-                //var myRadioButton:RadioButton= RadioButton(this)
                 myChipChoice.gravity = (Gravity.CENTER_VERTICAL or Gravity.START)
-                //myRadioButton.text =item.descripcion
                 myChipChoice.text=item.descripcion
                 myChipChoice.isCheckable=true
 
                 myChipChoice.setTextColor(Color.WHITE)
-                //myRadioButton.setTextColor(Color.WHITE)
-
                 myChipChoice.setChipBackgroundColorResource(R.color.colorAccent)
-
-                // rgbOpciones.addView(myRadioButton)
                 rgbOpciones.addView(myChipChoice)
             }
         }
@@ -125,11 +129,6 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
             {
                 val index=rgbOpciones.indexOfChild(findViewById(checkedId))
                 opcionDeRespuestaId=myListOpciones[index].id
-                Toast.makeText(
-                    this,
-                    "Onchecked in ${myListOpciones[index].descripcion}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
             else
                 opcionDeRespuestaId=null

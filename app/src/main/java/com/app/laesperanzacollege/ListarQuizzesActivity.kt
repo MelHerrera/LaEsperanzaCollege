@@ -23,6 +23,8 @@ class ListarQuizzesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listar_quizzes)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         keyNameUser=getString(R.string.keyNameUser)
         keyNameTest=getString(R.string.txt_tipoTest)
 
@@ -45,6 +47,9 @@ class ListarQuizzesActivity : AppCompatActivity() {
         myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante)
         recy_ls.layoutManager=myLayoutManager
         recy_ls.adapter=myListQuizzesAdapter
-
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

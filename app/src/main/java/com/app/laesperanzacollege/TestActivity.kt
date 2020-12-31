@@ -2,32 +2,27 @@ package com.app.laesperanzacollege
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.app.laesperanzacollege.adaptadores.QuizPageAdapter
-import com.app.laesperanzadao.PreguntaDAO
-import com.app.laesperanzaedm.model.Pregunta
+import android.view.Menu
+import com.app.laesperanzacollege.fragmentos.PruebaFragment
 import com.app.laesperanzaedm.model.Quiz
-import kotlinx.android.synthetic.main.activity_test.*
+import kotlin.math.log
 
-class TestActivity : FragmentActivity() {
-    var quiz:Quiz?=null
-    private lateinit var viewPager: ViewPager2
-    private lateinit var adapter: QuizPageAdapter
-    private lateinit var listPreguntas: ArrayList<Pregunta>
+class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
-        var myPreguntaDAO=PreguntaDAO(this)
+        val quiz=intent.extras?.get(getString(R.string.keyNameUser)) as Quiz?
 
-        quiz= intent.extras?.get(getString(R.string.keyNameUser)) as Quiz?
-        viewPager = quizPager
-        listPreguntas=myPreguntaDAO.ListarPreguntas(quiz?.quizId!!)
-
-        if(listPreguntas.size>0)
+        supportActionBar?.elevation=0.0f
+        supportActionBar?.title=""
+        if(quiz!=null)
         {
-            adapter= QuizPageAdapter(this,listPreguntas)
-            viewPager.adapter=adapter
+            val myPruebaFragment=PruebaFragment()
+            val myData=Bundle()
+            myData.putSerializable(getString(R.string.keyNameUser),quiz)
+
+            myPruebaFragment.arguments=myData
+            supportFragmentManager.beginTransaction().add(R.id.content,myPruebaFragment,null).commit()
         }
     }
 }

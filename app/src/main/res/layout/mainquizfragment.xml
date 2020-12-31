@@ -1,132 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/txtCorrect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CORRECTA"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:layout_margin="@dimen/default_padding"
-        android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCorrect">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_idea"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
 
         <TextView
             android:id="@+id/pregunta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:gravity="center"
             android:text="Cual es la Primera ley de newton?"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageHead" />
 
         <LinearLayout
             android:id="@+id/viewRespuestas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="@dimen/default_margin"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pregunta">
 
+            <TextView
+                android:id="@+id/sinResp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pregunta sin Respuestas"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:visibility="gone" />
         </LinearLayout>
 
         <GridView
             android:id="@+id/opciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="5dp"
             android:horizontalSpacing="5dp"
             android:numColumns="7"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_gravity="center"
             android:stretchMode="columnWidth"
             android:verticalSpacing="5dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewRespuestas">
-        </GridView>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewRespuestas" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/viewContador"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/large_margin"
-    app:layout_constraintStart_toStartOf="@+id/btnContinuar"
-    app:layout_constraintEnd_toEndOf="@+id/btnContinuar"
-    app:layout_constraintTop_toBottomOf="@+id/viewContent">
-
-    <TextView
-        android:id="@+id/preguntaActual"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewContador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:layout_marginEnd="@dimen/default_padding"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <TextView
-        android:id="@+id/separador"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" / "
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/preguntaActual"
-        app:layout_constraintEnd_toStartOf="@+id/preguntaFinal"
-        app:layout_constraintTop_toTopOf="@+id/preguntaActual"
-        />
-    <TextView
-        android:id="@+id/preguntaFinal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginTop="@dimen/large_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/separador"
-        app:layout_constraintTop_toTopOf="@+id/separador" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewContent">
+
+        <TextView
+            android:id="@+id/indicadorPreguntaActual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:text="0"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/separador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/indicadorPreguntaFinal"
+            app:layout_constraintStart_toEndOf="@+id/indicadorPreguntaActual"
+            app:layout_constraintTop_toTopOf="@+id/indicadorPreguntaActual" />
+
+        <TextView
+            android:id="@+id/indicadorPreguntaFinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/separador"
+            app:layout_constraintTop_toTopOf="@+id/separador" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <Button
         android:id="@+id/btnContinuar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CONTINUAR"
-        android:layout_marginTop="@dimen/medium_margin"
         android:background="@drawable/square_letras"
-        android:textColor="@android:color/white"
         android:padding="@dimen/default_padding"
+        android:text="@string/txt_siguiente"
+        android:textColor="@android:color/white"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnAnterior"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewContador"/>
+        app:layout_constraintTop_toTopOf="@+id/btnAnterior"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAnterior"/>
+
+    <Button
+        android:id="@+id/btnAnterior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_letras"
+        android:padding="@dimen/default_padding"
+        android:layout_margin="@dimen/medium_margin"
+        android:text="@string/txt_anterior"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/btnContinuar"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewContador" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

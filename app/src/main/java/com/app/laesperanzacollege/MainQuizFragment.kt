@@ -1,5 +1,6 @@
 package com.app.laesperanzacollege
 
+import Observers.ViewPagerObserver
 import android.app.ActionBar
 import android.content.Context
 import android.graphics.Color
@@ -9,15 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
+import com.app.laesperanzacollege.Utils.Companion.letrasEditTextEstaLlena
 import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.app.laesperanzacollege.Utils.Companion.mostrarContiuar
 import kotlinx.android.synthetic.main.mainquizfragment.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,22 +33,50 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
     var btnContinuar:Button?=null
     var checkedSelected:ArrayList<Respuesta> = arrayListOf()
     var letrasEditText:ArrayList<EditText> = arrayListOf()
+    var letrasButton:ArrayList<Button> = arrayListOf()
+    var txtSinRespuesta:TextView?=null
+
+    companion object
+    {
+        var myViewPagerObserver:ViewPagerObserver?=null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val myFrag=inflater.inflate(R.layout.mainquizfragment,container,false)
 
         myFrag.pregunta.text=myPpregunta.descripcion
-        myFrag.preguntaActual.text=actual.toString()
-        myFrag.preguntaFinal.text=final.toString()
+
+        myFrag.indicadorPreguntaActual.text=actual.toString()
+        myFrag.indicadorPreguntaFinal.text=final.toString()
+        txtSinRespuesta=myFrag.sinResp
 
         myOpciones=myFrag.opciones
         btnContinuar=myFrag.btnContinuar
+
+        if(ultimaPregunta(actual,final))
+        {
+            myFrag.btnContinuar.text=context?.getString(R.string.txt_finaliza)
+        }
+        else
+            myFrag.btnContinuar.text=context?.getString(R.string.txt_siguiente)
+
         //set this theme for use Chip and ChipGroup
         activity!!.applicationContext.setTheme(R.style.Theme_MaterialComponents)
 
         opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas,inflater)
 
+        myFrag.btnContinuar.setOnClickListener {
+            myViewPagerObserver?.paginaSiguiente()
+        }
+
+        myFrag.btnAnterior.setOnClickListener {
+            myViewPagerObserver?.paginaAnterior()
+        }
         return myFrag
+    }
+
+    private fun ultimaPregunta(actual: Int, final: Int): Boolean {
+        return actual==final
     }
 
     fun respuestas(preguntaId:Int?):ArrayList<Respuesta>
@@ -59,7 +89,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         when(opcionId)
         {
             1->
-            {
+            {//multiple opciones
                 for (item in respuestas)
                 {
                     val myCheckBox = CheckBox(activity!!.applicationContext)
@@ -70,8 +100,9 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
+
                     myCheckBox.setTextColor(Color.WHITE)
-                    myCheckBox.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.colorAccent,null))
+                    //myCheckBox.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.colorAccent,null))
 
                     myCheckBox.setOnCheckedChangeListener { compoundButton, checked ->
                         val resp=respuestas.find { x->x.id==compoundButton.id }
@@ -89,7 +120,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                             }
                         }
                     }
-
+                    viewResp.orientation=LinearLayout.VERTICAL
                     viewResp.addView(myCheckBox)
                 }
             }
@@ -104,7 +135,6 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                 myChipGroup.chipSpacingHorizontal=10
                 myChipGroup.isSingleSelection=true
                 myChipGroup.layoutParams=params
-                myChipGroup.setPadding(10,10,10,10)
 
                 myChipGroup.setOnCheckedChangeListener { group, checkedId ->
                     if(checkedId!=-1)
@@ -113,20 +143,23 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
 
                         if(mRespuesta!=null)
                         {
-                            mostrarContiuar(View.VISIBLE)
+                            mostrarContiuar(View.VISIBLE,btnContinuar)
                         }
                     }
                     else
-                       mostrarContiuar(View.GONE)
+                    {
+                        mostrarContiuar(View.GONE,btnContinuar)
+                    }
                 }
                 for (item in respuestas)
                 {
                     val myChipChoice= Chip(activity!!.applicationContext)
 
-                    myChipChoice.gravity = (Gravity.CENTER_VERTICAL or Gravity.START)
+                    myChipChoice.gravity = (Gravity.CENTER)
                     myChipChoice.text=item.descripcion?.toUpperCase(Locale.ROOT)
                     myChipChoice.id= item.id!!
                     myChipChoice.isCheckable=true
+                    myChipChoice.setPadding(30,30,30,30)
 
                     myChipChoice.setTextColor(Color.WHITE)
                     myChipChoice.setChipBackgroundColorResource(R.color.colorAccent)
@@ -137,69 +170,130 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
                 viewResp.addView(myChipGroup)
             }
             3->
-            {
-                for (item in respuestas)
+            {//
+                if(respuestas.size>0)
                 {
-                    val myLetter=EditText(activity!!.applicationContext)
-                    myLetter.setText(item.descripcion?.toUpperCase())
-                    myLetter.id=item.id!!
+                    txtSinRespuesta?.visibility=View.GONE
 
-                    myLetter.layoutParams=LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-
-                    myLetter.isEnabled=false
-                    myLetter.gravity=Gravity.CENTER
-                    myLetter.setTextColor(Color.TRANSPARENT)
-                    myLetter.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE,BlendModeCompat.SRC_IN)
-
-                    val params = ActionBar.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    params.setMargins(5, 0, 3, 0)
-                    myLetter.layoutParams = params
-
-                    letrasEditText.add(myLetter)
-                    viewResp.addView(myLetter)
-
-                    val alfabeto:MutableList<Char> = mutableListOf()
-                    var x:Char='A'
-
-                    while (x<='Z')
+                    for (letter in respuestas[0].descripcion.toString())
                     {
-                        alfabeto.add(x)
-                        x++
+                            val myLetter=EditText(activity!!.applicationContext)
+                            //myLetter.setText(item.descripcion?.toUpperCase())
+                            //myLetter.id=letter.id!!
+
+                            myLetter.layoutParams=LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                            )
+
+                        myLetter.isFocusable=false
+                            //myLetter.isEnabled=false
+                            myLetter.gravity=Gravity.CENTER
+                            //myLetter.setTextColor(Color.TRANSPARENT)
+                            myLetter.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE,BlendModeCompat.SRC_IN)
+
+                        myLetter.setOnClickListener {
+                            if(myLetter.text.isNotEmpty())
+                            {
+                               val mElement= letrasButton.find{ x-> !x.isEnabled && x.text==myLetter.text.toString() }
+
+                                    if(mElement!=null)
+                                    {
+                                        mElement.setTextColor(Color.WHITE)
+                                        mElement.isEnabled=true
+                                        letrasEditText.find { x->x.text.toString()==myLetter.text.toString()}?.text?.clear()
+                                    }
+                                if(!letrasEditTextEstaLlena(letrasEditText))
+                                    mostrarContiuar(View.GONE,btnContinuar)
+                            }
+                        }
+                            val params = ActionBar.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            params.setMargins(15, 0, 15, 0)
+                            myLetter.layoutParams = params
+
+                            letrasEditText.add(myLetter)
+                            viewResp.addView(myLetter)
                     }
 
-                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,alfabeto,letrasEditText)
+                    val miAlfabeto=generarAlfabeto(respuestas[0].descripcion.toString())
+                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,miAlfabeto.toUpperCase(
+                        Locale.ROOT), letrasEditText,letrasButton, btnContinuar)
                     myOpciones?.adapter=alfabetoAdapter
+                }
+                else
+                {
+                    txtSinRespuesta?.visibility=View.VISIBLE
+                    mostrarContiuar(View.VISIBLE,btnContinuar)
                 }
             }
         }
     }
 
-    class AlfabetoAdapter(private var context: Context,private var alfabeto:MutableList<Char>,private var letrasEditText:ArrayList<EditText>):BaseAdapter()
+    private fun generarAlfabeto(preAlfabeto: String):String {
+        val randomValues = List(8) { Random.nextInt(65, 90).toChar() }
+        return desordenar("$preAlfabeto${randomValues.joinToString(separator = "")}")
+    }
+
+    private fun desordenar(theWord: String):String {
+
+        val theTempWord=theWord.toMutableList()
+
+        for (item in 0..Random.nextInt(theTempWord.count()/2,theTempWord.count()-1))
+        {
+            val indexA=Random.nextInt(theTempWord.count()-1)
+            val indexB=Random.nextInt(theTempWord.count()-1)
+
+            val temp=theTempWord[indexA]
+
+            theTempWord[indexA]=theTempWord[indexB]
+            theTempWord[indexB]=temp
+        }
+
+        return theTempWord.joinToString(separator = "")
+    }
+
+    class AlfabetoAdapter(private var context: Context, private var alfabeto:String, private var letrasEditText:ArrayList<EditText>,
+                          private var letrasButton:ArrayList<Button>, private var btnContinuar:Button?):BaseAdapter()
     {
-        var alfabettoButtons:ArrayList<Button> = arrayListOf()
         override fun getView(i: Int, view: View?, container: ViewGroup?): View? {
 
             var myView=view
+            var myButton:Button?= null
 
             if(myView==null)
             {
                 myView=LayoutInflater.from(context).inflate(R.layout.item_alfabeto,container,false)
-            }
 
-           val myButton= myView?.findViewById<Button>(R.id.opcion)
-            myButton?.text= alfabeto[i].toString()
-            myButton?.setOnClickListener {
-               myButton.visibility=View.INVISIBLE
-                Toast.makeText(context,myButton.text,Toast.LENGTH_LONG).show()
-            }
-            if (myButton != null) {
-                alfabettoButtons.add(myButton)
+                myButton= myView?.findViewById(R.id.opcion)
+                myButton?.text= alfabeto[i].toString()
+
+                myButton?.setOnClickListener {
+                    if(!letrasEditTextEstaLlena(letrasEditText))
+                    {
+                        for (item in letrasEditText)
+                        {
+                            if(item.text.isEmpty())
+                            {
+                                item.setText(myButton.text.toString())
+                                break
+                            }
+                        }
+
+                        myButton.isEnabled=false
+                        myButton.setTextColor(Color.TRANSPARENT)
+
+                        if(letrasEditTextEstaLlena(letrasEditText))
+                            mostrarContiuar(View.VISIBLE,btnContinuar)
+                    }
+                    else
+                        mostrarContiuar(View.VISIBLE,btnContinuar)
+                }
+                if (myButton != null) {
+                    letrasButton.add(myButton)
+                }
             }
 
             return myView
@@ -214,41 +308,10 @@ class MainQuizFragment(private var myPpregunta:Pregunta,private var actual:Int,p
         }
 
         override fun getCount(): Int {
-            return alfabeto.size
+            return alfabeto.count()
         }
     }
 
-   /* fun getRespuesta(respId:Int,listResp:ArrayList<Respuesta>,myButton: Button)
-    {
-        val respuesta=listResp.find { x->x.id==respId }
-
-        if(!hasDrawableRight)
-        {
-            hasDrawableRight=true
-
-            if(respuesta!=null)
-            {
-                if(respuesta.correcta!!)
-                {
-                    myButton.setRigthDrawable(R.drawable.ic_check_circle)
-                }
-                else
-                {
-                    myButton.setRigthDrawable(R.drawable.ic_clear)
-                }
-            }
-        }
-    }
-
-    fun Button.setRigthDrawable(rigthDrawable:Int)
-    {
-        this.setCompoundDrawablesWithIntrinsicBounds(0, 0,rigthDrawable, 0)
-    }*/
-
-    fun mostrarContiuar(visibility:Int)
-    {
-        btnContinuar?.visibility=visibility
-    }
     fun mostrarContiuar(chechedList:ArrayList<Respuesta>)
     {
         if(chechedList.isNotEmpty())

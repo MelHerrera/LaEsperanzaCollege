@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -22,6 +23,8 @@ import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.fragment_estudiante.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class EstudianteFragment : Fragment() {
     private var keyName=""
@@ -30,6 +33,7 @@ class EstudianteFragment : Fragment() {
     private var myContext: Context?= null
     private var myImage:ImageView? = null
     private var estudiante: Usuario?=null
+    private var myButton:Button?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -39,6 +43,7 @@ class EstudianteFragment : Fragment() {
         myContext=container?.context
         myImage=myView.imageView_photo
         myUsuarioDAO=UsuarioDAO(myView.context)
+        myButton=myView.btnPractica
 
         estudiante=arguments?.get(keyName) as Usuario
 
@@ -75,7 +80,6 @@ class EstudianteFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
         inflater.inflate(R.menu.menu_preferencias,menu)
         return super.onCreateOptionsMenu(menu,inflater)
     }

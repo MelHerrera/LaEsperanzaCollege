@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
        android:layout_margin="@dimen/small_margin"
         android:adjustViewBounds="true"
-        android:background="@drawable/rounded_button_itemquizzes"
+        android:background="@drawable/rounded_button"
         android:backgroundTint="@color/colorPrimary"
         android:text="@string/empezar"
         android:textStyle="bold"

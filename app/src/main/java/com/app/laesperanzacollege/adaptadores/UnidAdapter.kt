@@ -57,7 +57,7 @@ class UnidAdapter(var listUnidades:ArrayList<Unidad>):
 
         fun obtenerCantidad(numUnidad: Int): String? {
 
-            var result=myQuizDAO.CantQuizzes(numUnidad)
+            val result=myQuizDAO.CantQuizzes(numUnidad)
 
             return result.toString()
         }
