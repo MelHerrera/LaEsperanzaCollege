@@ -69,10 +69,10 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
             object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    recyQuizzes.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    recyUnidades.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     val newSpanCount=spanCalc()
                     myLayoutManager=GridLayoutManager(this@UnidadesActivity,newSpanCount)
-                    recyQuizzes.layoutManager=myLayoutManager
+                    recyUnidades.layoutManager=myLayoutManager
                 }
             })
 
@@ -202,7 +202,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
 
     fun spanCalc():Int
     {
-        val viewWidth: Int = recyQuizzes.width
+        val viewWidth: Int = recyUnidades.width
         val cardViewWidth: Float =resources.getDimension(R.dimen.card_quizzes)
         return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
     }
