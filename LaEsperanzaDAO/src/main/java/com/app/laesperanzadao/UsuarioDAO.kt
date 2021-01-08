@@ -23,7 +23,7 @@ class UsuarioDAO(context: Context) {
 
     fun Eliminar(usuarioId: Int?):Boolean
     {
-        val result=mySqlDatabase?.delete(UsuarioContract.TABLE_NAME,UsuarioContract.COLUMN_ID+"=?", arrayOf(usuarioId.toString()))
+        val result=mySqlDatabase?.delete(UsuarioContract.TABLE_NAME,"${UsuarioContract.COLUMN_ID}=?", arrayOf(usuarioId.toString()))
 
         if (result != null) {
             return result>0

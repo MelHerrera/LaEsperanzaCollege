@@ -19,6 +19,7 @@ class MyDbHelper(var context: Context, nombre:String, factory:SQLiteDatabase.Cur
         db?.execSQL(OpcionDeRespuestaContract.SQL_CREATE_TABLE)
         db?.execSQL(PreguntaContract.SQL_CREATE_TABLE)
         db?.execSQL(RespuestaContract.SQL_CREATE_TABLE)
+        db?.execSQL(ResultadoContract.SQL_CREATE_TABLE)
         Inicializar(db)
     }
 

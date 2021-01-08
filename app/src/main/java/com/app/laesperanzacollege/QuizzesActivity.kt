@@ -46,7 +46,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
 
         AgregarQuizActivity.myQuizzObserver=this
-        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin)
+        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin,-1)
 
         myLayoutManager=GridLayoutManager(this,2)
         recyQuizzes.layoutManager=myLayoutManager

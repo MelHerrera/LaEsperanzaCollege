@@ -101,6 +101,7 @@ class PreguntaDAO(context: Context) {
                 myPregunta.id=res.getInt(res.getColumnIndex(PreguntaContract.COLUMN_ID))
                 myPregunta.descripcion=res.getString(res.getColumnIndex(PreguntaContract.COLUMN_DESCRIPCION))
                 myPregunta.opcionDeRespuestaId=res.getInt(res.getColumnIndex(PreguntaContract.COLUMN_OPCIONDERESPUESTAID))
+                myPregunta.quizzId=res.getInt(res.getColumnIndex(PreguntaContract.COLUMN_QUIZZID))
 
                 myListPreguntas.add(myPregunta)
 

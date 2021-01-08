@@ -44,7 +44,7 @@ class ListarQuizzesActivity : AppCompatActivity() {
 
 
         myLayoutManager=GridLayoutManager(this,2)
-        myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante)
+        myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante,estudiante?.id!!)
         recy_ls.layoutManager=myLayoutManager
         recy_ls.adapter=myListQuizzesAdapter
     }

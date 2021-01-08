@@ -7,13 +7,13 @@ class UsuarioQuizzContract {
         const val COLUMN_ID="UsuarioQuizzId"
         const val COLUMN_QUIZID=QuizContract.COLUMN_ID
         const val COLUMN_USUARIOID=UsuarioContract.COLUMN_ID
-        const val COLUMN_PENDIENTE="Pendiente"
+        const val COLUMN_ESTADO="Estado"
 
 
         val SQL_CREATE_TABLE =
             "CREATE TABLE $TABLE_NAME (" +
                     "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "$COLUMN_PENDIENTE INT," +
+                    "$COLUMN_ESTADO INT," +
                     "$COLUMN_USUARIOID INTEGER,"+
                     "$COLUMN_QUIZID INTEGER" +
                     ")"

@@ -164,4 +164,6 @@
     <string name="txt_anterior">ANTERIOR</string>
     <string name="txt_finaliza">FINALIZAR</string>
     <string name="txt_salir">Salir</string>
+    <string name="keyNameQuiz">Quiz</string>
+    <string name="keynameUsuarioQuiz">UsuarioQuiz</string>
 </resources>

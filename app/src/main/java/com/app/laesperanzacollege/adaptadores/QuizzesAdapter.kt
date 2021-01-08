@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_quizzes.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsuarios):
+class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsuarios,var usuarioId:Int):
     RecyclerView.Adapter<QuizzesAdapter.MyViewHolder>(), Filterable {
     var myQuizFilterList= arrayListOf<Quiz>()
     init {
@@ -32,7 +32,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bindItem(myListQuiz[position],tipoDeUsuario)
+        holder.bindItem(myListQuiz[position],tipoDeUsuario,usuarioId)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -43,7 +43,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
         private var quizzEstado: TextView =itemView.quizzEstado
         private var btnPractica: Button =itemView.btnPractica
 
-        fun bindItem(myQuizz:Quiz,tipoDeUsuario: TipoDeUsuarios)
+        fun bindItem(myQuizz:Quiz,tipoDeUsuario: TipoDeUsuarios,usuarioId: Int)
         {
             nombre.text=myQuizz.nombre
             cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!).toString()
@@ -89,7 +89,8 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, var tipoDeUsuario:TipoDeUsu
                 else
                 {
                     val myIntent=Intent(itemView.context, TestActivity::class.java)
-                    myIntent.putExtra(itemView.context.getString(R.string.keyNameUser),myQuizz)
+                    myIntent.putExtra(itemView.context.getString(R.string.keyNameQuiz),myQuizz)
+                    myIntent.putExtra(itemView.context.getString(R.string.keyNameUser),usuarioId)
                     if(obtenerCantidad(myQuizz.quizId!!)>0)
                     itemView.context.startActivity(myIntent)
                     else
