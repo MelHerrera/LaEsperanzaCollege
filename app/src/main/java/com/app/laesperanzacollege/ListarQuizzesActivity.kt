@@ -2,6 +2,7 @@ package com.app.laesperanzacollege
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
@@ -10,6 +11,7 @@ import com.app.laesperanzadao.enums.TipoDeUsuarios
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Usuario
+import com.app.laesperanzacollege.Utils.Companion.spanCalc
 import kotlinx.android.synthetic.main.activity_listar_quizzes.*
 
 class ListarQuizzesActivity : AppCompatActivity() {
@@ -41,10 +43,23 @@ class ListarQuizzesActivity : AppCompatActivity() {
                 myQuizDAO!!.listarQuizzesDePractica(estudiante?.codGrado)
             }
         }
-
-
-        myLayoutManager=GridLayoutManager(this,2)
         myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante,estudiante?.id!!)
+
+
+        if(recy_ls!=null)
+        {
+            recy_ls.viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        recy_ls.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        myLayoutManager=GridLayoutManager(this@ListarQuizzesActivity,spanCalc(recy_ls,this@ListarQuizzesActivity))
+                        recy_ls.layoutManager=myLayoutManager
+                    }
+                })
+        }
+        else
+            myLayoutManager=GridLayoutManager(this,2)
+
         recy_ls.layoutManager=myLayoutManager
         recy_ls.adapter=myListQuizzesAdapter
     }

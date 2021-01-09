@@ -6,12 +6,9 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
@@ -21,20 +18,17 @@ import com.app.laesperanzacollege.adaptadores.UnidAdapter
 import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Unidad
-import kotlinx.android.synthetic.main.activity_quizzes.*
+import com.app.laesperanzacollege.Utils.Companion.spanCalc
 import kotlinx.android.synthetic.main.activity_unidades.*
-import java.io.Console
-import javax.xml.validation.Validator
-import kotlin.math.log
 
 class UnidadesActivity : AppCompatActivity(),UnidadObserver {
-    var myUnidadesAdapter:UnidAdapter?=null
+    private var myUnidadesAdapter:UnidAdapter?=null
     var myLayoutManager:RecyclerView.LayoutManager?=null
-    var myListUnidad:ArrayList<Unidad> =arrayListOf()
-    var myUnidadDAO:UnidadDAO?=null
-    var selectedItems:ArrayList<Unidad> =arrayListOf()
-    var myTool:Toolbar?=null
-    var myTxtCantidad:TextView?=null
+    private var myListUnidad:ArrayList<Unidad> =arrayListOf()
+    private var myUnidadDAO:UnidadDAO?=null
+    private var selectedItems:ArrayList<Unidad> =arrayListOf()
+    private var myTool:Toolbar?=null
+    private var myTxtCantidad:TextView?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,17 +58,20 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
 
         UnidAdapter.myUnidadObserver=this
         myUnidadesAdapter= UnidAdapter(myListUnidad)
-        myLayoutManager=GridLayoutManager(this,3)
 
-        recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
-            object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    recyUnidades.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val newSpanCount=spanCalc()
-                    myLayoutManager=GridLayoutManager(this@UnidadesActivity,newSpanCount)
-                    recyUnidades.layoutManager=myLayoutManager
-                }
-            })
+        if(recyUnidades!=null)
+        {
+            recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        recyUnidades.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        myLayoutManager=GridLayoutManager(this@UnidadesActivity,spanCalc(recyUnidades,this@UnidadesActivity))
+                        recyUnidades.layoutManager=myLayoutManager
+                    }
+                })
+        }
+        else
+            myLayoutManager=GridLayoutManager(this,2)
 
         recyUnidades.layoutManager=myLayoutManager
         recyUnidades.adapter=myUnidadesAdapter
@@ -120,20 +117,19 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         {
             R.id.myItemDelete->
             {
-                var myAlert=AlertDialog.Builder(this)
+                val myAlert=AlertDialog.Builder(this)
 
                 myAlert.setTitle("Confirmar")
                 myAlert.setMessage("¿Seguro que Desea Eliminar?")
-                myAlert.setPositiveButton("Si",DialogInterface.OnClickListener { dialogInterface, i ->
+                myAlert.setPositiveButton("Si") { _, _ ->
 
-                    var unidToDelete:ArrayList<String> = arrayListOf()
+                    val unidToDelete:ArrayList<String> = arrayListOf()
 
-                    for (item in selectedItems)
-                    {
-                        unidToDelete.add(item.numUnidad.toString())
+                    for (it in selectedItems) {
+                        unidToDelete.add(it.numUnidad.toString())
                     }
 
-                    var res=myUnidadDAO?.EliminarUnidades(unidToDelete)
+                    val res=myUnidadDAO?.EliminarUnidades(unidToDelete)
                     print(res)
 
                     myListUnidad.removeAll(selectedItems)
@@ -141,16 +137,16 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
                     limpiarMenu()
                     myUnidadesAdapter?.notifyDataSetChanged()
 
-                    if(myTxtCantidad!=null && myListUnidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
+                    if(myTxtCantidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
 
-                })
-                myAlert.setNegativeButton("No",DialogInterface.OnClickListener { dialogInterface, i ->  })
+                }
+                myAlert.setNegativeButton("No") { _, _ ->  }
                 myAlert.show()
             }
 
             R.id.itemEdit->
             {
-                var myIntent=Intent(this,AgregarUnidActivity::class.java)
+                val myIntent=Intent(this,AgregarUnidActivity::class.java)
                 myIntent.putExtra("UNIDAD",selectedItems[0])
                 myIntent.putExtra("OPERACION",OperacionesCrud.Editar.toString())
                 AgregarUnidActivity.myUnidadObserver=this
@@ -185,12 +181,12 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
 
     }
 
-    fun addSelectedItem(myUnidad: Unidad)
+    private fun addSelectedItem(myUnidad: Unidad)
     {
         selectedItems.add(myUnidad)
     }
 
-    fun removeSelectedItem(myUnidad: Unidad)
+    private fun removeSelectedItem(myUnidad: Unidad)
     {
         selectedItems.remove(myUnidad)
     }
@@ -198,12 +194,5 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    fun spanCalc():Int
-    {
-        val viewWidth: Int = recyUnidades.width
-        val cardViewWidth: Float =resources.getDimension(R.dimen.card_quizzes)
-        return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
     }
 }

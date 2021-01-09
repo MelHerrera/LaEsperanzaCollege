@@ -1,6 +1,7 @@
 package com.app.laesperanzacollege
 
 import Observers.MainViewPagerObserver
+import Observers.QuizesAdapterObserver
 import Observers.ViewPagerObserver
 import android.app.ActionBar
 import android.app.AlertDialog
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
+import com.app.laesperanzacollege.Utils.Companion.generarAlfabeto
 import com.app.laesperanzacollege.Utils.Companion.letrasEditTextEstaLlena
 import com.app.laesperanzacollege.Utils.Companion.mostrarContiuar
 import com.app.laesperanzacollege.fragmentos.PruebaFragment
@@ -32,7 +34,6 @@ import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.alert_finalizarquiz.view.*
 import kotlinx.android.synthetic.main.mainquizfragment.view.*
 import java.util.*
-import kotlin.random.Random
 
 
 class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int, private var final:Int, private var usuarioId:Int,
@@ -56,6 +57,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         var quizRespuestas:ArrayList<ResultadoQuiz>?= arrayListOf()
         var listPreguntas:ArrayList<Pregunta> = arrayListOf()
         var myFrags:ArrayList<View>?= arrayListOf()
+        var mQuizesAdapterObserver:QuizesAdapterObserver?=null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -128,6 +130,8 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                                         ResultadoDAO(context!!).guardarResultados(it)
                                     }
                                     finalizado=true
+                                    mQuizesAdapterObserver?.deshabilitarQuiz()
+
                                 }
 
 
@@ -223,12 +227,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             if(checked)
                             {
                                 respuestasSelected?.add(resp.id!!)
-                                mostrarContiuar(respuestasSelected!!)
+                                continuar(respuestasSelected!!)
                             }
                             else
                             {
                                 respuestasSelected?.removeAt(respuestasSelected!!.indexOf(resp.id))
-                                mostrarContiuar(respuestasSelected!!)
+                                continuar(respuestasSelected!!)
                             }
                         }
                     }
@@ -270,12 +274,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             if(isChecked)
                             {
                                 respuestasSelected?.add(resp.id!!)
-                                mostrarContiuar(respuestasSelected!!)
+                                continuar(respuestasSelected!!)
                             }
                             else
                             {
                                 respuestasSelected?.removeAt(respuestasSelected!!.indexOf(resp.id))
-                                mostrarContiuar(respuestasSelected!!)
+                                continuar(respuestasSelected!!)
                             }
                         }
                     }
@@ -334,7 +338,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             viewResp.addView(myLetter)
                     }
 
-                    val miAlfabeto=generarAlfabeto(respuestas[0].descripcion.toString())
+                    val miAlfabeto= generarAlfabeto(respuestas[0].descripcion.toString())
                     val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,miAlfabeto.toUpperCase(
                         Locale.ROOT), letrasEditText,letrasButton, btnContinuar,respuestasSelected,myPpregunta.id)
                     myOpciones?.adapter=alfabetoAdapter
@@ -346,29 +350,6 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                 }
             }
         }
-    }
-
-    private fun generarAlfabeto(preAlfabeto: String):String {
-        val randomValues = List(8) { Random.nextInt(65, 90).toChar() }
-        return desordenar("$preAlfabeto${randomValues.joinToString(separator = "")}")
-    }
-
-    private fun desordenar(theWord: String):String {
-
-        val theTempWord=theWord.toMutableList()
-
-        for (item in 0..Random.nextInt(theTempWord.count()/2,theTempWord.count()-1))
-        {
-            val indexA=Random.nextInt(theTempWord.count()-1)
-            val indexB=Random.nextInt(theTempWord.count()-1)
-
-            val temp=theTempWord[indexA]
-
-            theTempWord[indexA]=theTempWord[indexB]
-            theTempWord[indexB]=temp
-        }
-
-        return theTempWord.joinToString(separator = "")
     }
 
     class AlfabetoAdapter(private var context: Context, private var alfabeto:String, private var letrasEditText:ArrayList<EditText>,
@@ -444,16 +425,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         }
     }
 
-    private fun mostrarContiuar(chechedList:ArrayList<Int>)
+    private fun continuar(chechedList:ArrayList<Int>)
     {
         if(chechedList.count()>0)
-        {
-            btnContinuar?.visibility=View.VISIBLE
-        }
+            mostrarContiuar(View.VISIBLE,btnContinuar)
         else
-        {
-            btnContinuar?.visibility=View.GONE
-        }
+            mostrarContiuar(View.GONE,btnContinuar)
     }
 
     override fun mostrarRespuestas(pos: Int) {
