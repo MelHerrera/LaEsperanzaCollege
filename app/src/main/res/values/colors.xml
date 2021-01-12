@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Primary app colors-->
     <color name="colorPrimary">#7F39FB</color>
     <color name="colorPrimaryDark">#512DA8</color>
-    <color name="colorAccent">#018786</color>
     <color name="colorPrimaryLight">#FFFFFF</color>
+    <color name="colorAccent">#018786</color>
+
+    <!--Primary texts colors-->
     <color name="primaryText">#212121</color>
-    <color name="secondaryText">#757575</color>
+    <color name="secondaryText">#FFFFFF</color>
+
+    <!--Primary icons colors-->
+    <color name="primaryIcons">@color/colorAccent</color>
     <color name="icons">#FFFFFF</color>
+
+    <!--Other color to dividers-->
     <color name="divider">#BDBDBD</color>
 </resources>

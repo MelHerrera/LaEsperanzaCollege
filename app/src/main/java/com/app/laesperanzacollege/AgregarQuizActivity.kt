@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +50,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
     var myQuiz: Quiz? = null
     var numUnidad: Int? = null
     var max: Int? = null
-    var CantidadDeUnidades:LinearLayout?=null
+    var CantidadDeUnidades:LinearLayoutCompat?=null
     var CantidadQuizz:TextView?=null
     var quizzEstado:Int=0 //Por defecto sin inciar
     var gradoDAO:GradoDAO?=null
@@ -154,6 +155,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
                     myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
                     myListPregunta = myPreguntaDAO?.ListarPreguntas()
+
                     if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
 
 

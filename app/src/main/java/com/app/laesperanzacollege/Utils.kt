@@ -1,15 +1,18 @@
 package com.app.laesperanzacollege
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.recyclerview.widget.GridLayoutManager
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_unidades.*
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_agregar_estu.*
 import java.io.ByteArrayOutputStream
 import kotlin.math.pow
 import kotlin.random.Random
@@ -83,5 +86,21 @@ class Utils {
             val cardViewWidth: Float =context.resources.getDimension(R.dimen.card_quizzes)
             return floorDiv(viewWidth,cardViewWidth.toInt())
         }
+
+        fun crearCustomSnackbar(stick:View,backgroundColor:Int,resIcon:Int,message:String,layoutInflater:LayoutInflater):Snackbar
+        {
+            val mSnack= Snackbar.make(stick,"", Snackbar.LENGTH_SHORT)
+            mSnack.view.setBackgroundColor(backgroundColor)
+
+            val mSnackLayout=mSnack.view as Snackbar.SnackbarLayout
+            val mcustomView=layoutInflater.inflate(R.layout.snackbar_custom,null)
+
+            mcustomView.findViewById<ImageView>(R.id.snackbar_icon).setImageResource(resIcon)
+            mcustomView.findViewById<TextView>(R.id.snackbar_message).text=message
+
+            mSnackLayout.addView(mcustomView)
+            return mSnack
+        }
+
     }
 }

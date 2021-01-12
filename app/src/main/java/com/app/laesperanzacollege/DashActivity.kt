@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.app.laesperanzacollege.fragmentos.AdminFragment
 import com.app.laesperanzacollege.fragmentos.EstudianteFragment
 import com.app.laesperanzaedm.model.Usuario
@@ -29,15 +28,10 @@ class DashActivity : AppCompatActivity() {
 
         if(myUsuario!=null)
         {
-            var myFrag:Fragment?= null
 
-            myFrag = when(myUsuario.tipoDeUsuarioId) {
-                1->{
-                    AdminFragment()
-                }
-                2->{
-                    EstudianteFragment()
-                }
+            val myFrag = when(myUsuario.tipoDeUsuarioId) {
+                1-> AdminFragment()
+                2-> EstudianteFragment()
                 else->null
             }
 

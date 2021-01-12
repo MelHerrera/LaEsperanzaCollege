@@ -23,6 +23,7 @@
     <string name="finalizado">Finalizado</string>
     <string name="preguntas">Preguntas</string>
     <string name="empezar">Empezar</string>
+    <string name="sin_datos">No hay %1$s Aún</string>
     <string name="seleccione_la_unidad">Filtar unidad</string>
     <string name="no_hay_unidades_aun">No hay Unidades aun</string>
     <string name="registro_quizz">Agregar quizz</string>
@@ -30,7 +31,6 @@
     <string name="tipo_de_respuesta">*Seleccione el tipo de respuesta</string>
     <string name="no_se_han_agregado_quizzes_aun">No se han Agregado Quizzes aun</string>
     <string name="txt_quizzes">Quizzes</string>
-    <string name="txt_unidades">Unidades</string>
     <string name="txt_sin_elementos">No se Encontraron Elementos</string>
     <string name="txt_buscar">Buscar</string>
     <string name="txt_finalizar">Finalizar</string>
@@ -166,4 +166,5 @@
     <string name="txt_salir">Salir</string>
     <string name="keyNameQuiz">Quiz</string>
     <string name="keynameUsuarioQuiz">UsuarioQuiz</string>
+    <string name="txt_unidades">Unidades</string>
 </resources>

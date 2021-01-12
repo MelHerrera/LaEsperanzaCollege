@@ -1,12 +1,13 @@
 package com.app.laesperanzacollege
 
 import Observers.UsuarioObserver
+import Observers.UsuarioObserverMain
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.EstuAdapter
@@ -14,28 +15,35 @@ import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.activity_est.*
+import java.util.*
+import kotlin.collections.ArrayList
 
-class EstActivity : AppCompatActivity(),UsuarioObserver {
-    var myLayoutManager: RecyclerView.LayoutManager?=null
+class EstActivity : AppCompatActivity(), UsuarioObserverMain,UsuarioObserver {
+    private var myLayoutManager: RecyclerView.LayoutManager?=null
     var myAdapter:EstuAdapter?=null
-    var myUsuario:UsuarioDAO?=null
-    var listEstu:ArrayList<Usuario> = arrayListOf()
-    var cantAlumnos:TextView?=null
+    private var myUsuario:UsuarioDAO?=null
+    private var listEstu:ArrayList<Usuario> = arrayListOf()
+    private var cantAlumnos:LinearLayoutCompat?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_est)
 
         myUsuario=UsuarioDAO(this)
-        cantAlumnos=txtCantAlumnos
+        cantAlumnos=viewCantAlumnos
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         listEstu = myUsuario!!.listarEstudiantes()
+
+        //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
+        txtCantAlumnos.text=getString(R.string.sin_datos,getString(R.string.txt_estudiantes))
+
         if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
 
 
         myLayoutManager=LinearLayoutManager(this)
 
+        EstuAdapter.myUsuarioObserverMain=this
         EstuAdapter.myUsuarioObserver=this
         myAdapter= EstuAdapter(listEstu)
 
@@ -61,37 +69,13 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
                 return false
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                myAdapter?.filter?.filter(newText.toString().toUpperCase())
+                myAdapter?.filter?.filter(newText.toString().toUpperCase(Locale.ROOT))
 
                 return true
             }
         })
 
         return true
-    }
-
-    override fun usuarioSaved(myUsuario: Usuario)
-    {
-        var existe=false
-
-        for (item in listEstu)
-        {
-            if(item.id==myUsuario.id)
-            {
-                item.nombre=myUsuario.nombre
-                item.usuario=myUsuario.nombre
-                item.codGrado=myUsuario.codGrado
-                item.apellido=myUsuario.apellido
-                item.usuario=myUsuario.usuario
-                existe=true
-            }
-        }
-
-        if(!existe)
-            listEstu.add(myUsuario)
-
-        myAdapter?.notifyDataSetChanged()
-        if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
     }
 
     override fun usuarioRemoved(posicion: Int) {
@@ -103,6 +87,23 @@ class EstActivity : AppCompatActivity(),UsuarioObserver {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun actualizarUsuario(mUsuario: Usuario) {
+       val indexUsu=listEstu.indexOfFirst { it.id==mUsuario.id }
+
+        if(indexUsu!=-1)
+            listEstu[indexUsu]=mUsuario
+
+        myAdapter?.notifyDataSetChanged()
+       if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
+    }
+
+    override fun agregarUsuario(mUsuario: Usuario) {
+        listEstu.add(mUsuario)
+
+        myAdapter?.notifyDataSetChanged()
+        if(cantAlumnos!=null) Validador.validarCantidad(cantAlumnos!!,listEstu)
     }
 
 }

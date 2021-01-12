@@ -13,6 +13,7 @@ import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Usuario
 import com.app.laesperanzacollege.Utils.Companion.spanCalc
 import kotlinx.android.synthetic.main.activity_listar_quizzes.*
+import kotlinx.android.synthetic.main.activity_unidades.*
 
 class ListarQuizzesActivity : AppCompatActivity() {
     private var keyNameUser=""
@@ -46,13 +47,14 @@ class ListarQuizzesActivity : AppCompatActivity() {
         myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante,estudiante?.id!!)
 
 
-        if(recy_ls!=null)
+        val newSpan=spanCalc(recy_ls,this@ListarQuizzesActivity)
+        if(recy_ls!=null && newSpan>0)
         {
             recy_ls.viewTreeObserver.addOnGlobalLayoutListener(
                 object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         recy_ls.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        myLayoutManager=GridLayoutManager(this@ListarQuizzesActivity,spanCalc(recy_ls,this@ListarQuizzesActivity))
+                        myLayoutManager=GridLayoutManager(this@ListarQuizzesActivity,newSpan)
                         recy_ls.layoutManager=myLayoutManager
                     }
                 })

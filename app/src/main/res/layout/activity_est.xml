@@ -23,13 +23,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/txtCantAlumnos"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/viewCantAlumnos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Hay Alumnos aun"
+        android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyEstudiantes"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_dataAnimation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_data1" />
+        <TextView
+            android:id="@+id/txtCantAlumnos"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

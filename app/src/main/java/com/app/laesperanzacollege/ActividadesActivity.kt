@@ -12,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.app.laesperanzadao.enums.OperacionesCrud
 import kotlinx.android.synthetic.main.activity_actividades.*
 import kotlinx.android.synthetic.main.activity_unidades.*
+import kotlinx.android.synthetic.main.fragment_estudiante.*
 
 class ActividadesActivity : AppCompatActivity() {
     var myTool: Toolbar?=null

@@ -55,10 +55,11 @@
         <activity android:name=".QuizzesActivity" />
         <activity
             android:name=".AgregarEstuActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:theme="@style/AppTheme_Material_NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_Material_NoActionBar"/>
     </application>
 
 </manifest>

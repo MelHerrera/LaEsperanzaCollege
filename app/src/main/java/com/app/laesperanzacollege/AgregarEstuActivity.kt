@@ -3,26 +3,26 @@ package com.app.laesperanzacollege
 import Observers.UsuarioObserver
 import android.content.res.ColorStateList
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Usuario
+import com.app.laesperanzacollege.Utils.Companion.crearCustomSnackbar
 import kotlinx.android.synthetic.main.activity_agregar_estu.*
 
 class AgregarEstuActivity : AppCompatActivity() {
-    var myGradoDAO:GradoDAO?=null
-    var grados= arrayListOf<String>()
-    var listGrados:ArrayList<Grado>?=null
-    var myOperacion:String?=null
-    var myUsuario:Usuario?=null
-    var mySeccion:String?=null
+    private var myGradoDAO:GradoDAO?=null
+    private var grados= arrayListOf<String>()
+    private var listGrados:ArrayList<Grado>?=null
+    private var myOperacion:String?=null
+    private var myUsuario:Usuario?=null
+    private var mySeccion:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +34,12 @@ class AgregarEstuActivity : AppCompatActivity() {
         val extras=intent.extras?.get("USUARIO")
 
         if (myGradoDAO != null) {
-            for (item in listGrados!!)
-            {
-                if(item.codGrado!="0grd")
-                {
-                    grados.add(item.descripcion.toString())
-                }
+
+            listGrados?.forEach {
+                if(it.codGrado!="0grd")
+                    grados.add(it.descripcion.toString())
             }
+
             spGrados.adapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,grados)
         }
 
@@ -56,22 +55,27 @@ class AgregarEstuActivity : AppCompatActivity() {
             this.finish()
         }
 
-        chipSec.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId)
-            {
-                R.id.txtSecA->{mySeccion=txtSecA.text.toString()}
-                R.id.txtSecB->{mySeccion=txtSecB.text.toString()}
-                R.id.txtSecC->{mySeccion=txtSecC.text.toString()}
-                else->{mySeccion=null}
+        chipSec.setOnCheckedChangeListener { _, checkedId ->
+            mySeccion = when(checkedId) {
+                R.id.txtSecA->{
+                    txtSecA.text.toString()
+                }
+                R.id.txtSecB->{
+                    txtSecB.text.toString()
+                }
+                R.id.txtSecC->{
+                    txtSecC.text.toString()
+                }
+                else-> null
             }
         }
 
         btnGuardar.setOnClickListener {
-            if(Validar())
+            if(validar())
             {
                 val myUsuarioDAO=UsuarioDAO(this)
 
-                myUsuario=Asignar(myUsuario)
+                myUsuario=asignar(myUsuario)
 
                 if(myOperacion==OperacionesCrud.Agregar.toString())
                 {
@@ -80,11 +84,9 @@ class AgregarEstuActivity : AppCompatActivity() {
                         val nuevoUsuario=myUsuarioDAO.Buscar(myUsuario!!.usuario.toString(), myUsuario!!.contrase.toString())
 
                         if(nuevoUsuario!=null)
-                        {
-                            myUsuario!!.id=nuevoUsuario.id
-                        }
-                        myUsuarioObserver?.usuarioSaved(myUsuario!!)
-                        Limpiar()
+                            myUsuarioObserver?.agregarUsuario(nuevoUsuario)
+
+                        limpiar()
                     }
                     else
                         Toast.makeText(this,"Lo siento!!! No pude Guardar la Información",Toast.LENGTH_LONG).show()
@@ -93,7 +95,7 @@ class AgregarEstuActivity : AppCompatActivity() {
                 {
                    if(myUsuarioDAO.actualizar(myUsuario!!))
                    {
-                       myUsuarioObserver?.usuarioSaved(myUsuario!!)
+                       myUsuarioObserver?.actualizarUsuario(myUsuario!!)
                        this.finish()
                    }
                 }
@@ -103,7 +105,7 @@ class AgregarEstuActivity : AppCompatActivity() {
         }
     }
 
-    fun Validar():Boolean
+    private fun validar():Boolean
     {
         if(edtNombres.text?.isEmpty()!!)
         {
@@ -143,14 +145,17 @@ class AgregarEstuActivity : AppCompatActivity() {
 
         if(mySeccion==null)
         {
-            Toast.makeText(this,getString(R.string.error_seccion),Toast.LENGTH_LONG).show()
+            val mSnack=crearCustomSnackbar(viewPrincipal,Color.RED,android.R.drawable.stat_notify_error,
+                getString(R.string.error_seccion),layoutInflater)
+            mSnack.show()
+
             return false
         }
 
         return true
     }
 
-    fun Asignar(myUsu:Usuario?):Usuario
+    private fun asignar(myUsu:Usuario?):Usuario
     {
         var myUsuaT=myUsu
 
@@ -169,7 +174,7 @@ class AgregarEstuActivity : AppCompatActivity() {
 
         return myUsuaT
     }
-    fun setControles(myUsu: Usuario)
+    private fun setControles(myUsu: Usuario)
     {
         edtNombres.setText(myUsu.nombre)
         edtApellidos.setText(myUsu.apellido)
@@ -182,6 +187,16 @@ class AgregarEstuActivity : AppCompatActivity() {
                 spGrados.setSelection(posSelected-1)
             }
 
+        mySeccion=myUsu.seccion
+
+        when(myUsu.seccion)
+        {
+            "A"-> txtSecA.isChecked=true
+            "B"-> txtSecB.isChecked=true
+            "C"-> txtSecC.isChecked=true
+            else-> mySeccion=null
+        }
+
         edtUsuario.setText(myUsu.usuario)
         edtContra.setText("********")
         edtContra.transformationMethod = PasswordTransformationMethod.getInstance()
@@ -189,7 +204,7 @@ class AgregarEstuActivity : AppCompatActivity() {
 
     }
 
-    fun Limpiar()
+    private fun limpiar()
     {
         edtNombres.text?.clear()
         edtApellidos.text?.clear()
@@ -200,6 +215,6 @@ class AgregarEstuActivity : AppCompatActivity() {
 
     companion object
     {
-        var myUsuarioObserver:UsuarioObserver?=null
+        var myUsuarioObserver: UsuarioObserver?=null
     }
 }

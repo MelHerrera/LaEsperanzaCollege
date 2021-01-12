@@ -144,6 +144,7 @@ class UsuarioDAO(context: Context) {
                 myEstu.apellido=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_APELLIDO))
                 myEstu.codGrado=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_CODGRADO))
                 myEstu.usuario=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_USUARIO))
+                myEstu.seccion=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_SECCION))
 
                 myListEstu.add(myEstu)
 

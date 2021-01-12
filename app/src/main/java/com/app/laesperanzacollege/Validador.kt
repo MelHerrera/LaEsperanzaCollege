@@ -3,12 +3,13 @@ package com.app.laesperanzacollege
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import javax.xml.validation.Validator
 
 class Validador {
     companion object
     {
-        fun validarCantidad(myMessage: LinearLayout, myListElement: List<Any>)
+        fun validarCantidad(myMessage: LinearLayoutCompat, myListElement: List<Any>)
         {
             if(myListElement.isEmpty())
             {

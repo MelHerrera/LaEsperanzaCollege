@@ -1,6 +1,7 @@
 package com.app.laesperanzacollege.adaptadores
 
 import Observers.UsuarioObserver
+import Observers.UsuarioObserverMain
 import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
     }
     companion object
     {
+        var myUsuarioObserverMain: UsuarioObserverMain?=null
         var myUsuarioObserver:UsuarioObserver?=null
     }
 
@@ -44,7 +46,7 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
       holder.bindholder(listEstudiantes[position])
     }
 
-   class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), UsuarioObserver {
+   class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),UsuarioObserver {
 
         fun bindholder(myEstu:Usuario)
         {
@@ -61,21 +63,23 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
             val gra=myGrado.Buscar(myEstu.codGrado.toString())
             img.setBackgroundResource(R.drawable.profile)
 
-            nombres.text=myEstu.nombre+" "+myEstu.apellido
+            nombres.text="${myEstu.nombre} ${myEstu.apellido}"
             grado.text=gra
 
             btnBorrar.setOnClickListener {
                 val myAlert=AlertDialog.Builder(itemView.context)
 
                 myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
+                myAlert.setTitle("Eliminar")
+                myAlert.setIcon(android.R.drawable.ic_menu_delete)
 
                 myAlert.setNegativeButton("No") { _, _ ->
+                    myAlert.create().dismiss()
                 }
 
                 myAlert.setPositiveButton("Si") { _, _ ->
                     if(myUsuDAO.Eliminar(myEstu.id)) {
-                        val posicion:Int=adapterPosition
-                        myUsuarioObserver?.usuarioRemoved(posicion)
+                        myUsuarioObserverMain?.usuarioRemoved(adapterPosition)
                     } else
                         Toast.makeText(itemView.context,"No se pudo Eliminar",Toast.LENGTH_SHORT).show()
                 }
@@ -94,13 +98,14 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
             }
         }
 
-       override fun usuarioSaved(myUsuario: Usuario) {
-           myUsuarioObserver?.usuarioSaved((myUsuario))
+       override fun actualizarUsuario(mUsuario: Usuario) {
+           myUsuarioObserver?.actualizarUsuario(mUsuario)
        }
 
-       override fun usuarioRemoved(posicion: Int) {
-          //nothing
+       override fun agregarUsuario(mUsuario: Usuario) {
+          //nothing to do
        }
+
    }
 
     override fun getFilter(): Filter {

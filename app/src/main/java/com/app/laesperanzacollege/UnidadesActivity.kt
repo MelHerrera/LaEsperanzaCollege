@@ -59,13 +59,15 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         UnidAdapter.myUnidadObserver=this
         myUnidadesAdapter= UnidAdapter(myListUnidad)
 
-        if(recyUnidades!=null)
+        val newSpan=spanCalc(recyUnidades,this@UnidadesActivity)
+
+        if(recyUnidades!=null && newSpan>0)
         {
             recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
                 object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         recyUnidades.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        myLayoutManager=GridLayoutManager(this@UnidadesActivity,spanCalc(recyUnidades,this@UnidadesActivity))
+                        myLayoutManager=GridLayoutManager(this@UnidadesActivity,newSpan)
                         recyUnidades.layoutManager=myLayoutManager
                     }
                 })
