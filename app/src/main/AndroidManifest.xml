@@ -14,7 +14,8 @@
         <activity android:name=".TestActivity" />
         <activity
             android:name=".IntroActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_Material_NoActionBar" />
         <activity android:name=".ActividadesActivity" />
         <activity android:name=".ListarQuizzesActivity" />
         <activity
