@@ -13,6 +13,7 @@ import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Usuario
 import com.app.laesperanzacollege.Utils.Companion.spanCalc
 import kotlinx.android.synthetic.main.activity_listar_quizzes.*
+import kotlinx.android.synthetic.main.activity_quizzes.*
 import kotlinx.android.synthetic.main.activity_unidades.*
 
 class ListarQuizzesActivity : AppCompatActivity() {
@@ -34,6 +35,9 @@ class ListarQuizzesActivity : AppCompatActivity() {
         val estudiante: Usuario?=intent.extras?.get(keyNameUser) as Usuario
         val myOperacion:TipodeTest=intent.extras?.get(keyNameTest) as TipodeTest
 
+        //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
+        txtCantPruebaQuizzes.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
+
         myQuizDAO= QuizDAO(this)
 
         myListQuizzes = when(myOperacion) {
@@ -44,6 +48,9 @@ class ListarQuizzesActivity : AppCompatActivity() {
                 myQuizDAO!!.listarQuizzesDePractica(estudiante?.codGrado)
             }
         }
+
+        if(txtCantPruebaQuizzes!=null) Validador.validarCantidad(viewCantPruebaQuizzes!!,myListQuizzes!!)
+
         myListQuizzesAdapter= QuizzesAdapter(myListQuizzes,TipoDeUsuarios.Estudiante,estudiante?.id!!)
 
 

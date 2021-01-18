@@ -16,7 +16,14 @@ import com.app.laesperanzacollege.Utils.Companion.setImage
 import com.app.laesperanzacollege.Utils.Companion.toByteArray
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzaedm.model.Usuario
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import kotlinx.android.synthetic.main.activity_agregar_quiz.*
+import kotlinx.android.synthetic.main.activity_agregar_quiz.app_bar
+import kotlinx.android.synthetic.main.activity_agregar_quiz.toolbar_layout
+import kotlinx.android.synthetic.main.fragment_admin.*
 import kotlinx.android.synthetic.main.fragment_admin.view.*
+import kotlin.math.abs
 
 
 class AdminFragment : Fragment() {
@@ -32,6 +39,7 @@ class AdminFragment : Fragment() {
         myImage=myView.imagenPerfil
         myUsuarioDAO= UsuarioDAO(myView.context)
         myContext=myView.context
+
 
         if(myUsuario!=null)
         {
@@ -57,14 +65,14 @@ class AdminFragment : Fragment() {
         }
 
         myView.categoria4.setOnClickListener {
-            startActivity(Intent(myView.context,ActividadesActivity::class.java))
+            startActivity(Intent(myView.context,CuriosidadesActivity::class.java))
         }
 
         myView.categoria5.setOnClickListener {
-            startActivity(Intent(myView.context,FormulasActivity::class.java))
+            startActivity(Intent(myView.context,ActividadesActivity::class.java))
         }
         myView.categoria6.setOnClickListener {
-            startActivity(Intent(myView.context,CuriosidadesActivity::class.java))
+            startActivity(Intent(myView.context,FormulasActivity::class.java))
         }
         return myView
     }

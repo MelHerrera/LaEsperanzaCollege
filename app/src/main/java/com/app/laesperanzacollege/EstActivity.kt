@@ -62,7 +62,7 @@ class EstActivity : AppCompatActivity(), UsuarioObserverMain,UsuarioObserver {
         menuInflater.inflate(R.menu.menu_estudiante,menu)
         val search = menu?.findItem(R.id.app_bar_search)
         val searchView = search?.actionView as SearchView
-        searchView.queryHint = "Buscar"
+        searchView.queryHint = getString(R.string.txtsearch)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -70,7 +70,6 @@ class EstActivity : AppCompatActivity(), UsuarioObserverMain,UsuarioObserver {
             }
             override fun onQueryTextChange(newText: String?): Boolean {
                 myAdapter?.filter?.filter(newText.toString().toUpperCase(Locale.ROOT))
-
                 return true
             }
         })

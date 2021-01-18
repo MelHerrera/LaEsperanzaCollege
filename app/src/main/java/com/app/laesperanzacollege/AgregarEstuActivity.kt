@@ -8,12 +8,12 @@ import android.text.method.PasswordTransformationMethod
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.app.laesperanzacollege.Utils.Companion.crearCustomSnackbar
 import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Usuario
-import com.app.laesperanzacollege.Utils.Companion.crearCustomSnackbar
 import kotlinx.android.synthetic.main.activity_agregar_estu.*
 
 class AgregarEstuActivity : AppCompatActivity() {
@@ -40,7 +40,7 @@ class AgregarEstuActivity : AppCompatActivity() {
                     grados.add(it.descripcion.toString())
             }
 
-            spGrados.adapter=ArrayAdapter(this,android.R.layout.simple_list_item_1,grados)
+            spGrados.adapter=ArrayAdapter(this,R.layout.list_item_1,grados)
         }
 
         if(extras!=null)

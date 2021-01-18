@@ -1,266 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/small_margin"
-    tools:context=".AgregarEstuActivity"
-    android:id="@+id/viewPrincipal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:background="@color/colorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ScrollView
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/viewPrincipal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="2">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/viewInfoPersonal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/infoPersonal"
+            <TextView
+                android:id="@+id/txtpersonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/informacion_personal"
+                android:textColor="@color/secondaryText"
+                android:layout_marginStart="@dimen/medium_margin"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtnombres"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                app:cardCornerRadius="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:hint="@string/nombres"
+                android:layout_marginStart="@dimen/medium_margin"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:textColorHint="@color/secondaryText"
+                android:theme="@style/AppTheme_Material_TextInputLayout"
+                app:helperText="Requerido*"
+                app:helperTextTextColor="@color/secondaryText">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNombres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:inputType="text"
+                    app:errorEnabled="true" />
 
-                    <TextView
-                        android:id="@+id/txtpersonal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/informacion_personal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/txtnombres"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/nombres"
-                        app:helperText="Requerido*"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtpersonal">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtNombres"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            app:errorEnabled="true"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/txtApellidos"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/apellidos"
-                        app:helperText="Requerido*"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtnombres">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtApellidos"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <LinearLayout
-                        android:id="@+id/contenedorGrad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtApellidos">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/grado" />
-
-                        <Spinner
-                            android:id="@+id/spGrados"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/txtSec"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/seccion"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/contenedorGrad"/>
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtSec">
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/chipSec"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            app:chipSpacingHorizontal="16dp"
-                            app:chipSpacingVertical="16dp"
-                            app:singleSelection="true">
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/txtSecA"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/seccion_a"
-                                android:textAlignment="center"
-                                android:checkable="true"
-                                app:chipBackgroundColor="@color/colorAccent"
-                                android:textColor="@android:color/white"
-                                />
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/txtSecB"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/SeccionB"
-                                android:textAlignment="center"
-                                android:checkable="true"
-                                app:chipBackgroundColor="@color/colorAccent"
-                                android:textColor="@android:color/white"
-                                />
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/txtSecC"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/SeccionC"
-                                android:textAlignment="center"
-                                android:checkable="true"
-                                app:chipBackgroundColor="@color/colorAccent"
-                                android:textColor="@android:color/white"
-                                />
-                        </com.google.android.material.chip.ChipGroup>
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/infoUsuario"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtApellidos"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                app:cardCornerRadius="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/infoPersonal">
+                android:hint="@string/apellidos"
+                android:layout_marginStart="@dimen/medium_margin"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:textColorHint="@color/secondaryText"
+                android:theme="@style/AppTheme_Material_TextInputLayout"
+                app:helperText="Requerido*"
+                app:helperTextTextColor="@color/secondaryText">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtApellidos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:inputType="text" />
 
-                    <TextView
-                        android:id="@+id/txtinfoUsuario"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/contenedorGrad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/grado"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:textColor="@color/secondaryText" />
+
+                <Spinner
+                    android:id="@+id/spGrados"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/secondaryText" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtSec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/seccion"
+                android:layout_marginStart="@dimen/default_margin"
+                android:textColor="@color/secondaryText" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/viewInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/small_margin"
+                android:layout_gravity="center">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipSec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:background="@drawable/chips_seccion_background"
+                    app:chipSpacingHorizontal="16dp"
+                    app:chipSpacingVertical="16dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/txtSecA"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/informacion_de_usuario"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:checkable="true"
+                        android:text="@string/seccion_a"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        app:chipBackgroundColor="@color/colorAccent" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/txtUsuario"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/txtSecB"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/txtusuario"
-                        app:helperText="Requerido*"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtinfoUsuario">
+                        android:checkable="true"
+                        android:text="@string/SeccionB"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        app:chipBackgroundColor="@color/colorAccent" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtUsuario"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/txtContra"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/txtSecC"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/txtcontra"
-                        app:helperText="Requerido*"
-                        app:endIconMode="password_toggle"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtUsuario">
+                        android:checkable="true"
+                        android:text="@string/SeccionC"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        app:chipBackgroundColor="@color/colorAccent" />
+                </com.google.android.material.chip.ChipGroup>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtContra"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPassword"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/infoUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/grid_menu_admin"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/txtinfoUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/informacion_de_usuario"
+                android:layout_margin="@dimen/default_margin" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtUsuario"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/infoUsuario">
+                android:layout_height="wrap_content"
+                android:hint="@string/txtusuario"
+                android:layout_marginStart="@dimen/medium_margin"
+                android:layout_marginEnd="@dimen/medium_margin"
+                app:helperText="Requerido*">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtContra"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/txtcontra"
+                app:endIconMode="password_toggle"
+                app:helperText="Requerido"
+                android:layout_marginStart="@dimen/medium_margin"
+                android:layout_marginEnd="@dimen/medium_margin">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtContra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:weightSum="2">
 
                 <Button
                     android:id="@+id/btnGuardar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/guardar"
                     android:padding="@dimen/large_padding"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btnCancelar"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/medium_margin"
+                    android:layout_marginEnd="@dimen/medium_margin"
+                    android:text="@string/guardar" />
 
                 <Button
                     android:id="@+id/btnCancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/salir"
                     android:padding="@dimen/large_padding"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnGuardar"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/salir"
+                    android:layout_marginStart="@dimen/medium_margin"
+                    android:layout_marginEnd="@dimen/medium_margin"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

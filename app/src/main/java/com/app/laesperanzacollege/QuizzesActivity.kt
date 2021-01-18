@@ -14,6 +14,7 @@ import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.enums.TipoDeUsuarios
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
+import kotlinx.android.synthetic.main.activity_unidades.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
@@ -42,8 +43,10 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
             })
 
         myListQuizzes=myQuizDAO?.ListarQuizzes()
+        //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
+        txtCantQuizzes.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
 
-        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
+        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
 
         AgregarQuizActivity.myQuizzObserver=this
         myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin,-1)

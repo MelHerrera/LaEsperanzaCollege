@@ -120,7 +120,7 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
                 }
                 else
                 {
-                    myFilter.values = listEstudiantes.filter { x->x.nombre?.toUpperCase(Locale.ROOT)!!.contains(wordToSearch.toString()) }
+                    myFilter.values = myEstFilterList.filter { x->"${x.nombre} ${x.apellido}".toUpperCase(Locale.ROOT).contains(wordToSearch.toString()) }
                 }
                 return myFilter
             }

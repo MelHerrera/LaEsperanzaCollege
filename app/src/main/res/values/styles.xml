@@ -51,4 +51,9 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="AppTheme_Material_TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/secondaryText</item>
+        <item name="boxStrokeColor">@color/secondaryText</item>
+    </style>
+
 </resources>

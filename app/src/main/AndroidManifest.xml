@@ -60,7 +60,7 @@
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme_Material_NoActionBar"/>
+            android:theme="@style/AppTheme_Material_NoActionBar" />
     </application>
 
 </manifest>

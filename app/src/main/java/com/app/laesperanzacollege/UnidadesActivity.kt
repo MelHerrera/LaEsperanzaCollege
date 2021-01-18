@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,6 +20,7 @@ import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Unidad
 import com.app.laesperanzacollege.Utils.Companion.spanCalc
+import kotlinx.android.synthetic.main.activity_est.*
 import kotlinx.android.synthetic.main.activity_unidades.*
 
 class UnidadesActivity : AppCompatActivity(),UnidadObserver {
@@ -28,7 +30,7 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
     private var myUnidadDAO:UnidadDAO?=null
     private var selectedItems:ArrayList<Unidad> =arrayListOf()
     private var myTool:Toolbar?=null
-    private var myTxtCantidad:TextView?=null
+    private var myTxtCantidad:LinearLayoutCompat?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,10 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         myUnidadDAO=UnidadDAO(this)
         myListUnidad= myUnidadDAO!!.listarUnidades()
 
-        myTxtCantidad=txtCantidadUnidades
+        myTxtCantidad=viewCantUnidades
+
+        //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
+        txtCantidadUnidades.text=getString(R.string.sin_datos,getString(R.string.txt_unidades))
 
         if(myTxtCantidad!=null)  Validador.validarCantidad(myTxtCantidad!!,myListUnidad)
 
