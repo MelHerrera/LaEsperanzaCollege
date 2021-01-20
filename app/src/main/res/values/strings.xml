@@ -44,7 +44,7 @@
     <string name="seccion_a">A</string>
     <string name="SeccionB">B</string>
     <string name="SeccionC">C</string>
-    <string name="error_seccion">Debe Seleccionar una Seccion</string>
+    <string name="error_incomplete_data">Debe Seleccionar una %1$s</string>
     <string name="informacion_personal">Informacion Personal</string>
     <string name="nombres">Nombres</string>
     <string name="apellidos">Apellidos</string>
@@ -167,4 +167,7 @@
     <string name="keyNameQuiz">Quiz</string>
     <string name="keynameUsuarioQuiz">UsuarioQuiz</string>
     <string name="txt_unidades">Unidades</string>
+    <string name="txt_unidad">Unidad</string>
+    <string name="txt_eliminar">Eliminar</string>
+    <string name="txt_editar">Editar</string>
 </resources>

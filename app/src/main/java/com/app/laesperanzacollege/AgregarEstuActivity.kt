@@ -146,9 +146,8 @@ class AgregarEstuActivity : AppCompatActivity() {
         if(mySeccion==null)
         {
             val mSnack=crearCustomSnackbar(viewPrincipal,Color.RED,android.R.drawable.stat_notify_error,
-                getString(R.string.error_seccion),layoutInflater)
+                getString(R.string.error_incomplete_data,getString(R.string.seccion)),layoutInflater)
             mSnack.show()
-
             return false
         }
 

@@ -4,7 +4,6 @@ import Observers.UnidadObserver
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.R
 import com.app.laesperanzadao.QuizDAO
@@ -12,10 +11,10 @@ import com.app.laesperanzaedm.model.Unidad
 import kotlinx.android.synthetic.main.item_unidades.view.*
 
 
-class UnidAdapter(var listUnidades:ArrayList<Unidad>):
+class UnidAdapter(private var listUnidades:ArrayList<Unidad>):
     RecyclerView.Adapter<UnidAdapter.myViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-        var myView=LayoutInflater.from(parent.context).inflate(R.layout.item_unidades,parent,false)
+        val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_unidades,parent,false)
         return myViewHolder(myView)
     }
 

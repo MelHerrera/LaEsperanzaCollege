@@ -1,14 +1,12 @@
 package com.app.laesperanzacollege
 
 import Observers.UnidadObserver
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewTreeObserver
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
@@ -20,7 +18,6 @@ import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Unidad
 import com.app.laesperanzacollege.Utils.Companion.spanCalc
-import kotlinx.android.synthetic.main.activity_est.*
 import kotlinx.android.synthetic.main.activity_unidades.*
 
 class UnidadesActivity : AppCompatActivity(),UnidadObserver {
@@ -126,8 +123,11 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
             {
                 val myAlert=AlertDialog.Builder(this)
 
+                myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
                 myAlert.setTitle("Confirmar")
-                myAlert.setMessage("¿Seguro que Desea Eliminar?")
+                myAlert.setIcon(android.R.drawable.ic_menu_delete)
+
+
                 myAlert.setPositiveButton("Si") { _, _ ->
 
                     val unidToDelete:ArrayList<String> = arrayListOf()

@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewPrin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@android:color/white"
     tools:context=".AgregarQuizActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -42,15 +42,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="@string/nombre_del_quizz">
+                        android:hint="@string/nombre_del_quizz"
+                        app:helperText="Requerido*">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edtNombre"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:textColor="@color/primaryText" />
+                            android:inputType="text"
+                            android:textColor="@color/primaryText"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
@@ -71,7 +72,7 @@
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:background="@color/colorAccent"
-                                android:drawableLeft="@drawable/ic_filter"
+                                android:drawableStart="@drawable/ic_filter"
                                 android:src="@drawable/ic_filter" />
 
                             <TextView
@@ -161,36 +162,49 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/itemsQuizzes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
         tools:context=".AgregarQuizActivity">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/medium_margin"
             android:orientation="vertical">
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyPreguntas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin">
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/small_margin">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <TextView
-                android:visibility="invisible"
-                android:id="@+id/txtCantidadQuizz"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_se_han_agregado_quizzes_aun"
-                android:layout_gravity="center"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:id="@+id/txtCantidadQuizzview"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtCantidadQuizz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_se_han_agregado_quizzes_aun" />
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lottie_loop="true"
+                    app:lottie_autoPlay="true"
+                    app:lottie_rawRes="@raw/no_data1"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>
 

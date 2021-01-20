@@ -70,7 +70,7 @@ class EstuAdapter(val listEstudiantes:ArrayList<Usuario>):
                 val myAlert=AlertDialog.Builder(itemView.context)
 
                 myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
-                myAlert.setTitle("Eliminar")
+                myAlert.setTitle("Confirmar")
                 myAlert.setIcon(android.R.drawable.ic_menu_delete)
 
                 myAlert.setNegativeButton("No") { _, _ ->

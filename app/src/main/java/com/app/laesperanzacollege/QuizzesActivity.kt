@@ -64,7 +64,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     override fun QuizzSaved(quizz: Quiz) {
         myListQuizzes?.add(quizz)
         myQuizzesAdapter?.notifyDataSetChanged()
-        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(txtCantQuizzes!!,myListQuizzes!!)
+        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

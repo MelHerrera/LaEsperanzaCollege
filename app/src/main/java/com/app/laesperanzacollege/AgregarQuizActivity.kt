@@ -6,16 +6,17 @@ import Observers.QuizzObserver
 import Observers.UnidadObserver
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizPreguntaAdapter
@@ -25,36 +26,34 @@ import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
-import com.app.laesperanzaedm.database.UnidadContract
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Unidad
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import kotlinx.android.synthetic.main.activity_agregar_estu.*
 import kotlinx.android.synthetic.main.activity_agregar_quiz.*
-import kotlinx.android.synthetic.main.item_estu.*
-import java.util.function.Consumer
 import kotlin.math.abs
 
 
 class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,FiltroObserver {
-    var myListUnidad: ArrayList<Unidad>? = null
-    var myListQuizz: ArrayList<Quiz>? = null
-    var myUnidadDAO: UnidadDAO? = null
-    var myPreguntaDAO: PreguntaDAO? = null
-    var myQuizDAO: QuizDAO? = null
-    var myUnidadesAdapter: UnidAdapter1? = null
-    var myQuizPreguntaAdapter: QuizPreguntaAdapter? = null
-    var myListPregunta: ArrayList<Pregunta>? = null
-    var myQuiz: Quiz? = null
-    var numUnidad: Int? = null
-    var max: Int? = null
-    var CantidadDeUnidades:LinearLayoutCompat?=null
-    var CantidadQuizz:TextView?=null
-    var quizzEstado:Int=0 //Por defecto sin inciar
-    var gradoDAO:GradoDAO?=null
-    var listaGrados:ArrayList<Grado>?=null
+    private var myListUnidad: ArrayList<Unidad>? = null
+    private var myListQuizz: ArrayList<Quiz>? = null
+    private var myUnidadDAO: UnidadDAO? = null
+    private var myPreguntaDAO: PreguntaDAO? = null
+    private var myQuizDAO: QuizDAO? = null
+    private var myUnidadesAdapter: UnidAdapter1? = null
+    private var myQuizPreguntaAdapter: QuizPreguntaAdapter? = null
+    private var myListPregunta: ArrayList<Pregunta>? = null
+    private var myQuiz: Quiz? = null
+    private var numUnidad: Int? = null
+    private var max: Int? = null
+    private var CantidadDeUnidades:LinearLayoutCompat?=null
+    private var CantidadQuizz:TextView?=null
+    private var quizzEstado:Int=0 //Por defecto sin inciar
+    private var gradoDAO:GradoDAO?=null
+    private var listaGrados:ArrayList<Grado>?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_quiz)
@@ -84,9 +83,18 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
                 }
                 newParams.collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                 toolbar.layoutParams = newParams
-                toolbar.requestLayout()
+                //toolbar.requestLayout()
+
+                val params1 = itemsQuizzes.layoutParams as CoordinatorLayout.LayoutParams
+                params1.setMargins(3, 3, 3, 0)
+                itemsQuizzes.layoutParams = params1
             } else {
                 toolbar_layout.isTitleEnabled = false
+
+                val params = itemsQuizzes.layoutParams as CoordinatorLayout.LayoutParams
+                params.setMargins(3, 70, 3, 0)
+
+                itemsQuizzes.layoutParams = params
             }
 
         })
@@ -140,7 +148,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
         BtnGuardar.setOnClickListener {
             if (validar()) {
-                var myQuizzToSave = Asignar()
+                var myQuizzToSave = asignar()
                 if (myQuizDAO?.Insertar(myQuizzToSave)!!) {
 
                     myQuizzToSave = myQuizDAO?.BuscarQuizz(myQuizzToSave.nombre.toString())!!
@@ -156,7 +164,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
                     myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
                     myListPregunta = myPreguntaDAO?.ListarPreguntas()
 
-                    if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
+                    if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(txtCantidadQuizzview!!,myListUnidad!!)
 
 
 
@@ -187,7 +195,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
         recyPreguntas.adapter = myQuizPreguntaAdapter
     }
 
-    fun Asignar(): Quiz {
+    private fun asignar(): Quiz {
         myQuiz = Quiz()
 
         myQuiz?.nombre = edtNombre.text.toString()
@@ -197,11 +205,12 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
         return myQuiz!!
     }
 
-    fun validar():Boolean
+    private fun validar():Boolean
     {
         if(edtNombre.text?.isEmpty()!!)
         {
             txtNombre.error="El nombre es requerido"
+            txtNombre.setHelperTextColor(ColorStateList.valueOf(Color.RED))
             return false
         }
         else
@@ -209,7 +218,11 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
         if(numUnidad==null)
         {
-            Toast.makeText(this, "Debe Seleccionar una Unidad", Toast.LENGTH_LONG).show()
+            val mSnack= Utils.crearCustomSnackbar(
+                viewPrin, Color.RED, android.R.drawable.stat_notify_error,
+                getString(R.string.error_incomplete_data,getString(R.string.txt_unidad)), layoutInflater
+            )
+            mSnack.show()
             return false
         }
 

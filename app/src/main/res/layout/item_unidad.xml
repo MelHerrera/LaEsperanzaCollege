@@ -21,7 +21,7 @@
             android:id="@+id/txtNumUnidad"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/medium_margin"
             android:background="@drawable/oval_counter"
             android:padding="3dp"
             android:elevation="10dp"
@@ -43,14 +43,14 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:gravity="center"
-            android:text="Primera ley de la Gravedad"
-            android:textStyle="bold"
             android:textColor="#000"
             android:maxLines="2"
             android:ellipsize="end"
+            android:layout_margin="@dimen/small_margin"
             app:layout_constraintTop_toBottomOf="@+id/solidColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

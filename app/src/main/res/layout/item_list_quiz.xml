@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp">
+    android:layout_margin="1dp"
+    app:cardElevation="@dimen/large_margin">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,12 +18,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imgIconQuiz"
+            <TextView
+                android:id="@+id/imgIconQuizCounter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_pregunta"
-                android:layout_margin="3dp"
+                android:background="@drawable/oval_counter"
+                android:layout_margin="@dimen/medium_margin"
+                android:textColor="@color/secondaryText"
+                android:textAlignment="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/textQuizzes"
                 app:layout_constraintBottom_toBottomOf="@id/textQuizzes"/>
@@ -34,14 +37,18 @@
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/iconExpandQuiz"
-                app:layout_constraintStart_toEndOf="@+id/imgIconQuiz"
+                app:layout_constraintStart_toEndOf="@+id/imgIconQuizCounter"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/textQuiz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:text="Elementos Basicos de la dinamica de los triangulos rectangulos"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <ImageView

@@ -26,7 +26,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
     var myPreguntaAdapter: PregunAdapter?=null
     var viewCantidadDeElementos:TextView?=null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVieHolder {
-        var myView= LayoutInflater.from(parent.context).inflate(R.layout.item_list_quiz,parent,false)
+        val myView= LayoutInflater.from(parent.context).inflate(R.layout.item_list_quiz,parent,false)
         return MyVieHolder(myView)
     }
 
@@ -35,7 +35,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
     }
 
     override fun onBindViewHolder(holder: MyVieHolder, position: Int) {
-        var myListPreguntaFilter:ArrayList<Pregunta> =ArrayList()
+        val myListPreguntaFilter:ArrayList<Pregunta> =ArrayList()
         for (item in myListPregunta)
         {
             if(item.quizzId==myListQuiz[position].quizId)
@@ -53,6 +53,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
         var myExpandableView=itemView.viewExpandedQuiz
         var myRecyRespuesta=itemView.recyQuizResp
         var myIconAdd=itemView.imgAddQuiz
+        var myQuizCount=itemView.imgIconQuizCounter
 
         init {
             myPreguntaDAO= PreguntaDAO(itemView.context)
@@ -63,9 +64,10 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
 
         fun bindItem(quiz:Quiz, myListPregunta: ArrayList<Pregunta>) {
             myQuiz.text=quiz.nombre
+            myQuizCount.text=adapterPosition.toString()
 
             myExpandableIcon.setOnClickListener {
-                var expanded=myExpandableView.visibility
+                val expanded=myExpandableView.visibility
 
                 if(expanded== View.VISIBLE)
                 {

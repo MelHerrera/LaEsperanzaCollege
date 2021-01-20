@@ -113,7 +113,8 @@ class AgregarUnidActivity : AppCompatActivity() {
                         edtNumUnidad.setText("")
                         NumUnidad.text="0"
 
-                        Toast.makeText(this,"Se Guardo con Exito",Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this,"Se Guardo con Exito",Toast.LENGTH_SHORT).show()
+                        //val mySnackbar=Utils.crearCustomSnackbar()
                     }
                     else
                         Toast.makeText(this,"Nombre o Numero de Unidad ya Existen",Toast.LENGTH_SHORT).show()
