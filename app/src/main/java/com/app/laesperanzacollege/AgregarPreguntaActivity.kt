@@ -88,7 +88,7 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         if(myData!=null)
         {
             pregQuiz.visibility=View.VISIBLE
-            pregQuiz.text="Unidad ${myData.toString()}"
+            pregQuiz.text="Quizz: ${myData.toString()}"
         }
         else
         {

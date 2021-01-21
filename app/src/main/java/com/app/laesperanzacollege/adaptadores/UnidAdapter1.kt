@@ -10,26 +10,20 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.app.laesperanzacollege.AgregarQuizActivity
 import com.app.laesperanzacollege.R
 import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UnidadDAO
-import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Unidad
-import kotlinx.android.synthetic.main.activity_agregar__unidad.view.*
-import kotlinx.android.synthetic.main.item_unidad.view.*
 import kotlinx.android.synthetic.main.item_unidades.view.txtDesc
 import kotlinx.android.synthetic.main.item_unidades.view.txtNumUnidad
 import kotlinx.android.synthetic.main.item_unidades.view.viewUnidad
-import java.util.*
 import kotlin.collections.ArrayList
 
-class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
+class UnidAdapter1(var listUnidades:ArrayList<Unidad>, var checkPos:Int):
     RecyclerView.Adapter<UnidAdapter1.myViewHolder>(),Filterable {
     var listaAuxDeUnidades= arrayListOf<Unidad>()
     var myContext:Context?=null
-    init {
-
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
         val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_unidad,parent,false)
         myContext=myView.context
@@ -55,6 +49,8 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>):
             descripcion.text = myUnidad.descripcion
             numUnidad.text = myUnidad.numUnidad.toString()
 
+            if(adapterPosition==checkPos)
+                cardUnidad.isChecked=true
 
                 cardUnidad.setOnLongClickListener {
 

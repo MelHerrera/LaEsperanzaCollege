@@ -1,7 +1,6 @@
 package com.app.laesperanzacollege.adaptadores
 
 import Observers.PreguntaObserver
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.AgregarPreguntaActivity
-import com.app.laesperanzacollege.AgregarRespuestaActivity
 import com.app.laesperanzacollege.R
 import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.item_list_quiz.view.*
-import kotlinx.android.synthetic.main.item_preguntas_expandable.view.iconExpand
-import kotlinx.android.synthetic.main.item_preguntas_expandable.view.imgAdd
-import kotlinx.android.synthetic.main.item_preguntas_expandable.view.recyPregRes
 
 class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:ArrayList<Pregunta>)
     :RecyclerView.Adapter<QuizPreguntaAdapter.MyVieHolder>() {
@@ -94,12 +89,12 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
 
             myRecyRespuesta.layoutManager= LinearLayoutManager(itemView.context)
             myPreguntaAdapter=PregunAdapter(myListPregunta)
-            var myItemDecoration= DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL)
+            val myItemDecoration= DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL)
             myRecyRespuesta.addItemDecoration(myItemDecoration)
             myRecyRespuesta.adapter=myPreguntaAdapter
 
             myIconAdd.setOnClickListener {
-                var myIntent= Intent(itemView.context, AgregarPreguntaActivity::class.java)
+                val myIntent= Intent(itemView.context, AgregarPreguntaActivity::class.java)
                 myIntent.putExtra("QUIZZID",quiz.quizId)
                 myIntent.putExtra("QUIZZNOM",quiz.nombre)
                 itemView.context.startActivity(myIntent)

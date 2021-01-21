@@ -4,6 +4,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_clear</item>
     </style>
 
     <style name="AppTheme_Material_NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -54,6 +57,12 @@
     <style name="AppTheme_Material_TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="colorPrimary">@color/secondaryText</item>
         <item name="boxStrokeColor">@color/secondaryText</item>
+    </style>
+
+    <style name="Widget.App.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
+        <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
+        <item name="background">@color/colorPrimary</item>
     </style>
 
 </resources>

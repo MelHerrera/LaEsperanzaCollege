@@ -170,4 +170,5 @@
     <string name="txt_unidad">Unidad</string>
     <string name="txt_eliminar">Eliminar</string>
     <string name="txt_editar">Editar</string>
+    <string name="txt_operacion">OPERACION</string>
 </resources>

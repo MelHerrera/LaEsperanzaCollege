@@ -34,7 +34,7 @@
         <activity
             android:name=".AgregarPreguntaActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AgregarPreguntaTheme"
+            android:theme="@style/AppTheme_Material_NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarQuizActivity"
@@ -50,8 +50,8 @@
         <activity android:name=".FormulasActivity" />
         <activity
             android:name=".UnidadesActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name=".QuizzesActivity" />
+            android:theme="@style/AppTheme_Material_NoActionBar" />
+        <activity android:name=".QuizzesActivity"/>
         <activity
             android:name=".AgregarEstuActivity"
             android:configChanges="keyboardHidden|smallestScreenSize|screenSize|orientation"

@@ -22,7 +22,7 @@ class PreguntaDAO(context: Context) {
 
     fun Insertar(pregunta: Pregunta):Boolean
     {
-        var datos= ContentValues()
+        val datos= ContentValues()
         datos.put(PreguntaContract.COLUMN_DESCRIPCION,pregunta.descripcion)
         datos.put(PreguntaContract.COLUMN_OPCIONDERESPUESTAID,pregunta.opcionDeRespuestaId)
         datos.put(PreguntaContract.COLUMN_QUIZZID,pregunta.quizzId)
@@ -57,9 +57,9 @@ class PreguntaDAO(context: Context) {
     fun ListarPreguntas():ArrayList<Pregunta>
     {
         var myPregunta: Pregunta?=null
-        var myListPreguntas:ArrayList<Pregunta> = arrayListOf()
+        val myListPreguntas:ArrayList<Pregunta> = arrayListOf()
 
-        var res=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,null,null,null,null,null,null)
+        val res=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,null,null,null,null,null,null)
 
         if(res?.count!! >0)
         {
@@ -86,9 +86,9 @@ class PreguntaDAO(context: Context) {
     fun ListarPreguntas(quizzId:Int):ArrayList<Pregunta>
     {
         var myPregunta: Pregunta?=null
-        var myListPreguntas:ArrayList<Pregunta> = arrayListOf()
-        var mySelection="${PreguntaContract.COLUMN_QUIZZID}=?"
-        var res=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,mySelection,
+        val myListPreguntas:ArrayList<Pregunta> = arrayListOf()
+        val mySelection="${PreguntaContract.COLUMN_QUIZZID}=?"
+        val res=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,mySelection,
             arrayOf(quizzId.toString()),null,null,null,null)
 
         if(res?.count!! >0)

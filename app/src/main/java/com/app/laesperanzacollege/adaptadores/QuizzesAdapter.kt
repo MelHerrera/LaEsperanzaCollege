@@ -1,10 +1,9 @@
 package com.app.laesperanzacollege.adaptadores
 
 import Observers.QuizesAdapterObserver
+import Observers.QuizzObserver
 import android.content.Intent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +27,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
     companion object
     {
         var myListQuizzes:ArrayList<View> = arrayListOf()
+        var myQuizzObserver: QuizzObserver?=null
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_quizzes,parent,false)
@@ -49,6 +49,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
         private var cantPreguntas: TextView =itemView.cantPreguntas
         private var quizzEstado: TextView =itemView.quizzEstado
         private var btnPractica: Button =itemView.btnPractica
+        private var cardView=itemView.cardView_Quiz
 
         fun bindItem(myQuizz:Quiz,tipoDeUsuario: TipoDeUsuarios,usuarioId: Int)
         {
@@ -68,6 +69,28 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
                    cardDisable()
                 }
 
+            cardView.isChecked=false
+
+            //action mode to edit and delete
+            cardView.setOnLongClickListener {
+
+                if(tipoDeUsuario==TipoDeUsuarios.Admin)
+                {
+                    //chechear o descheckear el cardview
+                    cardView.isChecked = !cardView.isChecked
+
+                    if(cardView.isChecked)
+                       myQuizzObserver?.quizSelection(adapterPosition,true)
+                    else
+                        myQuizzObserver?.quizSelection(adapterPosition,false)
+
+
+                    //iniciar el menu action Mode
+                    myQuizzObserver?.actionModeInit()
+                }
+
+                return@setOnLongClickListener false
+            }
 
             btnPractica.setOnClickListener {
 

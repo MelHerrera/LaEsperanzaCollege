@@ -24,7 +24,7 @@ class AgregarUnidActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar__unidad)
 
-        myOperacion=intent.extras?.get("OPERACION").toString()
+        myOperacion=intent.extras?.get(getString(R.string.txt_operacion)).toString()
         val extras=intent.extras?.get("UNIDAD")
 
 

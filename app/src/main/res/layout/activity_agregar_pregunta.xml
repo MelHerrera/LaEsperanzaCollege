@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/jeje"
-    android:background="@android:color/white"
     tools:context=".AgregarPreguntaActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -101,11 +100,11 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedPreg"
         android:layout_width="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="25dp"
         tools:context=".AgregarQuizActivity">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -115,12 +114,13 @@
 
             <TextView
                 android:id="@+id/pregQuiz"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/secondaryText"
                 android:background="@drawable/estado_menu_quizz"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/medium_margin"
                 android:padding="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -132,7 +132,6 @@
             <TextView
                 android:id="@+id/txtCantidadPreguntas"
                 android:layout_width="wrap_content"
-                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="No hay preguntas aun"/>

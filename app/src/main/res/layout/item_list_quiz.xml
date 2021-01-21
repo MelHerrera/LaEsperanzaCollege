@@ -4,8 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
-    app:cardElevation="@dimen/large_margin">
+    android:layout_margin="1dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -46,9 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textStyle="bold"
-                    android:textAlignment="center"
-                    android:text="Elementos Basicos de la dinamica de los triangulos rectangulos"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAlignment="center" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <ImageView
@@ -57,14 +54,13 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/imgAddQuiz"
                 app:layout_constraintTop_toTopOf="@id/textQuizzes"
-                app:layout_constraintBottom_toBottomOf="@id/textQuizzes"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/textQuizzes" />
             <ImageView
                 android:id="@+id/imgAddQuiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_circle"
-                android:layout_margin="3dp"
+                android:layout_margin="@dimen/small_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iconExpandQuiz"
                 app:layout_constraintBottom_toBottomOf="@id/iconExpandQuiz"/>
@@ -93,5 +89,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recyQuizResp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

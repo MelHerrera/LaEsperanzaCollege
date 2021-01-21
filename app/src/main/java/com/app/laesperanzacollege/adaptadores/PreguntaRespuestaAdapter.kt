@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_preguntas_expandable.view.*
 class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myListRespuesta: ArrayList<Respuesta>): RecyclerView.Adapter<PreguntaRespuestaAdapter.MyVieHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVieHolder {
-       var myView=LayoutInflater.from(parent.context).inflate(R.layout.item_preguntas_expandable,parent,false)
+       val myView=LayoutInflater.from(parent.context).inflate(R.layout.item_preguntas_expandable,parent,false)
         return MyVieHolder(myView)
     }
 
@@ -45,6 +45,7 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
         var myRecyRespuesta=itemView.recyPregRes
         var myIconAdd=itemView.imgAdd
         var cantidadElementos=itemView.msjCantidad
+        var preguntaCounter=itemView.imgIconPreguntaCounter
 
         init {
            myExpandableView.visibility=View.GONE
@@ -53,9 +54,10 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
 
         fun bindItem(pregunta: Pregunta,myListRespuesta: ArrayList<Respuesta>) {
             myPregunta.text=pregunta.descripcion
+            preguntaCounter.text=adapterPosition.toString()
 
             myExpandableIcon.setOnClickListener {
-                var expanded=myExpandableView.visibility
+                val expanded=myExpandableView.visibility
 
                 if(expanded==View.VISIBLE)
                 {
