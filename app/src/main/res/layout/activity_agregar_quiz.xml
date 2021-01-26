@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#FDFAFA"
     tools:context=".AgregarQuizActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -42,6 +43,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginStart="@dimen/small_margin"
+                        android:layout_marginEnd="@dimen/small_margin"
                         android:hint="@string/nombre_del_quizz"
                         app:helperText="Requerido*">
 
@@ -49,8 +52,8 @@
                             android:id="@+id/edtNombre"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textColor="@color/primaryText"/>
+                            android:textColor="@color/primaryText"
+                            android:inputType="text" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +120,7 @@
 
                         <ImageView
                             android:id="@+id/imgSinUnidades"
-                            style="@style/AgregarPreguntaFABTheme"
+                            style="@style/FABTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_add" />
@@ -192,8 +195,7 @@
                 <TextView
                     android:id="@+id/txtCantidadQuizz"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_se_han_agregado_quizzes_aun" />
+                    android:layout_height="wrap_content" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:layout_width="wrap_content"
@@ -202,7 +204,6 @@
                     app:lottie_autoPlay="true"
                     app:lottie_rawRes="@raw/no_data1"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
-
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -215,6 +216,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
+        style="@style/FABTheme"
         android:src="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

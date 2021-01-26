@@ -1,5 +1,6 @@
 package com.app.laesperanzacollege.adaptadores
 
+import Observers.RespuestaObserver
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.AgregarRespuestaActivity
 import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.interfaces.NotifyUpdateRecyclerView
+import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
 import kotlinx.android.synthetic.main.item_preguntas_expandable.view.*
@@ -25,7 +28,7 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
     }
 
     override fun onBindViewHolder(holder: MyVieHolder, position: Int) {
-        var myListRespuestaFilter:ArrayList<Respuesta> =ArrayList()
+        val myListRespuestaFilter:ArrayList<Respuesta> =ArrayList()
 
         for (item in myListRespuesta)
         {
@@ -36,9 +39,10 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
        holder.bindItem(myListPreguntas[position],myListRespuestaFilter)
     }
 
-    class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView),NotifyUpdateRecyclerView, RespuestaObserver
     {
         var myRespuestaAdapter: ResAdapter?=null
+        var mListRespuestas:ArrayList<Respuesta> = arrayListOf()
         var myPregunta=itemView.textPre
         var myExpandableIcon=itemView.iconExpand
         var myExpandableView=itemView.viewExpanded
@@ -55,6 +59,7 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
         fun bindItem(pregunta: Pregunta,myListRespuesta: ArrayList<Respuesta>) {
             myPregunta.text=pregunta.descripcion
             preguntaCounter.text=adapterPosition.toString()
+            this.mListRespuestas=myListRespuesta
 
             myExpandableIcon.setOnClickListener {
                 val expanded=myExpandableView.visibility
@@ -80,19 +85,34 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
                     cantidadElementos.visibility=View.GONE
                     cantidadElementos.text = ""
                 }
-
-                myRecyRespuesta.layoutManager=LinearLayoutManager(itemView.context)
-                var myItemDecoration= DividerItemDecoration(itemView.context,DividerItemDecoration.VERTICAL)
-                myRecyRespuesta.addItemDecoration(myItemDecoration)
-                myRespuestaAdapter=ResAdapter(myListRespuesta)
-                myRecyRespuesta.adapter=myRespuestaAdapter
             }
+
+            myRecyRespuesta.layoutManager=LinearLayoutManager(itemView.context)
+            val myItemDecoration= DividerItemDecoration(itemView.context,DividerItemDecoration.VERTICAL)
+            myRecyRespuesta.addItemDecoration(myItemDecoration)
+            myRespuestaAdapter=ResAdapter(myListRespuesta,this)
+            myRecyRespuesta.adapter=myRespuestaAdapter
 
             myIconAdd.setOnClickListener {
-                var myIntent=Intent(itemView.context,AgregarRespuestaActivity::class.java)
-                myIntent.putExtra("PREGUNTAID",pregunta.id)
+                val myIntent=Intent(itemView.context,AgregarRespuestaActivity::class.java)
+                myIntent.putExtra("PREGUNTA",pregunta)
+                myIntent.putExtra("OPERACION",OperacionesCrud.Editar)
+                AgregarRespuestaActivity.myRespuestaObserver=this
                 itemView.context.startActivity(myIntent)
             }
+        }
+
+        override fun updateRecy() {
+            myRespuestaAdapter?.notifyDataSetChanged()
+        }
+
+        override fun respuestaSaved(newRespuestas: ArrayList<Respuesta>) {
+            mListRespuestas.addAll(newRespuestas)
+            updateRecy()
+        }
+
+        override fun preguntaSaved(pregunta: Pregunta, mListRespuestas: ArrayList<Respuesta>) {
+           //nothing to do
         }
     }
 }

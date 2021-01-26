@@ -24,8 +24,8 @@ class RespuestaDAO(context: Context) {
 
     fun Insertar(respuesta: Respuesta):Boolean
     {
-        var datos= ContentValues()
-        var correcta:Int=0
+        val datos= ContentValues()
+        var correcta=0
 
         datos.put(RespuestaContract.COLUMN_ID,respuesta.id)
         datos.put(RespuestaContract.COLUMN_DESCRIPCION,respuesta.descripcion)
@@ -135,9 +135,9 @@ class RespuestaDAO(context: Context) {
 
     fun BuscarRespuesta(descripcion: String): Respuesta?
     {
-        var miRespuesta = Respuesta()
-        var selection="${RespuestaContract.COLUMN_DESCRIPCION}=?"
-        var myCursor: Cursor?=mySqlDatabase?.query(RespuestaContract.TABLE_NAME,null,selection, arrayOf(descripcion),null,null,null)
+        val miRespuesta = Respuesta()
+        val selection="${RespuestaContract.COLUMN_DESCRIPCION}=?"
+        val myCursor: Cursor?=mySqlDatabase?.query(RespuestaContract.TABLE_NAME,null,selection, arrayOf(descripcion),null,null,null)
 
         if(myCursor?.count!! >0)
         {
@@ -156,5 +156,15 @@ class RespuestaDAO(context: Context) {
             return miRespuesta
         }
         return null
+    }
+
+    fun Eliminar(PreguntaId: Int?):Boolean
+    {
+        val result=mySqlDatabase?.delete(RespuestaContract.TABLE_NAME,"${RespuestaContract.COLUMN_PREGUNTAID}=?", arrayOf(PreguntaId.toString()))
+
+        if (result != null) {
+            return result>0
+        }
+        return false
     }
 }

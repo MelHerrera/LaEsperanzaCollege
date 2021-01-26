@@ -138,6 +138,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
 
               if(mListQuizSelected?.size!!>0)
               {
+                  mode?.title="${mListQuizSelected?.size}"
                   if(mListQuizSelected?.size!!>1)
                   {
                       val menuItemEdit=menu?.findItem(R.id.myItemEditQuiz)

@@ -20,7 +20,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
-    <style name="AgregarPreguntaFABTheme" parent="Widget.Design.FloatingActionButton">
+    <style name="FABTheme" parent="Widget.Design.FloatingActionButton">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="tint">@android:color/white</item>
     </style>

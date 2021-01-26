@@ -2,19 +2,21 @@ package com.app.laesperanzacollege
 
 import Observers.PreguntaObserver
 import Observers.RespuestaObserver
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.laesperanzacollege.adaptadores.PreguntaRespuestaAdapter
 import com.app.laesperanzadao.OpcionesDeRespuestaDAO
 import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzadao.RespuestaDAO
+import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.OpcionDeRespuesta
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
@@ -22,11 +24,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_agregar_pregunta.*
-import kotlinx.android.synthetic.main.activity_agregar_pregunta.toolbar
 import kotlin.math.abs
 
 
-class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
+class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
     var myPreguntaDAO:PreguntaDAO?=null
     var myRespuestaDAO:RespuestaDAO?=null
     var myOpcionDeRespuestaDAO:OpcionesDeRespuestaDAO?=null
@@ -37,21 +38,24 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
     var myListRespuesta:ArrayList<Respuesta>?=null
     var myPreguntaRespuestaAdapter:PreguntaRespuestaAdapter?=null
     var opcionDeRespuestaId:Int?=null
-    var cantidadPreguntas:TextView?=null
+    var cantidadPreguntas:LinearLayoutCompat?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_pregunta)
 
-        edtPregunta.requestFocus()
+        //edtPregunta.requestFocus()
         val myToolbar=findViewById<Toolbar>(R.id.toolbar)
         myToolbar.title=getString(R.string.txt_agregarPregunta)
         setSupportActionBar(myToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        app_barActPregunta.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
+        txtCantidadPreguntas.text=getString(R.string.sin_datos,getString(R.string.preguntas))
 
+        app_barActPregunta.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val nestedScroolParams = nestedPreg.layoutParams as CoordinatorLayout.LayoutParams
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 toolbar_layoutActPregunta.isTitleEnabled = true
                 toolbar_layoutActPregunta.title = getString(R.string.txt_agregarPregunta)
@@ -66,13 +70,16 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
                 newParams.collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                 myToolbar.layoutParams = newParams
                 myToolbar.requestLayout()
+
+                nestedScroolParams.setMargins(3, 3, 3, 0)
             } else {
                 toolbar_layoutActPregunta.isTitleEnabled = false
+                nestedScroolParams.setMargins(3, 70, 3, 0)
             }
-
+            nestedPreg.layoutParams = nestedScroolParams
         })
 
-        cantidadPreguntas=txtCantidadPreguntas
+        cantidadPreguntas=viewCantidadPreguntas
         myPreguntaDAO= PreguntaDAO(this)
         myRespuestaDAO=RespuestaDAO(this)
 
@@ -139,28 +146,17 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
             if(validar())
             {
-                var myPreguntaToSave=Asignar()
+                val myPreguntaToSave=Asignar()
+                val mIntent= Intent(this,AgregarRespuestaActivity::class.java)
+                mIntent.putExtra("PREGUNTA",myPreguntaToSave)
+                mIntent.putExtra("OPERACION", OperacionesCrud.Agregar)
+                AgregarRespuestaActivity.myRespuestaObserver=this
+                startActivity(mIntent)
 
-                if(myPreguntaDAO?.Insertar(myPreguntaToSave)!!)
-                {
-                    myPreguntaToSave= myPreguntaDAO?.BuscarPregunta(myPreguntaToSave.descripcion.toString())!!
-
-                    myListPregunta?.add(myPreguntaToSave)
-                    myPreguntaRespuestaAdapter?.notifyDataSetChanged()
-                    if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(
-                        cantidadPreguntas!!,
-                        myListPregunta!!
-                    )
-
-                    myPreguntaObserver?.preguntaSaved(myPreguntaToSave)
-                    AgregarRespuestaActivity.myRespuestaObserver=this
-
-                    Toast.makeText(this, "Se Agrego con Exito", Toast.LENGTH_LONG).show()
-                    edtPregunta.text?.clear()
-
-                    rgbOpciones.clearCheck()
-                    opcionDeRespuestaId=null
-                }
+                //limpiar controles y variables
+                edtPregunta.text?.clear()
+                rgbOpciones.clearCheck()
+                opcionDeRespuestaId=null
             }
         }
     }
@@ -186,7 +182,11 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
 
         if(opcionDeRespuestaId==null)
         {
-            Toast.makeText(this, "Opcion de Respuesta no Seleccionada", Toast.LENGTH_SHORT).show()
+            val mSnack= Utils.crearCustomSnackbar(
+                viewPrinPreg, Color.RED, android.R.drawable.stat_notify_error,
+                getString(R.string.error_incomplete_data,getString(R.string.txt_opcionRespuesta)), layoutInflater
+            )
+            mSnack.show()
             return false
         }
 
@@ -197,12 +197,18 @@ class AgregarPreguntaActivity : AppCompatActivity(), RespuestaObserver {
         var myPreguntaObserver:PreguntaObserver?=null
     }
 
-    override fun respuestaSaved(respuesta: Respuesta) {
-        myListRespuesta=myRespuestaDAO?.ListarRespuestas()
-        myPreguntaRespuestaAdapter= PreguntaRespuestaAdapter(myListPregunta!!, myListRespuesta!!)
-        pregs.layoutManager=LinearLayoutManager(this)
-        pregs.adapter=myPreguntaRespuestaAdapter
+    override fun respuestaSaved(newRespuestas: ArrayList<Respuesta>) {
+        //do nothing
     }
+
+    override fun preguntaSaved(pregunta: Pregunta, mListRespuestas:ArrayList<Respuesta>) {
+        myListPregunta?.add(pregunta)
+        myListRespuesta?.addAll(mListRespuestas)
+        myPreguntaRespuestaAdapter?.notifyDataSetChanged()
+
+        if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(cantidadPreguntas!!, myListPregunta!!)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.AgregarPreguntaActivity
 import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.interfaces.NotifyUpdateRecyclerView
 import com.app.laesperanzadao.PreguntaDAO
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
@@ -40,7 +41,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
         holder.bindItem(myListQuiz[position],myListPreguntaFilter)
     }
 
-  inner class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+  inner class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView),NotifyUpdateRecyclerView
     {
         var myPreguntaDAO:PreguntaDAO?=null
         var myQuiz=itemView.textQuiz
@@ -88,7 +89,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
             }
 
             myRecyRespuesta.layoutManager= LinearLayoutManager(itemView.context)
-            myPreguntaAdapter=PregunAdapter(myListPregunta)
+            myPreguntaAdapter=PregunAdapter(myListPregunta,this)
             val myItemDecoration= DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL)
             myRecyRespuesta.addItemDecoration(myItemDecoration)
             myRecyRespuesta.adapter=myPreguntaAdapter
@@ -99,6 +100,10 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
                 myIntent.putExtra("QUIZZNOM",quiz.nombre)
                 itemView.context.startActivity(myIntent)
             }
+        }
+
+        override fun updateRecy() {
+            myPreguntaAdapter?.notifyDataSetChanged()
         }
     }
     companion object

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.app.laesperanzaedm.database.MyDbAdapter
 import com.app.laesperanzaedm.database.PreguntaContract
 import com.app.laesperanzaedm.database.QuizContract
+import com.app.laesperanzaedm.database.UsuarioContract
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 
@@ -114,10 +115,10 @@ class PreguntaDAO(context: Context) {
 
     fun BuscarPregunta(descripcion:String): Pregunta?
     {
-        var miPregunta = Pregunta()
+        val miPregunta = Pregunta()
 
-        var query="${PreguntaContract.COLUMN_DESCRIPCION}=?"
-        var myCursor: Cursor?=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,query, arrayOf(descripcion),null,null,null)
+        val query="${PreguntaContract.COLUMN_DESCRIPCION}=?"
+        val myCursor: Cursor?=mySqlDatabase?.query(PreguntaContract.TABLE_NAME,null,query, arrayOf(descripcion),null,null,null)
 
         if(myCursor?.count!! >0)
         {
@@ -136,5 +137,15 @@ class PreguntaDAO(context: Context) {
             return miPregunta
         }
         return null
+    }
+
+    fun Eliminar(PreguntaId: Int?):Boolean
+    {
+        val result=mySqlDatabase?.delete(PreguntaContract.TABLE_NAME,"${PreguntaContract.COLUMN_ID}=?", arrayOf(PreguntaId.toString()))
+
+        if (result != null) {
+            return result>0
+        }
+        return false
     }
 }

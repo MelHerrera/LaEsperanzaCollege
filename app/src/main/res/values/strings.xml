@@ -171,4 +171,5 @@
     <string name="txt_eliminar">Eliminar</string>
     <string name="txt_editar">Editar</string>
     <string name="txt_operacion">OPERACION</string>
+    <string name="txt_opcionRespuesta">Opcion de Respuesta</string>
 </resources>

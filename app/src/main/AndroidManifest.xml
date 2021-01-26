@@ -29,8 +29,8 @@
         </activity>
         <activity
             android:name=".AgregarRespuestaActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
-        <activity android:name=".RespuestaActivity" />
+            android:theme="@style/AppTheme_Material_NoActionBar"/>
+
         <activity
             android:name=".AgregarPreguntaActivity"
             android:screenOrientation="portrait"
@@ -38,7 +38,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AgregarQuizActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme_Material_NoActionBar"
             android:configChanges="keyboardHidden|smallestScreenSize|screenSize|orientation"
             android:windowSoftInputMode="stateHidden" />
         <activity
