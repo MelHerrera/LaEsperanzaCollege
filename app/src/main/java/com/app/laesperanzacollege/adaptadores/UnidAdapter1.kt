@@ -50,7 +50,12 @@ class UnidAdapter1(var listUnidades:ArrayList<Unidad>, var checkPos:Int):
             numUnidad.text = myUnidad.numUnidad.toString()
 
             if(adapterPosition==checkPos)
+            {
                 cardUnidad.isChecked=true
+                intChecked++
+                allowCardChecked=Integer.parseInt(this.itemView.txtNumUnidad.text.toString())
+                myUnidadObserver?.startSelection(adapterPosition,true)
+            }
 
                 cardUnidad.setOnLongClickListener {
 

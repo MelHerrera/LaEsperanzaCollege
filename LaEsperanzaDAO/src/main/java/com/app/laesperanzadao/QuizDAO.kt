@@ -4,26 +4,26 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import androidx.core.content.contentValuesOf
 import com.app.laesperanzaedm.database.*
 import com.app.laesperanzaedm.model.Quiz
 
 class QuizDAO(context: Context) {
     var mySqlDatabase: SQLiteDatabase?=null
     var myDbAdapter: MyDbAdapter?=null
-    var result:Long?=null
+    private var result:Long?=null
 
     init {
         myDbAdapter= MyDbAdapter(context)
         mySqlDatabase= myDbAdapter!!.openDatabase()
     }
 
-    fun Insertar(quiz: Quiz):Boolean
+    fun insertar(quiz: Quiz):Boolean
     {
         val datos= ContentValues()
         datos.put(QuizContract.COLUMN_NOMBRE,quiz.nombre)
         datos.put(QuizContract.COLUMN_NUMUNIDAD,quiz.numUnidad)
         datos.put(QuizContract.COLUMN_ESTADO,quiz.estado)
+        datos.put(QuizContract.COLUMN_PUNTAJE,quiz.puntaje)
 
         result=mySqlDatabase?.insert(QuizContract.TABLE_NAME,null,datos)
 
@@ -34,10 +34,14 @@ class QuizDAO(context: Context) {
     {
         val datos= ContentValues()
         datos.put(QuizContract.COLUMN_NOMBRE,quiz.nombre)
+        datos.put(QuizContract.COLUMN_ID,quiz.quizId)
+        datos.put(QuizContract.COLUMN_NUMUNIDAD,quiz.numUnidad)
+        datos.put(QuizContract.COLUMN_ESTADO,quiz.estado)
+        datos.put(QuizContract.COLUMN_PUNTAJE,quiz.puntaje)
 
         val query="${QuizContract.COLUMN_ID}=?"
 
-        var res=mySqlDatabase?.update(
+        val res=mySqlDatabase?.update(
             QuizContract.TABLE_NAME,
             datos,
             query,
@@ -50,12 +54,12 @@ class QuizDAO(context: Context) {
         return false
     }
 
-    fun ListarQuizzes():ArrayList<Quiz>
+    fun listarQuizzes():ArrayList<Quiz>
     {
-        var myQuiz:Quiz?=null
-        var myListQuizzes:ArrayList<Quiz> = arrayListOf()
+        var myQuiz: Quiz
+        val myListQuizzes:ArrayList<Quiz> = arrayListOf()
 
-        var res=mySqlDatabase?.query(QuizContract.TABLE_NAME,null,null,null,null,null,null,null)
+        val res=mySqlDatabase?.query(QuizContract.TABLE_NAME,null,null,null,null,null,null,null)
 
         if(res?.count!! >0)
         {
@@ -67,6 +71,7 @@ class QuizDAO(context: Context) {
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+                myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
                 myListQuizzes.add(myQuiz)
 
@@ -79,15 +84,15 @@ class QuizDAO(context: Context) {
     fun listarQuizzesDePractica(myCodGrado:String?):ArrayList<Quiz>
     {
         //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
-        var myQuiz:Quiz?=null
-        var myListQuizzes:ArrayList<Quiz> = arrayListOf()
+        var myQuiz:Quiz
+        val myListQuizzes:ArrayList<Quiz> = arrayListOf()
         val mySelection= "SELECT q.NombreDeQuiz FROM ${QuizContract.TABLE_NAME} as q\n" +
                 "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
                 "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
                 "WHERE g.CodGrado==? AND q.estado=?" +
                 "GROUP BY u.NumUnidad,g.CodGrado"
 
-        var res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,0.toString()),null)
+        val res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,0.toString()),null)
 
         if(res?.count!! >0)
         {
@@ -99,6 +104,7 @@ class QuizDAO(context: Context) {
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+                myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
                 myListQuizzes.add(myQuiz)
 
@@ -111,13 +117,8 @@ class QuizDAO(context: Context) {
     fun listarQuizzesPrueba(myCodGrado:String?):ArrayList<Quiz>
     {
         //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
-        var myQuiz:Quiz?=null
+        var myQuiz:Quiz
         val myListQuizzes:ArrayList<Quiz> = arrayListOf()
-        /*val mySelection= "SELECT ${QuizContract.COLUMN_ID},${QuizContract.COLUMN_NOMBRE},${QuizContract.COLUMN_ESTADO}  FROM ${QuizContract.TABLE_NAME} as q\n" +
-                "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
-                "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
-                "WHERE g.CodGrado==? AND q.estado=?" +
-                " GROUP BY u.NumUnidad,g.CodGrado"*/
 
         val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q\n" +
                 "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
@@ -137,6 +138,9 @@ class QuizDAO(context: Context) {
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
                 myQuiz.estado=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ESTADO))
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+                myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
+
+                if(cantPreguntas(myQuiz.quizId!!)>0)
                 myListQuizzes.add(myQuiz)
 
                 res.moveToNext()
@@ -145,7 +149,7 @@ class QuizDAO(context: Context) {
         return myListQuizzes
     }
 
-    fun ListarQuizNuevos(Max:Int):ArrayList<Quiz>
+    fun listarQuizNuevos(Max:Int):ArrayList<Quiz>
     {
         var myQuiz:Quiz?=null
         val myListQuizzes:ArrayList<Quiz> = arrayListOf()
@@ -163,6 +167,9 @@ class QuizDAO(context: Context) {
                 myQuiz= Quiz()
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                myQuiz.estado=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ESTADO))
+                myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+                myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
                 myListQuizzes.add(myQuiz)
 
@@ -194,7 +201,7 @@ class QuizDAO(context: Context) {
         }
         return max
     }
-    fun CantPreguntas(quizId: Int):Int
+    fun cantPreguntas(quizId: Int):Int
     {
 
         val query:String="${PreguntaContract.COLUMN_QUIZZID}=?"
@@ -208,7 +215,7 @@ class QuizDAO(context: Context) {
         return 0
     }
 
-    fun CantQuizzes(numUnidad:Int):Int
+    fun cantQuizzes(numUnidad:Int):Int
     {
 
         val selection="${QuizContract.COLUMN_NUMUNIDAD}=?"
@@ -222,7 +229,7 @@ class QuizDAO(context: Context) {
         return 0
     }
 
-    fun EstadoQuizz(quizzId:Int):Int
+    fun estadoQuizz(quizzId:Int):Int
     {
         //-1.Finalizado  0. Sin iniciar  1.En progreso
         var estado:Int=0
@@ -268,7 +275,7 @@ class QuizDAO(context: Context) {
         return false
     }
 
-    fun BuscarQuizz(nombre:String): Quiz?
+    fun buscarQuizz(nombre:String): Quiz?
     {
         val miQuizz = Quiz()
         val query="${QuizContract.COLUMN_NOMBRE}=?"
@@ -282,6 +289,9 @@ class QuizDAO(context: Context) {
             {
                 miQuizz.quizId =myCursor.getInt(myCursor.getColumnIndex(QuizContract.COLUMN_ID))
                 miQuizz.nombre=myCursor.getString(myCursor.getColumnIndex(QuizContract.COLUMN_NOMBRE))
+                miQuizz.estado=myCursor.getInt(myCursor.getColumnIndex(QuizContract.COLUMN_ESTADO))
+                miQuizz.numUnidad=myCursor.getInt(myCursor.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
+                miQuizz.puntaje=myCursor.getInt(myCursor.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
                 myCursor.moveToNext()
             }

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.laesperanzacollege.AgregarRespuestaActivity
 import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.RespuestaActivity
 import com.app.laesperanzacollege.interfaces.NotifyUpdateRecyclerView
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Pregunta
@@ -94,10 +94,10 @@ class PreguntaRespuestaAdapter(var myListPreguntas:ArrayList<Pregunta>,var myLis
             myRecyRespuesta.adapter=myRespuestaAdapter
 
             myIconAdd.setOnClickListener {
-                val myIntent=Intent(itemView.context,AgregarRespuestaActivity::class.java)
+                val myIntent=Intent(itemView.context,RespuestaActivity::class.java)
                 myIntent.putExtra("PREGUNTA",pregunta)
                 myIntent.putExtra("OPERACION",OperacionesCrud.Editar)
-                AgregarRespuestaActivity.myRespuestaObserver=this
+                RespuestaActivity.myRespuestaObserver=this
                 itemView.context.startActivity(myIntent)
             }
         }

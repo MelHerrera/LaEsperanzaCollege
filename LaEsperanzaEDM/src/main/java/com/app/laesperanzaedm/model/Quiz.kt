@@ -7,4 +7,5 @@ class Quiz:Serializable{
     var nombre:String?=null
     var numUnidad:Int?=null
     var estado:Int?=null
+    var puntaje:Int=0
 }

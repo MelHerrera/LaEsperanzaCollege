@@ -3,14 +3,13 @@ package com.app.laesperanzacollege
 import Observers.QuizzObserver
 import android.content.Intent
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
@@ -19,20 +18,17 @@ import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzadao.enums.TipoDeUsuarios
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.activity_quizzes.*
-import kotlinx.android.synthetic.main.activity_unidades.*
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.pow
 
 
-class QuizzesActivity : AppCompatActivity(),QuizzObserver {
+class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
     private var myQuizzesAdapter:QuizzesAdapter?=null
     private var myLayoutManager:RecyclerView.LayoutManager?=null
     private var myListQuizzes:ArrayList<Quiz>?=null
     private var myQuizDAO:QuizDAO?=null
     private var mListQuizSelected:ArrayList<Quiz>?= arrayListOf()
-    private var mActionMode:ActionMode.Callback?=null
-    private var mActionModeStarted:ActionMode?=null
+    private var mActionMode:ActionMode?=null
+    private var mActionModeMenu:Menu?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quizzes)
@@ -50,7 +46,7 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
                 }
             })
 
-        myListQuizzes=myQuizDAO?.ListarQuizzes()
+        myListQuizzes=myQuizDAO?.listarQuizzes()
         //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
         txtCantQuizzes.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
 
@@ -72,97 +68,34 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
     }
 
     override fun QuizzSaved(quizz: Quiz) {
+        val pos=myListQuizzes?.indexOfFirst { it.quizId==quizz.quizId}
+
+        if(pos!=null && pos!=-1)
+            myListQuizzes!![pos]=quizz
+        else
         myListQuizzes?.add(quizz)
+
         myQuizzesAdapter?.notifyDataSetChanged()
         if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
     }
 
     override fun actionModeInit() {
-        mActionMode=object : ActionMode.Callback
-        {
-            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                when(item?.itemId)
-                {
-                    R.id.myItemDeleteQuiz->
-                    {
-                        if(mListQuizSelected?.size!! >0)
-                        {
-                            val myAlert= AlertDialog.Builder(this@QuizzesActivity)
-
-                            myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
-                            myAlert.setTitle("Confirmar")
-                            myAlert.setIcon(android.R.drawable.ic_menu_delete)
-
-                            myAlert.setPositiveButton("Si") { _, _ ->
-
-                                for (it in mListQuizSelected!!) {
-                                    if(QuizDAO(this@QuizzesActivity).eliminarQuiz(it.quizId))
-                                        myListQuizzes?.remove(it)
-                                }
-                                myQuizzesAdapter?.notifyDataSetChanged()
-                                mListQuizSelected= arrayListOf()
-                                if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
-                            }
-
-                            myAlert.setNegativeButton("No") { _, _ ->
-                                myAlert.create().dismiss()
-                                myQuizzesAdapter?.notifyDataSetChanged()
-                                mListQuizSelected= arrayListOf()
-                                if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
-                            }
-
-                            myAlert.show()
-                        }
-                    }
-                    R.id.myItemEditQuiz->
-                    {
-                        val mIntent=Intent(this@QuizzesActivity,AgregarQuizActivity::class.java)
-                        mIntent.putExtra(getString(R.string.txt_operacion),OperacionesCrud.Editar)
-                        mIntent.putExtra(getString(R.string.keyNameQuiz), mListQuizSelected?.get(0))
-                        startActivity(mIntent)
-                    }
-                    else->
-                        return false
-                }
-                mode?.finish()
-
-                return true
-            }
-
-            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-               menuInflater.inflate(R.menu.menu_quiz,menu)
-                return true
-            }
-
-            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-
-              if(mListQuizSelected?.size!!>0)
-              {
-                  mode?.title="${mListQuizSelected?.size}"
-                  if(mListQuizSelected?.size!!>1)
-                  {
-                      val menuItemEdit=menu?.findItem(R.id.myItemEditQuiz)
-                      menuItemEdit?.isVisible=false
-                  }
-              }
-                else
-                  return false
-
-               return true
-            }
-
-            override fun onDestroyActionMode(mode: ActionMode?) {
-                mActionMode=null
-            }
-        }
 
         if(mListQuizSelected?.size!!>0)
         {
-            mActionModeStarted=startActionMode(mActionMode)
+            if (mActionMode == null) {
+                mActionMode = startSupportActionMode(this)
+            }
+            else
+            {
+                val menuItemEdit=mActionModeMenu?.findItem(R.id.myItemEditQuiz)
+                menuItemEdit?.isVisible = mListQuizSelected?.size!! <= 1
+
+                mActionMode?.title="${mListQuizSelected?.size}"
+            }
         }
         else
-            mActionModeStarted?.finish()
-
+            mActionMode?.finish()
     }
 
     override fun quizSelection(pos: Int, selected: Boolean) {
@@ -207,4 +140,76 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver {
         return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
     }
 
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+        when(item?.itemId)
+        {
+            R.id.myItemDeleteQuiz->
+            {
+                if(mListQuizSelected?.size!! >0)
+                {
+                    val myAlert= AlertDialog.Builder(this@QuizzesActivity)
+
+                    myAlert.setMessage("¿Estás Seguro que Deseas Eliminar?")
+                    myAlert.setTitle("Confirmar")
+                    myAlert.setIcon(android.R.drawable.ic_menu_delete)
+
+                    myAlert.setPositiveButton("Si") { _, _ ->
+
+                        for (it in mListQuizSelected!!) {
+                            if(QuizDAO(this@QuizzesActivity).eliminarQuiz(it.quizId))
+                                myListQuizzes?.remove(it)
+                        }
+                        myQuizzesAdapter?.notifyDataSetChanged()
+                        mListQuizSelected= arrayListOf()
+                        mode?.finish()
+                        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
+                    }
+
+                    myAlert.setNegativeButton("No") { _, _ ->
+                        myAlert.create().dismiss()
+                        myQuizzesAdapter?.notifyDataSetChanged()
+                        mListQuizSelected= arrayListOf()
+                        mode?.finish()
+                        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
+                    }
+
+                    myAlert.show()
+                }
+            }
+            R.id.myItemEditQuiz->
+            {
+                val mIntent=Intent(this@QuizzesActivity,AgregarQuizActivity::class.java)
+                mIntent.putExtra(getString(R.string.txt_operacion),OperacionesCrud.Editar)
+                mIntent.putExtra(getString(R.string.keyNameQuiz), mListQuizSelected?.get(0))
+                startActivity(mIntent)
+                myQuizzesAdapter?.notifyDataSetChanged()
+                mListQuizSelected= arrayListOf()
+                mode?.finish()
+            }
+            else->
+                return false
+        }
+        return true
+    }
+
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_quiz,menu)
+        return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        if(mListQuizSelected?.size!!>0)
+            mode?.title="${mListQuizSelected?.size}"
+
+        mActionModeMenu=menu
+        return true
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {
+        mActionMode=null
+        mActionModeMenu=null
+        myQuizzesAdapter?.notifyDataSetChanged()
+        mListQuizSelected= arrayListOf()
+        if(txtCantQuizzes!=null && myListQuizzes!=null) Validador.validarCantidad(viewCantQuizzes!!,myListQuizzes!!)
+    }
 }

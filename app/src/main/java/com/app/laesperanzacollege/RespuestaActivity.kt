@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,26 +19,37 @@ import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Respuesta
-import kotlinx.android.synthetic.main.activity_agregar_pregunta.*
-import kotlinx.android.synthetic.main.activity_agregar_quiz.*
-import kotlinx.android.synthetic.main.activity_agregar_respuesta.*
-import kotlinx.android.synthetic.main.activity_agregar_respuesta.view.*
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_respuesta.*
+import kotlinx.android.synthetic.main.activity_respuesta.view.*
+import kotlin.math.abs
 
-class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
+class RespuestaActivity : AppCompatActivity(), NotifyUpdateRecyclerView {
     private var correcta=true
-    private var pregunta:Pregunta= Pregunta()
-    private var myRespuestaDAO:RespuestaDAO?=null
+    private var pregunta: Pregunta = Pregunta()
+    private var myRespuestaDAO: RespuestaDAO?=null
     private var mListRespuestas:ArrayList<Respuesta> = arrayListOf()
-    private var mLayoutManager:RecyclerView.LayoutManager?=null
-    private var mRespuestaAdapter:RespuestaAdapter?=null
-    private var linearCantidadResp:LinearLayoutCompat?=null
-    private var operacion:OperacionesCrud?=null
+    private var mLayoutManager: RecyclerView.LayoutManager?=null
+    private var mRespuestaAdapter: RespuestaAdapter?=null
+    private var linearCantidadResp: LinearLayoutCompat?=null
+    private var operacion: OperacionesCrud?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_agregar_respuesta)
+        setContentView(R.layout.activity_respuesta)
+
+        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+
+            if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                toolbar_layout.isTitleEnabled = true
+                toolbar_layout.title = "Agregar Respuesta"
+                btnGuardarRes.visibility=View.GONE
+            } else {
+                toolbar_layout.isTitleEnabled = false
+                btnGuardarRes.visibility=View.VISIBLE
+            }
+        })
 
         linearCantidadResp=viewCantidadRespuestas
-
         //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
         txtCantidadRespuestas.text=getString(R.string.sin_datos,getString(R.string.respuesta))
 
@@ -47,25 +59,13 @@ class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
         operacion=intent.extras?.get("OPERACION") as OperacionesCrud
 
         myRespuestaDAO=RespuestaDAO(this)
-        mLayoutManager=LinearLayoutManager(this)
+        mLayoutManager= LinearLayoutManager(this)
         mRespuestaAdapter= RespuestaAdapter(mListRespuestas,this)
         val mItemDecoration= DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
         recyclerViewResp.addItemDecoration(mItemDecoration)
         recyclerViewResp.layoutManager=mLayoutManager
         recyclerViewResp.adapter=mRespuestaAdapter
-
-        recyclerViewResp.addOnScrollListener(object : RecyclerView.OnScrollListener()
-        {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-               if(newState==RecyclerView.SCROLL_STATE_IDLE)
-                   btnGuardarRes.visibility=View.VISIBLE
-                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
-                    btnGuardarRes.visibility=View.GONE
-
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
 
         RgbCorrecta.setOnCheckedChangeListener { _, _ ->
             when {
@@ -84,10 +84,10 @@ class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
                 //guardar temporalmente la lista
                 val myRestoSave=asignar()
                 mListRespuestas.add(myRestoSave)
-                updateRecycler()
-                if(linearCantidadResp!=null) Validador.validarCantidad(linearCantidadResp!!,mListRespuestas)
+                updateRecy()
+
                 edtDesRes.text?.clear()
-                puedeGuardar=true
+                puedeGuardar =true
             }
         }
 
@@ -117,7 +117,7 @@ class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
             else
             {
                 val mSnack= Utils.crearCustomSnackbar(
-                    viewAgregarResp, Color.RED, android.R.drawable.stat_notify_error,
+                    primaryContainer, Color.RED, android.R.drawable.stat_notify_error,
                     getString(R.string.sin_datos,getString(R.string.respuesta)), layoutInflater
                 )
                 mSnack.show()
@@ -135,12 +135,8 @@ class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
                 it.id=mResSaved.id
             }
             else
-                Toast.makeText(this, "Ocurrio un error grandote",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Ocurrio un error grandote", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun updateRecycler() {
-        mRespuestaAdapter?.notifyDataSetChanged()
     }
 
     private fun asignar():Respuesta {
@@ -167,12 +163,36 @@ class AgregarRespuestaActivity : AppCompatActivity(),NotifyUpdateRecyclerView {
 
     companion object
     {
-        var myRespuestaObserver:RespuestaObserver?=null
+        var myRespuestaObserver: RespuestaObserver?=null
         var puedeGuardar=false
-        var mPreguntaObserver:PreguntaObserver?=null
+        var mPreguntaObserver: PreguntaObserver?=null
     }
 
     override fun updateRecy() {
-        updateRecycler()
+        mRespuestaAdapter?.notifyDataSetChanged()
+        if(linearCantidadResp!=null) Validador.validarCantidad(linearCantidadResp!!,mListRespuestas)
+    }
+
+    override fun onDestroy() {
+        puedeGuardar=false
+        super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        val myAlert= AlertDialog.Builder(this)
+
+        myAlert.setMessage("Si sales, perderas la informacion agregada.")
+        myAlert.setTitle("Descartar")
+        myAlert.setIcon(android.R.drawable.ic_dialog_alert)
+
+        myAlert.setPositiveButton("Descartar") { _, _ ->
+            super.onBackPressed()
+        }
+
+        myAlert.setNegativeButton("Cancelar") { _, _ ->
+            myAlert.create().dismiss()
+        }
+
+        myAlert.show()
     }
 }

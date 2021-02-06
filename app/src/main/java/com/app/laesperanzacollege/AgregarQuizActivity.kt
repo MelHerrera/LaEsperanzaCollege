@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -19,11 +21,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.laesperanzacollege.adaptadores.PregunAdapter
-import com.app.laesperanzacollege.adaptadores.PreguntaRespuestaAdapter
 import com.app.laesperanzacollege.adaptadores.QuizPreguntaAdapter
 import com.app.laesperanzacollege.adaptadores.UnidAdapter1
-import com.app.laesperanzadao.*
+import com.app.laesperanzadao.GradoDAO
+import com.app.laesperanzadao.PreguntaDAO
+import com.app.laesperanzadao.QuizDAO
+import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Grado
 import com.app.laesperanzaedm.model.Pregunta
@@ -36,21 +39,21 @@ import kotlin.math.abs
 
 
 class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,FiltroObserver {
-    private var myListUnidad: ArrayList<Unidad>? = null
-    private var myListQuizz: ArrayList<Quiz>? = null
+    private var myListUnidad: ArrayList<Unidad> = arrayListOf()
+    private var myListQuizz: ArrayList<Quiz>? = arrayListOf()
     private var myUnidadDAO: UnidadDAO? = null
     private var myPreguntaDAO: PreguntaDAO? = null
     private var myQuizDAO: QuizDAO? = null
     private var myUnidadesAdapter: UnidAdapter1? = null
     private var mLayoutManager:RecyclerView.LayoutManager?=null
     private var myQuizPreguntaAdapter: QuizPreguntaAdapter? = null
-    private var myPreguntaAdapter:PregunAdapter?=null
     private var myListPregunta: ArrayList<Pregunta>? = null
     private var myQuiz: Quiz? = null
     private var numUnidad: Int? = null
     private var max: Int? = null
     private var CantidadDeUnidades:LinearLayoutCompat?=null
     private var CantidadQuizz:TextView?=null
+    private var CantidadQuizView:LinearLayoutCompat?=null
     private var quizzEstado:Int=0 //Por defecto sin inciar
     private var gradoDAO:GradoDAO?=null
     private var listaGrados:ArrayList<Grado>?=null
@@ -108,8 +111,10 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
         CantidadQuizz=txtCantidadQuizz
         CantidadDeUnidades=linear_validar
-        myListUnidad = myUnidadDAO?.listarUnidades()
-        AgregarRespuestaActivity.mPreguntaObserver=this
+        CantidadQuizView=txtCantidadQuizzview
+
+        myListUnidad = myUnidadDAO?.listarUnidades()!!
+        RespuestaActivity.mPreguntaObserver=this
 
         //setear los campos que se van a poder editar
         if(mOperacion==OperacionesCrud.Editar.toString())
@@ -118,21 +123,44 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
             txtCantidadQuizz.text=getString(R.string.sin_datos,getString(R.string.preguntas))
 
             edtNombre.setText(quizToEdit?.nombre)
-            val pos= myListUnidad!!.indexOfFirst { x->x.numUnidad==quizToEdit?.numUnidad}
+            edtPuntaje.setText(quizToEdit?.puntaje.toString())
+
+            val pos= myListUnidad.indexOfFirst { x->x.numUnidad==quizToEdit?.numUnidad}
 
             if(pos!=-1)
             {
-                myUnidadesAdapter = UnidAdapter1(myListUnidad!!,pos)
+                myUnidadesAdapter = UnidAdapter1(myListUnidad,pos)
             }
+
+            chkEstado.visibility=View.GONE
         }
         else
         {
             //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
             txtCantidadQuizz.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
-            myUnidadesAdapter = UnidAdapter1(myListUnidad!!,-1)
+            myUnidadesAdapter = UnidAdapter1(myListUnidad,-1)
         }
 
+        edtPuntaje.addTextChangedListener(object : TextWatcher
+        {
+            override fun afterTextChanged(s: Editable?) {
+                //
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                ///
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s != null) {
+                    if(s.isNotEmpty() && Integer.parseInt(s.toString())>100) {
+                        val mSnack= Utils.crearCustomSnackbar(
+                            viewPrin, Color.RED, android.R.drawable.stat_notify_error,"Nota no debe ser mayor a 100", layoutInflater)
+                        mSnack.show()
+                    }
+                }
+            }
+        })
         imgSinUnidades.setOnClickListener {
             AgregarUnidActivity.myUnidadObserver=this
             val myIntent=Intent(this,AgregarUnidActivity::class.java)
@@ -140,15 +168,12 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
             startActivity(myIntent)
         }
 
-        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
-
         UnidAdapter1.myUnidadObserver = this
         UnidAdapter1.myFilterObserver=this
-
         mLayoutManager=LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-
         recyUnid.layoutManager = mLayoutManager
         recyUnid.adapter = myUnidadesAdapter
+        if(CantidadDeUnidades!=null) Validador.validarCantidad(linear_validar!!, myListUnidad)
 
         filtroUnidades.setOnClickListener {
                 val misGrados:MutableList<String?> = arrayListOf()
@@ -174,29 +199,42 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
         BtnGuardar.setOnClickListener {
             if (validar()) {
                 var myQuizzToSave = asignar()
-                if (myQuizDAO?.Insertar(myQuizzToSave)!!) {
 
-                    myQuizzToSave = myQuizDAO?.BuscarQuizz(myQuizzToSave.nombre.toString())!!
-                     edtNombre.text?.clear()
-                    numUnidad=null
-                    chkEstado.isChecked=false
+                if(mOperacion==OperacionesCrud.Agregar.toString())
+                {
+                    if (myQuizDAO?.insertar(myQuizzToSave)!!) {
+
+                        myQuizzToSave = myQuizDAO?.buscarQuizz(myQuizzToSave.nombre.toString())!!
 
                         myQuizzObserver?.QuizzSaved(myQuizzToSave)
                         myUnidadesAdapter?.notifyDataSetChanged()
-                        UnidAdapter1.allowCardChecked=null
-                        UnidAdapter1.intChecked=0
 
-                    myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
-                    myListPregunta = myPreguntaDAO?.ListarPreguntas()
+                        myListQuizz = myQuizDAO?.listarQuizNuevos(max!!)
+                        myListPregunta = myPreguntaDAO?.ListarPreguntas()
 
-                    if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(txtCantidadQuizzview!!,myListUnidad!!)
+                        limpiarControles()
 
+                        if(myListPregunta!=null && CantidadQuizView!=null) Validador.validarCantidad(CantidadQuizView!!,myListQuizz!!)
 
+                        AgregarPreguntaActivity.myPreguntaObserver=this
+                        myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!,
+                            mOperacion!!
+                        )
+                        recyPreguntas.layoutManager = LinearLayoutManager(this)
+                        recyPreguntas.adapter = myQuizPreguntaAdapter
+                    }
+                }
+                else
+                {
+                    myQuizzToSave.quizId=quizToEdit?.quizId
 
-                    AgregarPreguntaActivity.myPreguntaObserver=this
-                    myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
-                    recyPreguntas.layoutManager = LinearLayoutManager(this)
-                    recyPreguntas.adapter = myQuizPreguntaAdapter
+                    if(myQuizDAO?.actualizar(myQuizzToSave)!!)
+                    {
+                        limpiarControles()
+                        myQuizzObserver?.QuizzSaved(myQuizzToSave)
+                        myUnidadesAdapter?.notifyDataSetChanged()
+                        this.finish()
+                    }
                 }
             }
         }
@@ -209,29 +247,32 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
                 0
         }
 
-        myListQuizz = myQuizDAO?.ListarQuizNuevos(max!!)
-        myListPregunta = myPreguntaDAO?.ListarPreguntas()
-
-        //AgregarPreguntaActivity.myPreguntaObserver=this
         if(mOperacion==OperacionesCrud.Agregar.toString())
         {
+            myListQuizz = myQuizDAO?.listarQuizNuevos(max!!)
             myListPregunta = myPreguntaDAO?.ListarPreguntas()
-            myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
+            myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!,
+                mOperacion!!
+            )
             recyPreguntas.layoutManager = LinearLayoutManager(this)
             recyPreguntas.adapter = myQuizPreguntaAdapter
         }
         else
         {
-            BtnGuardar.isEnabled=false
+            BtnGuardar.setImageResource(R.drawable.ic_save)
+
             myListPregunta = myPreguntaDAO?.ListarPreguntas(quizToEdit?.quizId!!)
             myListQuizz?.add(quizToEdit!!)
+            numUnidad=quizToEdit?.numUnidad
 
-            myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!)
+            myQuizPreguntaAdapter = QuizPreguntaAdapter(myListQuizz!!, myListPregunta!!,
+                mOperacion!!
+            )
             recyPreguntas.layoutManager = LinearLayoutManager(this)
             recyPreguntas.adapter = myQuizPreguntaAdapter
         }
 
-        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
+        if(myListPregunta!=null && CantidadQuizView!=null) Validador.validarCantidad(CantidadQuizView!!,myListQuizz!!)
     }
 
     private fun asignar(): Quiz {
@@ -240,6 +281,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
         myQuiz?.nombre = edtNombre.text.toString()
         myQuiz?.numUnidad = numUnidad
         myQuiz?.estado=quizzEstado
+        myQuiz?.puntaje=Integer.parseInt(edtPuntaje.text.toString())
 
         return myQuiz!!
     }
@@ -258,6 +300,14 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
             txtNombre.helperText=null
         }
 
+        if(edtPuntaje.text.isEmpty())
+        {
+            val mSnack= Utils.crearCustomSnackbar(
+                viewPrin, Color.RED, android.R.drawable.stat_notify_error, "Puntaje es requerido", layoutInflater
+            )
+            mSnack.show()
+            return false
+        }
 
 
         if(numUnidad==null)
@@ -276,9 +326,9 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
     override fun startSelection(pos: Int, selected: Boolean) {
         if(selected)
         {
-            if (myListUnidad?.size!! >0)
+            if (myListUnidad.size >0)
             {
-                numUnidad= myListUnidad!![pos].numUnidad
+                numUnidad= myListUnidad[pos].numUnidad
             }
         }
         else
@@ -289,9 +339,9 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
     override fun unidadSaved(myUnidad: Unidad) {
 
-        myListUnidad?.add(myUnidad)
+        myListUnidad.add(myUnidad)
         myUnidadesAdapter?.notifyDataSetChanged()
-        if(CantidadDeUnidades!=null && myListUnidad!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
+        if(CantidadDeUnidades!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
     }
 
     companion object
@@ -302,7 +352,6 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
     override fun preguntaSaved(pregunta: Pregunta) {
         myListPregunta?.add(pregunta)
         myQuizPreguntaAdapter?.notifyDataSetChanged()
-        Toast.makeText(this,"Pregunta Saved ${pregunta.descripcion}",Toast.LENGTH_LONG).show()
     }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -316,5 +365,22 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
        }
         else
            filtroCantidad.visibility=View.VISIBLE
+    }
+
+    fun limpiarControles()
+    {
+        edtNombre.text?.clear()
+        edtPuntaje.text?.clear()
+        numUnidad=null
+        chkEstado.isChecked=false
+
+        UnidAdapter1.allowCardChecked=null
+        UnidAdapter1.intChecked=0
+    }
+
+    override fun onDestroy() {
+        UnidAdapter1.allowCardChecked=null
+        UnidAdapter1.intChecked=0
+        super.onDestroy()
     }
 }

@@ -36,7 +36,7 @@ class ListarQuizzesActivity : AppCompatActivity() {
         val myOperacion:TipodeTest=intent.extras?.get(keyNameTest) as TipodeTest
 
         //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
-        txtCantPruebaQuizzes.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
+        txtCantPruebaQuizzes.text=getString(R.string.sin_datos,getString(R.string.prueba))
 
         myQuizDAO= QuizDAO(this)
 

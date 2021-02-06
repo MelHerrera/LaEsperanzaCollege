@@ -1,11 +1,13 @@
 package com.app.laesperanzacollege.adaptadores
 
-import Observers.PreguntaObserver
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +15,12 @@ import com.app.laesperanzacollege.AgregarPreguntaActivity
 import com.app.laesperanzacollege.R
 import com.app.laesperanzacollege.interfaces.NotifyUpdateRecyclerView
 import com.app.laesperanzadao.PreguntaDAO
+import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.item_list_quiz.view.*
 
-class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:ArrayList<Pregunta>)
+class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, private var myListPregunta:ArrayList<Pregunta>, val mOperacion:String)
     :RecyclerView.Adapter<QuizPreguntaAdapter.MyVieHolder>() {
     var myPreguntaAdapter: PregunAdapter?=null
     var viewCantidadDeElementos:TextView?=null
@@ -38,18 +41,18 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
                 myListPreguntaFilter.add(item)
         }
 
-        holder.bindItem(myListQuiz[position],myListPreguntaFilter)
+        holder.bindItem(myListQuiz[position],myListPreguntaFilter,mOperacion)
     }
 
   inner class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView),NotifyUpdateRecyclerView
     {
-        var myPreguntaDAO:PreguntaDAO?=null
-        var myQuiz=itemView.textQuiz
-        var myExpandableIcon=itemView.iconExpandQuiz
-        var myExpandableView=itemView.viewExpandedQuiz
-        var myRecyRespuesta=itemView.recyQuizResp
-        var myIconAdd=itemView.imgAddQuiz
-        var myQuizCount=itemView.imgIconQuizCounter
+        private var myPreguntaDAO:PreguntaDAO?=null
+        private var myQuiz: TextView =itemView.textQuiz
+        private var myExpandableIcon: ImageView =itemView.iconExpandQuiz
+        private var myExpandableView: ConstraintLayout =itemView.viewExpandedQuiz
+        private var myRecyRespuesta: RecyclerView =itemView.recyQuizResp
+        private var myIconAdd: ImageView =itemView.imgAddQuiz
+        private var myQuizCount: TextView =itemView.imgIconQuizCounter
 
         init {
             myPreguntaDAO= PreguntaDAO(itemView.context)
@@ -58,7 +61,17 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
             viewCantidadDeElementos=itemView.msjCantidadPreguntas
         }
 
-        fun bindItem(quiz:Quiz, myListPregunta: ArrayList<Pregunta>) {
+        fun bindItem(
+            quiz: Quiz,
+            myListPregunta: ArrayList<Pregunta>,
+            mOperacion: String
+        ) {
+
+            if(mOperacion==OperacionesCrud.Editar.toString())
+                myIconAdd.setImageResource(R.drawable.ic_edit_purple)
+            else
+                myIconAdd.setImageResource(R.drawable.ic_add_circle)
+
             myQuiz.text=quiz.nombre
             myQuizCount.text=adapterPosition.toString()
 
@@ -76,17 +89,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
                     myExpandableIcon.setBackgroundResource(R.drawable.ic_expand_less)
                 }
             }
-
-            if (myListPregunta.size==0)
-            {
-                viewCantidadDeElementos?.visibility= View.VISIBLE
-                viewCantidadDeElementos?.text="No Hay Preguntas Aun"
-            }
-            else
-            {
-                viewCantidadDeElementos?.visibility= View.GONE
-                viewCantidadDeElementos?.text = ""
-            }
+            validar(myListPregunta,itemView.context)
 
             myRecyRespuesta.layoutManager= LinearLayoutManager(itemView.context)
             myPreguntaAdapter=PregunAdapter(myListPregunta,this)
@@ -96,18 +99,29 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, var myListPregunta:Arr
 
             myIconAdd.setOnClickListener {
                 val myIntent= Intent(itemView.context, AgregarPreguntaActivity::class.java)
-                myIntent.putExtra("QUIZZID",quiz.quizId)
-                myIntent.putExtra("QUIZZNOM",quiz.nombre)
+                myIntent.putExtra("QUIZZ",quiz)
+                myIntent.putExtra("OPERACION",mOperacion)
                 itemView.context.startActivity(myIntent)
+            }
+        }
+
+        fun validar(myListPregunta: ArrayList<Pregunta>, context: Context)
+        {
+            if (myListPregunta.size==0)
+            {
+                viewCantidadDeElementos?.visibility= View.VISIBLE
+                viewCantidadDeElementos?.text=context.getString(R.string.sin_datos,context.getString(R.string.preguntas))
+            }
+            else
+            {
+                viewCantidadDeElementos?.visibility= View.GONE
+                viewCantidadDeElementos?.text = ""
             }
         }
 
         override fun updateRecy() {
             myPreguntaAdapter?.notifyDataSetChanged()
+            validar(myListPregunta,itemView.context)
         }
-    }
-    companion object
-    {
-        var myPreguntaObserver:PreguntaObserver?=null
     }
 }

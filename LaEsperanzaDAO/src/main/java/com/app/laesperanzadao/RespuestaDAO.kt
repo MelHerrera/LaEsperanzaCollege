@@ -167,4 +167,14 @@ class RespuestaDAO(context: Context) {
         }
         return false
     }
+
+        fun Eliminar(Respuesta: Respuesta):Boolean
+    {
+            val result=mySqlDatabase?.delete(RespuestaContract.TABLE_NAME,"${RespuestaContract.COLUMN_ID}=?", arrayOf(Respuesta.id.toString()))
+
+        if (result != null) {
+            return result>0
+        }
+        return false
+    }
 }

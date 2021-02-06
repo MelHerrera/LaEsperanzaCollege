@@ -152,7 +152,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
 
         private fun ObtenerEstado(quizId: Int): String
         {
-            val result=myQuizDAO.EstadoQuizz(quizId)
+            val result=myQuizDAO.estadoQuizz(quizId)
 
             if(result==0)
             {
@@ -176,7 +176,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
 
         private fun establecerEstado(quizId:Int):String
         {
-            val result=myQuizDAO.EstadoQuizz(quizId)
+            val result=myQuizDAO.estadoQuizz(quizId)
 
             if(result==0)
             {
@@ -195,7 +195,7 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
 
         private fun obtenerCantidad(quizId: Int): Int {
 
-            return myQuizDAO.CantPreguntas(quizId)
+            return myQuizDAO.cantPreguntas(quizId)
         }
 
         override fun deshabilitarQuiz() {

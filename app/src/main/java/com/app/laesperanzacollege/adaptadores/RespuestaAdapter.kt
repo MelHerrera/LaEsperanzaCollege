@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.app.laesperanzacollege.AgregarRespuestaActivity
 import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.RespuestaActivity
 import com.app.laesperanzacollege.interfaces.NotifyUpdateRecyclerView
+import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzaedm.model.Respuesta
 import kotlinx.android.synthetic.main.item_respuesta.view.*
 
@@ -46,9 +47,10 @@ class RespuestaAdapter(var myListRespuesta:ArrayList<Respuesta>, var NotifyUpdat
 
             iconQuitar.setOnClickListener {
                 myListRespuesta.remove(respuesta)
+                RespuestaDAO(itemView.context).Eliminar(respuesta)
 
                 if(myListRespuesta.size==0)
-                    AgregarRespuestaActivity.puedeGuardar=false
+                    RespuestaActivity.puedeGuardar=false
 
                 NotifyUpdateRecy.updateRecy()
             }

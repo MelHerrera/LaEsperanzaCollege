@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.laesperanzacollege.adaptadores.PreguntaRespuestaAdapter
 import com.app.laesperanzadao.OpcionesDeRespuestaDAO
@@ -19,6 +20,7 @@ import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.OpcionDeRespuesta
 import com.app.laesperanzaedm.model.Pregunta
+import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.Respuesta
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,7 +33,7 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
     var myPreguntaDAO:PreguntaDAO?=null
     var myRespuestaDAO:RespuestaDAO?=null
     var myOpcionDeRespuestaDAO:OpcionesDeRespuestaDAO?=null
-    var quizzId:Int?=null
+    var quizz:Quiz= Quiz()
     var quizzNombre:String=""
     var myListOpciones:ArrayList<OpcionDeRespuesta> = arrayListOf()
     var myListPregunta:ArrayList<Pregunta>?=null
@@ -39,17 +41,28 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
     var myPreguntaRespuestaAdapter:PreguntaRespuestaAdapter?=null
     var opcionDeRespuestaId:Int?=null
     var cantidadPreguntas:LinearLayoutCompat?=null
+    var mOperacion:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_pregunta)
 
+
+        mOperacion=intent.extras?.get("OPERACION").toString()
+        val myData=intent.extras?.get("QUIZZ")
         //edtPregunta.requestFocus()
+
         val myToolbar=findViewById<Toolbar>(R.id.toolbar)
         myToolbar.title=getString(R.string.txt_agregarPregunta)
         setSupportActionBar(myToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        if(mOperacion==OperacionesCrud.Editar.toString())
+        {
+            myToolbar.navigationIcon=ContextCompat.getDrawable(this,R.drawable.ic_clear)
+            btnGuar.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_save))
+        }
 
         //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
         txtCantidadPreguntas.text=getString(R.string.sin_datos,getString(R.string.preguntas))
@@ -83,25 +96,14 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
         myPreguntaDAO= PreguntaDAO(this)
         myRespuestaDAO=RespuestaDAO(this)
 
-        var myData=intent.extras?.get("QUIZZID")
 
         if(myData!=null)
         {
-            quizzId=Integer.parseInt(myData.toString())
+            quizz=myData as Quiz
         }
 
-        myData=intent.extras?.get("QUIZZNOM")
-
-        if(myData!=null)
-        {
-            pregQuiz.visibility=View.VISIBLE
-            pregQuiz.text="Quizz: ${myData.toString()}"
-        }
-        else
-        {
-            pregQuiz.text=""
-            pregQuiz.visibility=View.GONE
-        }
+        pregQuiz.visibility=View.VISIBLE
+        pregQuiz.text="Quizz: ${quizz.nombre}"
 
 
         myOpcionDeRespuestaDAO= OpcionesDeRespuestaDAO(this)
@@ -118,11 +120,12 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
 
                 myChipChoice.setTextColor(Color.WHITE)
                 myChipChoice.setChipBackgroundColorResource(R.color.colorAccent)
+
                 rgbOpciones.addView(myChipChoice)
             }
         }
 
-        myListPregunta=myPreguntaDAO?.ListarPreguntas(quizzId!!)
+        myListPregunta=myPreguntaDAO?.ListarPreguntas(quizz.quizId!!)
         if(cantidadPreguntas!=null && myListPregunta!=null) Validador.validarCantidad(cantidadPreguntas!!, myListPregunta!!)
 
 
@@ -147,10 +150,10 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
             if(validar())
             {
                 val myPreguntaToSave=Asignar()
-                val mIntent= Intent(this,AgregarRespuestaActivity::class.java)
+                val mIntent= Intent(this,RespuestaActivity::class.java)
                 mIntent.putExtra("PREGUNTA",myPreguntaToSave)
                 mIntent.putExtra("OPERACION", OperacionesCrud.Agregar)
-                AgregarRespuestaActivity.myRespuestaObserver=this
+                RespuestaActivity.myRespuestaObserver=this
                 startActivity(mIntent)
 
                 //limpiar controles y variables
@@ -164,7 +167,7 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
     fun Asignar():Pregunta
     {
         val myPregunta=Pregunta()
-        myPregunta.quizzId=quizzId
+        myPregunta.quizzId=quizz.quizId
         myPregunta.descripcion=edtPregunta.text.toString()
         myPregunta.opcionDeRespuestaId=opcionDeRespuestaId
         return myPregunta
@@ -210,6 +213,12 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        if(mOperacion==OperacionesCrud.Editar.toString())
+        {
+            this.finish()
+            startActivity(Intent(this,QuizzesActivity::class.java))
+        }
+        else
         onBackPressed()
         return true
     }
