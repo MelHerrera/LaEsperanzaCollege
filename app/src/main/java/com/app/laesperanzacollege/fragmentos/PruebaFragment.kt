@@ -13,6 +13,7 @@ import com.app.laesperanzacollege.R
 import com.app.laesperanzacollege.TestActivity
 import com.app.laesperanzacollege.adaptadores.QuizPageAdapter
 import com.app.laesperanzadao.PreguntaDAO
+import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import com.app.laesperanzaedm.model.UsuarioQuiz
@@ -37,13 +38,14 @@ class PruebaFragment : Fragment(),ViewPagerObserver {
         quiz = arguments?.get(getString(R.string.keyNameQuiz)) as Quiz?
         usuarioId = arguments?.get(getString(R.string.keyNameUser)) as Int
         usuarioQuiz = arguments?.get(getString(R.string.keynameUsuarioQuiz)) as UsuarioQuiz
+        val mOpe=arguments?.get(getString(R.string.txt_tipoTest)) as TipodeTest
 
         viewPager = myView.quizPager
         listPreguntas = myPreguntaDAO.ListarPreguntas(quiz?.quizId!!)
 
         if (listPreguntas.size > 0) {
             MainQuizFragment.myViewPagerObserver = this
-            adapter = QuizPageAdapter(this, listPreguntas, usuarioId, usuarioQuiz?.UsuarioQuizId!!)
+            adapter = QuizPageAdapter(this, listPreguntas, usuarioId, usuarioQuiz?.UsuarioQuizId!!, quiz!!,mOpe)
             viewPager.adapter = adapter
         }
         viewPager.isUserInputEnabled = false
@@ -80,27 +82,29 @@ class PruebaFragment : Fragment(),ViewPagerObserver {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId)
         {
-           /* R.id.itemCompartir->
-            {
-                Toast.makeText(context,"Compartir",Toast.LENGTH_LONG).show()
-            }
-            R.id.itemFavoritos->
-            {
-                Toast.makeText(context,"Favoritos",Toast.LENGTH_LONG).show()
-            }*/
             R.id.itemSalir->
             {
-                val myAlert = AlertDialog.Builder(context!!)
-                myAlert.setTitle("Abandonar Prueba")
-                myAlert.setMessage("Si Sale de la Prueba Perdera el avance. ¿Esta Seguro que desea Abandonar la Prueba?")
-                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                if (mainPagerObserver != null) {
+                    if (mainPagerObserver!!.estaEnRevision()) {
+                       activity?.finish()
+                    }
+                    else
+                    {
+                        val myAlert = AlertDialog.Builder(context!!)
+                        myAlert.setIcon(android.R.drawable.ic_dialog_alert)
+                        myAlert.setTitle("Abandonar Prueba")
+                        myAlert.setMessage("Si Sale de la Prueba Perdera el avance. ¿Esta Seguro que desea Abandonar la Prueba?")
+                        myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        }
+
+                        myAlert.setPositiveButton("Si") { _, _ ->
+                            activity?.finish()
+                        }
+
+                        myAlert.show()
+                    }
                 }
 
-                myAlert.setPositiveButton("Si") { _, _ ->
-                    activity?.finish()
-                }
-
-                myAlert.show()
             }
             else->
                 Toast.makeText(context,"Nada Se Selecciono",Toast.LENGTH_LONG).show()

@@ -1,7 +1,7 @@
 package com.app.laesperanzacollege.fragmentos
 
+import Observers.EstudianteObserver
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -12,10 +12,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.app.laesperanzacollege.ListarQuizzesActivity
-import com.app.laesperanzacollege.LoginActivity
-import com.app.laesperanzacollege.Preferencias
-import com.app.laesperanzacollege.R
+import com.app.laesperanzacollege.*
 import com.app.laesperanzacollege.Utils.Companion.setImage
 import com.app.laesperanzacollege.Utils.Companion.toByteArray
 import com.app.laesperanzadao.GradoDAO
@@ -23,10 +20,8 @@ import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Usuario
 import kotlinx.android.synthetic.main.fragment_estudiante.view.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class EstudianteFragment : Fragment() {
+class EstudianteFragment : Fragment(),EstudianteObserver {
     private var keyName=""
     private var myGradoDAO:GradoDAO?=null
     private var myUsuarioDAO:UsuarioDAO? = null
@@ -74,6 +69,12 @@ class EstudianteFragment : Fragment() {
 
         myView.photo_camera.setOnClickListener {
             startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),0)
+        }
+
+        myView.txtEditPerfil.setOnClickListener {
+            val mIntent=Intent(myView.context,EstudianteEditPerfilActivity::class.java)
+            mIntent.putExtra("USUARIO",estudiante)
+            startActivity(mIntent)
         }
 
         return myView
@@ -129,11 +130,26 @@ class EstudianteFragment : Fragment() {
     {
         if(myUsuarioDAO!=null && estudiante!=null)
         {
-           if(!myUsuarioDAO!!.actualizarImagen(mImage, estudiante!!.id))
+           if(myUsuarioDAO!!.actualizarImagen(mImage, estudiante!!.id))
            {
-               Toast.makeText(myContext,"Ocurrio un Error",Toast.LENGTH_LONG).show()
+               estudiante?.imagen=mImage
            }
+            else
+               Toast.makeText(myContext,"Ocurrio un Error",Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun updateImage(mByteArray:ByteArray) {
+        setImage(mByteArray, myImage)
+        estudiante?.imagen=mByteArray
+    }
+
+    override fun updateUser(user: String) {
+        estudiante?.usuario=user
+    }
+
+    override fun updatePass(pass: String) {
+       estudiante?.contrase=pass
     }
 
 }

@@ -46,7 +46,7 @@ class CuriosidadesActivity : AppCompatActivity() {
             R.drawable.ran1
         )
 
-        var textolist:Array<String> = arrayOf(
+        val textolist:Array<String> = arrayOf(
             "El signo «=», que sirve para indicar la igualdad e introducir el resultado de algún procedimiento o ecuación, fue creado por el médico y matemático inglés Robert Recorde, quien aseguró tras la invención que «dos cosas no pueden ser más iguales que dos rectas paralelas».",
             "Durante el siglo XVI, la multiplicación era considerada la operación matemática más difícil y compleja de todas. Por este motivo, solo los alumnos universitarios adquirían dicho conocimiento.",
             "A lo largo de numerosos siglos, incluso en la Edad Media, el baño fue una práctica habitual, sobre todo entre gente procedente de las altas clases sociales.",

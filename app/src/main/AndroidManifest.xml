@@ -11,11 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".EstudianteEditPerfilActivity"
+            android:configChanges="keyboardHidden|smallestScreenSize|screenSize|orientation"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
         <activity
             android:name=".RespuestaActivity"
             android:theme="@style/AppTheme_Material_NoActionBar" />
-
-        <activity android:name=".TestActivity" />
+        <activity android:name=".TestActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboardHidden"/>
         <activity
             android:name=".IntroActivity"
             android:screenOrientation="portrait"
@@ -31,9 +34,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AgregarRespuestaActivity"
-            android:theme="@style/AppTheme_Material_NoActionBar" />
         <activity
             android:name=".AgregarPreguntaActivity"
             android:theme="@style/AppTheme_Material_NoActionBar"

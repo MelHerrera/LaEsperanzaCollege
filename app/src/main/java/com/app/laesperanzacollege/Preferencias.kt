@@ -22,12 +22,15 @@ class Preferencias {
         ) as EncryptedSharedPreferences
     }
 
-    fun guardarSharedPrefsUser(myContext: Context, myUser: Set<String?>, myPass: Set<String?>):Boolean
+    fun guardarSharedPrefsUser(myContext: Context, myUser: Set<String?>, myPass: Set<String?>?):Boolean
     {
         try {
             val mySharedPrefs=sharedPrefs(myContext,sharedPrefsFileUser).edit()
 
+            if(myUser.isNotEmpty())
             mySharedPrefs.putString(myUser.elementAt(0),myUser.elementAt(1))
+
+            if(myPass?.isNotEmpty()!!)
             mySharedPrefs.putString(myPass.elementAt(0),myPass.elementAt(1))
 
             mySharedPrefs.apply()
@@ -61,7 +64,6 @@ class Preferencias {
 
         if(mySharedPrefs.all.isNotEmpty())
         {
-
             mySharedPrefs.getString(myUserKey,"")?.let { myData.add(0, it) }
             mySharedPrefs.getString(myPassKey,"")?.let { myData.add(1, it) }
         }
@@ -74,10 +76,7 @@ class Preferencias {
         var myData = 0
 
         if(mySharedPrefs.all.isNotEmpty())
-        {
-
             mySharedPrefs.getInt(myIntroKey,0).let { myData=it }
-        }
         return myData
     }
 

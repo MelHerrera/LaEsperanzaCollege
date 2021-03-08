@@ -16,14 +16,16 @@ import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzadao.enums.TipoDeUsuarios
+import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Quiz
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.activity_quizzes.*
+import kotlinx.android.synthetic.main.activity_unidades.*
 import java.util.*
 
 
 class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
     private var myQuizzesAdapter:QuizzesAdapter?=null
-    private var myLayoutManager:RecyclerView.LayoutManager?=null
     private var myListQuizzes:ArrayList<Quiz>?=null
     private var myQuizDAO:QuizDAO?=null
     private var mListQuizSelected:ArrayList<Quiz>?= arrayListOf()
@@ -36,16 +38,6 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         myQuizDAO= QuizDAO(this)
 
-        recyQuizzes.viewTreeObserver.addOnGlobalLayoutListener(
-            object : OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    recyQuizzes.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val newSpanCount=spanCalc()
-                    myLayoutManager=GridLayoutManager(this@QuizzesActivity,newSpanCount)
-                    recyQuizzes.layoutManager=myLayoutManager
-                }
-            })
-
         myListQuizzes=myQuizDAO?.listarQuizzes()
         //asignar dinamicamente el texto que tendra el textview cuando no hayan datos
         txtCantQuizzes.text=getString(R.string.sin_datos,getString(R.string.txt_quizzes))
@@ -54,10 +46,10 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
 
         AgregarQuizActivity.myQuizzObserver=this
         QuizzesAdapter.myQuizzObserver=this
-        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin,-1)
+        myQuizzesAdapter= QuizzesAdapter(myListQuizzes!!,TipoDeUsuarios.Admin,-1,TipodeTest.Practica)
 
-        myLayoutManager=GridLayoutManager(this,2)
-        recyQuizzes.layoutManager=myLayoutManager
+        //myLayoutManager=GridLayoutManager(this,2)
+        recyQuizzes.layoutManager= FlexboxLayoutManager(this)
         recyQuizzes.adapter=myQuizzesAdapter
 
         btnAgregarQuiz.setOnClickListener {

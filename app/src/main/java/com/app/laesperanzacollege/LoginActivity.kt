@@ -3,11 +3,14 @@ package com.app.laesperanzacollege
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzaedm.model.Usuario
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -36,9 +39,10 @@ class LoginActivity : AppCompatActivity() {
                     if(myUsuario.id!! >0)
                     {
                         val prefs = Preferencias()
+                        val userData=setOf(getString(R.string.keyNameUser),myUsuario.usuario)
+                        val passData=setOf(getString(R.string.keyNamePass),edtcontra.text.toString())
 
-                        if(!prefs.guardarSharedPrefsUser(this,
-                                setOf(getString(R.string.keyNameUser),myUsuario.usuario),setOf(getString(R.string.keyNamePass),edtcontra.text.toString())))
+                        if(!prefs.guardarSharedPrefsUser(this, userData,passData))
                         {
                             Toast.makeText(this,"Error al guardar Preferencias",Toast.LENGTH_SHORT).show()
                         }
@@ -51,6 +55,13 @@ class LoginActivity : AppCompatActivity() {
                 else
                     Toast.makeText(this,R.string.usuario_incorrecto, Toast.LENGTH_LONG).show()
             }
+        }
+
+        edtusuario.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus)
+                txtusuario.endIconMode=TextInputLayout.END_ICON_CLEAR_TEXT
+            else
+                txtusuario.endIconMode=TextInputLayout.END_ICON_NONE
         }
     }
 

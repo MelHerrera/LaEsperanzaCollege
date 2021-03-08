@@ -25,6 +25,7 @@ class ResultadoDAO(context: Context) {
         datos.put(ResultadoContract.COLUMN_PREGUNTAID,resultado.preguntaId)
         datos.put(ResultadoContract.COLUMN_RESPUESTASID,resultado.respuestasId.toString())
         datos.put(ResultadoContract.COLUMN_USUARIOQUIZID,resultado.usuarioQuizId)
+        datos.put(ResultadoContract.COLUMN_PUNTAJE,resultado.puntaje)
 
         result=mySqlDatabase?.insert(ResultadoContract.TABLE_NAME,null,datos)
 

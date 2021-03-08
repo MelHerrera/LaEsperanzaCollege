@@ -20,6 +20,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.Toolbar" parent="AppTheme">
+        <item name="android:textColorSecondary">#ffffff</item>
+    </style>
+
     <style name="FABTheme" parent="Widget.Design.FloatingActionButton">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="tint">@android:color/white</item>

@@ -1,23 +1,20 @@
 package com.app.laesperanzacollege.adaptadores
 
-import Observers.QuizesAdapterObserver
 import Observers.QuizzObserver
 import android.content.Intent
 import android.view.*
 import android.widget.*
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.app.laesperanzacollege.MainQuizFragment
 import com.app.laesperanzacollege.R
 import com.app.laesperanzacollege.TestActivity
 import com.app.laesperanzadao.QuizDAO
-import com.app.laesperanzadao.UsuarioQuizzDAO
 import com.app.laesperanzadao.enums.TipoDeUsuarios
+import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.item_quizzes.view.*
 import java.util.*
 
-class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:TipoDeUsuarios, private var usuarioId:Int):
+class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:TipoDeUsuarios, private var usuarioId:Int,var mOperacion:TipodeTest?):
     RecyclerView.Adapter<QuizzesAdapter.MyViewHolder>(), Filterable {
     var myQuizFilterList= arrayListOf<Quiz>()
 
@@ -39,10 +36,10 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bindItem(myListQuiz[position],tipoDeUsuario,usuarioId)
+        holder.bindItem(myListQuiz[position],tipoDeUsuario,usuarioId,mOperacion!!)
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),QuizesAdapterObserver
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
         private var myQuizDAO=QuizDAO(itemView.context)
         var nombre: TextView =itemView.txtNombre
@@ -51,7 +48,12 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
         private var btnPractica: Button =itemView.btnPractica
         private var cardView=itemView.cardView_Quiz
 
-        fun bindItem(myQuizz:Quiz,tipoDeUsuario: TipoDeUsuarios,usuarioId: Int)
+        fun bindItem(
+            myQuizz: Quiz,
+            tipoDeUsuario: TipoDeUsuarios,
+            usuarioId: Int,
+            mOperacion: TipodeTest?
+        )
         {
             nombre.text=myQuizz.nombre
             cantPreguntas.text=obtenerCantidad(myQuizz.quizId!!).toString()
@@ -63,11 +65,6 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
             {
                ObtenerEstado(myQuizz.quizId!!)
             }
-            else
-                if(estadoUsuarioQuiz(myQuizz.quizId!!))
-                {
-                   cardDisable()
-                }
 
             cardView.isChecked=false
 
@@ -127,27 +124,12 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
                 else
                 {
                     val myIntent=Intent(itemView.context, TestActivity::class.java)
+                    myIntent.putExtra(itemView.context.getString(R.string.txt_tipoTest),mOperacion)
                     myIntent.putExtra(itemView.context.getString(R.string.keyNameQuiz),myQuizz)
                     myIntent.putExtra(itemView.context.getString(R.string.keyNameUser),usuarioId)
-                    MainQuizFragment.mQuizesAdapterObserver=this
-
-                    if(obtenerCantidad(myQuizz.quizId!!)>0)
                     itemView.context.startActivity(myIntent)
-                    else
-                        Toast.makeText(itemView.context,"Esta Prueba aun no tiene preguntas",Toast.LENGTH_LONG).show()
                 }
             }
-        }
-
-        private fun cardDisable() {
-            btnPractica.isEnabled=false
-            btnPractica.setBackgroundColor(ResourcesCompat.getColor(itemView.resources,android.R.color.darker_gray,null))
-            itemView.view_He.backgroundTintList=ResourcesCompat.getColorStateList(itemView.context.resources,android.R.color.darker_gray,null)
-            itemView.quizzEstado.backgroundTintList=ResourcesCompat.getColorStateList(itemView.context.resources,android.R.color.darker_gray,null)
-        }
-
-        private fun estadoUsuarioQuiz(quizId: Int):Boolean {
-            return UsuarioQuizzDAO(itemView.context).usuarioQuizzEstado(quizId)
         }
 
         private fun ObtenerEstado(quizId: Int): String
@@ -196,10 +178,6 @@ class QuizzesAdapter(var myListQuiz:ArrayList<Quiz>, private var tipoDeUsuario:T
         private fun obtenerCantidad(quizId: Int): Int {
 
             return myQuizDAO.cantPreguntas(quizId)
-        }
-
-        override fun deshabilitarQuiz() {
-            cardDisable()
         }
     }
 

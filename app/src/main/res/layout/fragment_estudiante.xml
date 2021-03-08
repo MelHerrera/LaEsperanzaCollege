@@ -61,6 +61,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtnombres" />
 
+    <TextView
+        android:id="@+id/txtEditPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/editar_perfil"
+        android:textColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="@+id/txtgrad"
+        app:layout_constraintEnd_toEndOf="@+id/txtgrad"
+        app:layout_constraintTop_toBottomOf="@+id/txtgrad"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:drawablePadding="@dimen/small_padding"
+        app:drawableEndCompat="@drawable/ic_edit" />
+
     <Button
         android:id="@+id/btnPrueba"
         android:layout_width="wrap_content"
@@ -83,7 +97,6 @@
         android:drawableStart="@drawable/ic_replay"
         android:padding="@dimen/default_padding"
         android:text="@string/practica"
-        android:enabled="false"
         android:layout_marginTop="@dimen/default_margin"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/btnPrueba"

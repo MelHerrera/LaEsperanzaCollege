@@ -11,18 +11,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.UnidAdapter
 import com.app.laesperanzadao.UnidadDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Unidad
-import com.app.laesperanzacollege.Utils.Companion.spanCalc
+import com.google.android.flexbox.*
 import kotlinx.android.synthetic.main.activity_unidades.*
 
 class UnidadesActivity : AppCompatActivity(),UnidadObserver {
     private var myUnidadesAdapter:UnidAdapter?=null
-    var myLayoutManager:RecyclerView.LayoutManager?=null
     private var myListUnidad:ArrayList<Unidad> =arrayListOf()
     private var myUnidadDAO:UnidadDAO?=null
     private var selectedItems:ArrayList<Unidad> =arrayListOf()
@@ -61,23 +58,9 @@ class UnidadesActivity : AppCompatActivity(),UnidadObserver {
         UnidAdapter.myUnidadObserver=this
         myUnidadesAdapter= UnidAdapter(myListUnidad)
 
-        val newSpan=spanCalc(recyUnidades,this@UnidadesActivity)
-
-        if(recyUnidades!=null && newSpan>0)
-        {
-            recyUnidades.viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        recyUnidades.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        myLayoutManager=GridLayoutManager(this@UnidadesActivity,newSpan)
-                        recyUnidades.layoutManager=myLayoutManager
-                    }
-                })
-        }
-        else
-            myLayoutManager=GridLayoutManager(this,2)
-
-        recyUnidades.layoutManager=myLayoutManager
+       // recyUnidades.layoutManager=myLayoutManager
+        //usar flexbox en lugar de gridlayout manager
+        recyUnidades.layoutManager=FlexboxLayoutManager(this)
         recyUnidades.adapter=myUnidadesAdapter
     }
 

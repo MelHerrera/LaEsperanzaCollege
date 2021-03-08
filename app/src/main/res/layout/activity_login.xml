@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txtusuario"
+            app:startIconDrawable="@drawable/ic_account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -42,6 +43,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/txtcontra"
             app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/ic_pin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtusuario">
 
@@ -68,6 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txtresetear_contra"
+            android:visibility="gone"
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="@+id/btnsesion"
             app:layout_constraintTop_toBottomOf="@+id/btnsesion" />

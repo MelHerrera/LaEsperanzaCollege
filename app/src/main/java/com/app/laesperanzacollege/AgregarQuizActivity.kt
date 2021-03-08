@@ -124,6 +124,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
             edtNombre.setText(quizToEdit?.nombre)
             edtPuntaje.setText(quizToEdit?.puntaje.toString())
+            quizzEstado= quizToEdit?.estado!!
 
             val pos= myListUnidad.indexOfFirst { x->x.numUnidad==quizToEdit?.numUnidad}
 
@@ -341,7 +342,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
 
         myListUnidad.add(myUnidad)
         myUnidadesAdapter?.notifyDataSetChanged()
-        if(CantidadDeUnidades!=null) Validador.validarCantidad(linear_validar!!,myListUnidad!!)
+        if(CantidadDeUnidades!=null) Validador.validarCantidad(linear_validar!!, myListUnidad)
     }
 
     companion object
@@ -367,7 +368,7 @@ class AgregarQuizActivity : AppCompatActivity(),UnidadObserver,PreguntaObserver,
            filtroCantidad.visibility=View.VISIBLE
     }
 
-    fun limpiarControles()
+    private fun limpiarControles()
     {
         edtNombre.text?.clear()
         edtPuntaje.text?.clear()

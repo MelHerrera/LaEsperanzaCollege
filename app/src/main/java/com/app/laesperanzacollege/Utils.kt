@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -53,13 +54,17 @@ class Utils {
 
             if(viewList.size>0)
             {
-                viewList.forEach { x->if(x.text.toString()==""){return false} }
+                viewList.forEach { x->if(x.text.toString()==""){
+                    return false} }
             }
+            else
+                return false
+
             return true
         }
 
         fun generarAlfabeto(preAlfabeto: String):String {
-            val randomValues = List(8) { Random.nextInt(65, 90).toChar() }
+            val randomValues = List(5) { Random.nextInt(65, 90).toChar() }
             return desordenar("$preAlfabeto${randomValues.joinToString(separator = "")}")
         }
 
@@ -67,7 +72,7 @@ class Utils {
 
             val theTempWord=theWord.toMutableList()
 
-            for (item in 0..Random.nextInt(theTempWord.count()/2,theTempWord.count()-1))
+            for (item in 0..Random.nextInt(1,theTempWord.count()-1))
             {
                 val indexA=Random.nextInt(theTempWord.count()-1)
                 val indexB=Random.nextInt(theTempWord.count()-1)
@@ -79,12 +84,6 @@ class Utils {
             }
 
             return theTempWord.joinToString(separator = "")
-        }
-        fun spanCalc(mRecy:RecyclerView,context: Context):Int
-        {
-            val viewWidth: Int = mRecy.width
-            val cardViewWidth: Float =context.resources.getDimension(R.dimen.card_quizzes)
-            return floorDiv(viewWidth,cardViewWidth.toInt())
         }
 
         fun crearCustomSnackbar(stick:View,backgroundColor:Int,resIcon:Int,message:String,layoutInflater:LayoutInflater):Snackbar

@@ -72,6 +72,7 @@ class QuizDAO(context: Context) {
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
                 myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
+                myQuiz.estado=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ESTADO))
 
                 myListQuizzes.add(myQuiz)
 
@@ -81,18 +82,19 @@ class QuizDAO(context: Context) {
         return myListQuizzes
     }
 
-    fun listarQuizzesDePractica(myCodGrado:String?):ArrayList<Quiz>
+    fun listarQuizzesDePractica(myCodGrado:String?,mContext:Context):ArrayList<Quiz>
     {
-        //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
+        //estados del qui de la tabla usuarioquizz...   0.en progreso, 1. Finalizado
         var myQuiz:Quiz
         val myListQuizzes:ArrayList<Quiz> = arrayListOf()
-        val mySelection= "SELECT q.NombreDeQuiz FROM ${QuizContract.TABLE_NAME} as q\n" +
-                "INNER JOIN ${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
-                "INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
-                "WHERE g.CodGrado==? AND q.estado=?" +
-                "GROUP BY u.NumUnidad,g.CodGrado"
 
-        val res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,0.toString()),null)
+        val mySelection= "SELECT * FROM ${QuizContract.TABLE_NAME} as q INNER JOIN " +
+                "${UnidadContract.TABLE_NAME} as u on q.NumUnidad==u.NumUnidad\n" +
+                "                INNER JOIN ${GradoContract.TABLE_NAME} as g on g.CodGrado==u.CodGrado\n" +
+                "                INNER JOIN ${UsuarioQuizzContract.TABLE_NAME} as uq ON uq.QuizId==q.QuizId\n" +
+                "                WHERE g.CodGrado==? AND uq.estado==?"
+
+        val res=mySqlDatabase?.rawQuery(mySelection, arrayOf(myCodGrado,1.toString()),null)
 
         if(res?.count!! >0)
         {
@@ -102,11 +104,13 @@ class QuizDAO(context: Context) {
             {
                 myQuiz= Quiz()
                 myQuiz.quizId=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ID))
+                myQuiz.estado=res.getInt(res.getColumnIndex(QuizContract.COLUMN_ESTADO))
                 myQuiz.nombre=res.getString(res.getColumnIndex(QuizContract.COLUMN_NOMBRE))
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
                 myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
-                myListQuizzes.add(myQuiz)
+                if(cantPreguntas(myQuiz.quizId!!)>0 && UsuarioQuizzDAO(mContext).usuarioQuizzEstado(myQuiz.quizId!!))
+                    myListQuizzes.add(myQuiz)
 
                 res.moveToNext()
             }
@@ -114,7 +118,7 @@ class QuizDAO(context: Context) {
         return myListQuizzes
     }
 
-    fun listarQuizzesPrueba(myCodGrado:String?):ArrayList<Quiz>
+    fun listarQuizzesPrueba(myCodGrado:String?,mContext:Context):ArrayList<Quiz>
     {
         //estados del quiz....   1.en progreso, 0. Finalizado, -1. No iniciado
         var myQuiz:Quiz
@@ -140,7 +144,7 @@ class QuizDAO(context: Context) {
                 myQuiz.numUnidad=res.getInt(res.getColumnIndex(QuizContract.COLUMN_NUMUNIDAD))
                 myQuiz.puntaje=res.getInt(res.getColumnIndex(QuizContract.COLUMN_PUNTAJE))
 
-                if(cantPreguntas(myQuiz.quizId!!)>0)
+                if(cantPreguntas(myQuiz.quizId!!)>0 && !UsuarioQuizzDAO(mContext).usuarioQuizzEstado(myQuiz.quizId!!))
                 myListQuizzes.add(myQuiz)
 
                 res.moveToNext()
@@ -151,7 +155,7 @@ class QuizDAO(context: Context) {
 
     fun listarQuizNuevos(Max:Int):ArrayList<Quiz>
     {
-        var myQuiz:Quiz?=null
+        var myQuiz:Quiz?
         val myListQuizzes:ArrayList<Quiz> = arrayListOf()
         val mySelection="${QuizContract.COLUMN_ID}>?"
 

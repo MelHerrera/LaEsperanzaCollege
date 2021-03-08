@@ -134,14 +134,14 @@ class AgregarEstuActivity : AppCompatActivity() {
         else
             txtUsuario.helperText=null
 
-        if(edtContra.text?.isEmpty()!!)
+        /*if(edtContra.text?.isEmpty()!!)
         {
             edtContra.error="Campo Requerido"
             txtContra.setHelperTextColor(ColorStateList.valueOf(Color.RED))
             return false
         }
         else
-            txtContra.helperText=null
+            txtContra.helperText=null*/
 
         if(mySeccion==null)
         {
@@ -197,9 +197,9 @@ class AgregarEstuActivity : AppCompatActivity() {
         }
 
         edtUsuario.setText(myUsu.usuario)
-        edtContra.setText("********")
+        /*edtContra.setText("********")
         edtContra.transformationMethod = PasswordTransformationMethod.getInstance()
-        edtContra.isEnabled=false
+        edtContra.isEnabled=false*/
 
     }
 

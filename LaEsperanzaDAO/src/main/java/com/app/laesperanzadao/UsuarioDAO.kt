@@ -56,6 +56,9 @@ class UsuarioDAO(context: Context) {
         datos.put(UsuarioContract.COLUMN_CODGRADO,usuario.codGrado)
         datos.put(UsuarioContract.COLUMN_SECCION,usuario.seccion)
 
+        if(usuario.contrase!=null && usuario.contrase!!.isNotEmpty())
+            datos.put(UsuarioContract.COLUMN_CONTRASE,usuario.contrase)
+
         val query="${UsuarioContract.COLUMN_ID}=?"
 
         val res=mySqlDatabase?.update(
@@ -63,6 +66,29 @@ class UsuarioDAO(context: Context) {
             datos,
             query,
             arrayOf(usuario.id.toString())
+        )
+
+        if (res != null) {
+            return res>0
+        }
+        return false
+    }
+
+    fun actualizar(mUsuario:String,mPass:String?,usuarioId:Int):Boolean
+    {
+        val datos= ContentValues()
+        datos.put(UsuarioContract.COLUMN_USUARIO,mUsuario)
+
+        if(mPass!=null)
+            datos.put(UsuarioContract.COLUMN_CONTRASE,mPass)
+
+        val query="${UsuarioContract.COLUMN_ID}=?"
+
+        val res=mySqlDatabase?.update(
+            UsuarioContract.TABLE_NAME,
+            datos,
+            query,
+            arrayOf(usuarioId.toString())
         )
 
         if (res != null) {

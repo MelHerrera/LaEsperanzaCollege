@@ -7,6 +7,7 @@ class ResultadoContract {
         const val COLUMN_ID="ResultadoId"
         const val COLUMN_PREGUNTAID= PreguntaContract.COLUMN_ID
         const val COLUMN_RESPUESTASID="RespuestasId"
+        const val COLUMN_PUNTAJE="Puntaje"
         const val COLUMN_USUARIOQUIZID=UsuarioQuizzContract.COLUMN_ID
 
 
@@ -15,6 +16,7 @@ class ResultadoContract {
                     "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,"+
                     "$COLUMN_PREGUNTAID INTEGER,"+
                     "$COLUMN_RESPUESTASID TEXT,"+
+                    "$COLUMN_PUNTAJE REAL,"+
                     "$COLUMN_USUARIOQUIZID INTEGER"+
                     ")"
 

@@ -14,9 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.Utils.Companion.generarAlfabeto
 import com.app.laesperanzacollege.Utils.Companion.letrasEditTextEstaLlena
 import com.app.laesperanzacollege.Utils.Companion.mostrarContiuar
@@ -25,22 +27,32 @@ import com.app.laesperanzadao.RespuestaDAO
 import com.app.laesperanzadao.ResultadoDAO
 import com.app.laesperanzadao.UsuarioQuizzDAO
 import com.app.laesperanzadao.enums.EstadoQuiz
-import com.app.laesperanzaedm.model.Pregunta
-import com.app.laesperanzaedm.model.Respuesta
-import com.app.laesperanzaedm.model.ResultadoQuiz
-import com.app.laesperanzaedm.model.UsuarioQuiz
+import com.app.laesperanzadao.enums.OpcionesDeRespuesta
+import com.app.laesperanzadao.enums.TipodeTest
+import com.app.laesperanzaedm.model.*
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayout
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.alert_finalizarquiz.view.*
+import kotlinx.android.synthetic.main.item_alfabeto.view.*
 import kotlinx.android.synthetic.main.mainquizfragment.view.*
+import java.text.DecimalFormat
 import java.util.*
 
 
-class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int, private var final:Int, private var usuarioId:Int,
-                       private var usuarioQuizId:Int)
+class MainQuizFragment(
+    private var myPpregunta: Pregunta,
+    private var actual: Int,
+    private var final: Int,
+    private var usuarioId: Int,
+    private var usuarioQuizId: Int,
+    private var mquiz: Quiz,
+    private var mOpe: TipodeTest
+)
     : Fragment(), MainViewPagerObserver
 {
-    private var myOpciones:GridView?=null
     private var btnContinuar:Button?=null
     private var respuestasSelected:ArrayList<Int>?= arrayListOf()
     private var letrasEditText:ArrayList<EditText> = arrayListOf()
@@ -50,6 +62,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
     private var finalizar:Boolean=false
     private var finalizado:Boolean=false
     private var revisar:Boolean=false
+    private var maxPuntajeDePregunta:Float=0.0f
+    private var puntajeTotalPregunta:Float=0.0f
+    private var multichoiceCorrectAnswerCounter:Int=0
+    private var quiz:Quiz= mquiz
+    private var puedePuntuarse:Int=0
+    private var alfabet:RecyclerView?=null
 
     companion object
     {
@@ -58,21 +76,25 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         var listPreguntas:ArrayList<Pregunta> = arrayListOf()
         var myFrags:ArrayList<View>?= arrayListOf()
         var mQuizesAdapterObserver:QuizesAdapterObserver?=null
+        var mPuntaje:Float=0.0f
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val myFrag=inflater.inflate(R.layout.mainquizfragment,container,false)
 
+        PruebaFragment.mainPagerObserver=this
         myFrag.pregunta.text=myPpregunta.descripcion
         listPreguntas.add(myPpregunta)
+        maxPuntajeDePregunta=quiz.puntaje.toFloat()/final.toFloat()
         myFrags?.add(myFrag)
+
+        alfabet=myFrag.alphabet
 
         myFrag.indicadorPreguntaActual.text=actual.toString()
         myFrag.indicadorPreguntaFinal.text=final.toString()
         txtSinRespuesta=myFrag.sinResp
         viewMostrarRespuestas=myFrag.viewMostrarResp
 
-        myOpciones=myFrag.opciones
         btnContinuar=myFrag.btnContinuar
 
         if(ultimaPregunta(actual,final))
@@ -90,7 +112,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         //set this theme for use Chip and ChipGroup
         activity!!.applicationContext.setTheme(R.style.Theme_MaterialComponents)
 
-        opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas)
+        opcionRespuesta(myPpregunta.opcionDeRespuestaId,respuestas(myPpregunta.id),myFrag.viewRespuestas,activity!!.applicationContext)
 
         myFrag.btnContinuar.setOnClickListener {
             //antes de pasar a la pagina siguiente o finalizar se debe guardar las selecciones de esta pagina
@@ -98,6 +120,11 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
             pageResultado.usuarioQuizId=usuarioQuizId
             pageResultado.preguntaId=myPpregunta.id
             pageResultado.respuestasId=respuestasSelected
+
+            if(puedePuntuarse==0)
+            pageResultado.puntaje=puntajeTotalPregunta
+            else
+                pageResultado.puntaje=0.0f
 
            val pageResulExiste= quizRespuestas?.find { x->x.preguntaId==myPpregunta.id }
 
@@ -124,46 +151,52 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                         {
                             if(quizRespuestas!!.size>0)
                             {
-                                if(!finalizado)
+                                if(!finalizado && mOpe==TipodeTest.Prueba)
                                 {
                                     quizRespuestas!!.forEach {
                                         ResultadoDAO(context!!).guardarResultados(it)
                                     }
-                                    finalizado=true
-                                    mQuizesAdapterObserver?.deshabilitarQuiz()
 
+                                    mQuizesAdapterObserver?.updateRecyClerQuiz()
                                 }
-
-
-                                val mAlert= AlertDialog.Builder(context!!).create()
-                                mAlert.setTitle("Finalizado")
-                                val mAlertView= LayoutInflater.from(context).inflate(R.layout.alert_finalizarquiz,null)
-                                mAlert.setView(mAlertView)
-
-                                mAlertView.AlertTer.setOnClickListener {
-                                    mAlert.dismiss()
-                                    activity!!.finish()
-                                }
-
-                                mAlertView.AlertRev.setOnClickListener {
-                                    mAlert.dismiss()
-                                    revisar=true
-                                    if(finalizado)
-                                    {
-                                        PruebaFragment.mainPagerObserver=this
-                                        val myPagerCount=myViewPagerObserver?.paginaPrimera()
-                                        if(myPagerCount==1)
-                                        {
-                                            //cuando solo hay una pagina mostrar las respuestas de forma manual de esa pagina
-                                            mostrarRespuestas(0)
-                                        }
-                                    }
-                                }
-
-                                mAlert.show()
                             }
                         }
                     }
+
+                    finalizado=true
+
+                    val mAlert= AlertDialog.Builder(context!!).create()
+                    mAlert.setCancelable(false)
+                    val mAlertView= LayoutInflater.from(context).inflate(R.layout.alert_finalizarquiz,null)
+
+                    //asignar puntaje del test
+                    mAlertView.findViewById<TextView>(R.id.puntaje).text= DecimalFormat("#.##").format(mPuntaje).toString()
+                    mAlertView.findViewById<TextView>(R.id.txtValor).text= "Valor: ${quiz.puntaje} Pts"
+
+                    mAlert.setView(mAlertView)
+
+                    mAlertView.AlertTer.setOnClickListener {
+                        mAlert.dismiss()
+                        activity!!.finish()
+                    }
+
+                    mAlert.window?.setBackgroundDrawable(ResourcesCompat.getDrawable(resources,android.R.color.transparent,null))
+
+                    mAlertView.AlertRev.setOnClickListener {
+                        mAlert.dismiss()
+                        revisar=true
+                        if(finalizado)
+                        {
+                            PruebaFragment.mainPagerObserver=this
+                            val myPagerCount=myViewPagerObserver?.paginaPrimera()
+                            if(myPagerCount==1)
+                            {
+                                //cuando solo hay una pagina mostrar las respuestas de forma manual de esa pagina
+                                mostrarRespuestas(0)
+                            }
+                        }
+                    }
+                    mAlert.show()
                 }
                 else//si es revision entonces solo terminar la actividad
                     this.activity?.finish()
@@ -199,7 +232,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         return RespuestaDAO(activity!!.applicationContext).ListarRespuestas(preguntaId!!)
     }
 
-    private fun opcionRespuesta(opcionId:Int?, respuestas:ArrayList<Respuesta>, viewResp:LinearLayout)
+    private fun opcionRespuesta(
+        opcionId: Int?,
+        respuestas: ArrayList<Respuesta>,
+        viewResp: LinearLayout,
+        applicationContext: Context
+    )
     {
         when(opcionId)
         {
@@ -216,8 +254,10 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
 
+                    if(item.correcta!!)
+                        multichoiceCorrectAnswerCounter++
+
                     myCheckBox.setTextColor(Color.WHITE)
-                    //myCheckBox.setBackgroundColor(ResourcesCompat.getColor(resources,R.color.colorAccent,null))
 
                     myCheckBox.setOnCheckedChangeListener { checkButton, checked ->
                         val resp=respuestas.find { x->x.id==checkButton.id }
@@ -228,11 +268,21 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             {
                                 respuestasSelected?.add(resp.id!!)
                                 continuar(respuestasSelected!!)
+
+                                if(resp.correcta!!) {
+                                    puntuar(multichoiceCorrectAnswerCounter,1)
+                                } else {
+                                    puedePuntuarse++
+                                }
                             }
                             else
                             {
                                 respuestasSelected?.removeAt(respuestasSelected!!.indexOf(resp.id))
                                 continuar(respuestasSelected!!)
+                                if(resp.correcta!!)
+                                    desPuntuar(multichoiceCorrectAnswerCounter,1)
+                                else
+                                    puedePuntuarse--
                             }
                         }
                     }
@@ -275,11 +325,22 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             {
                                 respuestasSelected?.add(resp.id!!)
                                 continuar(respuestasSelected!!)
+
+                                if(resp.correcta!!)
+                                puntuar(multichoiceCorrectAnswerCounter,2)
+                                else {
+                                    puedePuntuarse++
+                                }
                             }
                             else
                             {
                                 respuestasSelected?.removeAt(respuestasSelected!!.indexOf(resp.id))
                                 continuar(respuestasSelected!!)
+
+                                if(resp.correcta!!)
+                                desPuntuar(multichoiceCorrectAnswerCounter,2)
+                                else
+                                    puedePuntuarse--
                             }
                         }
                     }
@@ -295,10 +356,12 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                 {
                     txtSinRespuesta?.visibility=View.GONE
 
+                    val flexLayoutAdaptative= FlexboxLayout(applicationContext)
+                    flexLayoutAdaptative.flexWrap=FlexWrap.WRAP
+
                     for (letter in respuestas[0].descripcion.toString())
                     {
                             val myLetter=EditText(activity!!.applicationContext)
-                            //myLetter.setText(item.descripcion?.toUpperCase())
                             myLetter.id= respuestas[0].id!!
 
                             myLetter.layoutParams=LinearLayout.LayoutParams(
@@ -307,9 +370,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             )
 
                         myLetter.isFocusable=false
-                            //myLetter.isEnabled=false
                             myLetter.gravity=Gravity.CENTER
-                            //myLetter.setTextColor(Color.TRANSPARENT)
                             myLetter.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.WHITE,BlendModeCompat.SRC_IN)
 
                         myLetter.setOnClickListener {
@@ -324,7 +385,10 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                                         letrasEditText.find { x->x.text.toString()==myLetter.text.toString()}?.text?.clear()
                                     }
                                 if(!letrasEditTextEstaLlena(letrasEditText))
+                                {
                                     mostrarContiuar(View.GONE,btnContinuar)
+                                    desPuntuar(-1,3)
+                                }
                             }
                         }
                             val params = ActionBar.LayoutParams(
@@ -334,14 +398,19 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
                             params.setMargins(15, 0, 15, 0)
                             myLetter.layoutParams = params
 
+                        if(letrasEditText.size<=respuestas[0].descripcion!!.length)
                             letrasEditText.add(myLetter)
-                            viewResp.addView(myLetter)
+
+                        flexLayoutAdaptative.addView(myLetter)
                     }
 
+                    viewResp.addView(flexLayoutAdaptative)
+
                     val miAlfabeto= generarAlfabeto(respuestas[0].descripcion.toString())
-                    val alfabetoAdapter=AlfabetoAdapter(activity!!.applicationContext,miAlfabeto.toUpperCase(
-                        Locale.ROOT), letrasEditText,letrasButton, btnContinuar,respuestasSelected,myPpregunta.id)
-                    myOpciones?.adapter=alfabetoAdapter
+
+                    alfabet?.layoutManager=FlexboxLayoutManager(applicationContext)
+                    alfabet?.adapter=AlfaAdapter1(miAlfabeto.toUpperCase(Locale.ROOT),
+                        letrasEditText,myPpregunta.id)
                 }
                 else
                 {
@@ -352,77 +421,151 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         }
     }
 
-    class AlfabetoAdapter(private var context: Context, private var alfabeto:String, private var letrasEditText:ArrayList<EditText>,
-                          private var letrasButton:ArrayList<Button>, private var btnContinuar:Button?,
-                          private var respuestasSelected:ArrayList<Int>?,private var preguntaId: Int?):BaseAdapter()
-    {
-        override fun getView(i: Int, view: View?, container: ViewGroup?): View? {
+    private fun desPuntuar(multichoiceCorrectAnswerCounter: Int,opcionDeRespuesta: Int) {
 
-            var myView=view
-            var myButton:Button?= null
+        when(opcionDeRespuesta)
+        {
+            OpcionesDeRespuesta.OpcionMultiple.index-> {
+                if(puntajeTotalPregunta>0)
+                {
+                    val puntuacion=maxPuntajeDePregunta/multichoiceCorrectAnswerCounter
+                    mPuntaje-= puntuacion
+                    puntajeTotalPregunta-= puntuacion
+                }
+            }
+            OpcionesDeRespuesta.FalsoVerdadero.index-> {
+                if(puntajeTotalPregunta>0)
+                {
+                    mPuntaje-=maxPuntajeDePregunta
+                    puntajeTotalPregunta-= maxPuntajeDePregunta
+                }
+            }
+            OpcionesDeRespuesta.CompletaPalabra.index-> {
+                if(puntajeTotalPregunta>0)
+                {
+                    mPuntaje-=maxPuntajeDePregunta
+                    puntajeTotalPregunta-= maxPuntajeDePregunta
+                }
+            }
+        }
+    }
 
-            if(myView==null)
+    private fun puntuar(multichoiceCorrectAnswerCounter: Int,opcionDeRespuesta: Int) {
+        when(opcionDeRespuesta)
+        {
+            OpcionesDeRespuesta.OpcionMultiple.index->
             {
-                myView=LayoutInflater.from(context).inflate(R.layout.item_alfabeto,container,false)
+                    val puntuacion=maxPuntajeDePregunta/multichoiceCorrectAnswerCounter
+                    mPuntaje+= puntuacion
+                    puntajeTotalPregunta+= puntuacion
+            }
+            OpcionesDeRespuesta.FalsoVerdadero.index->
+            {
+                    mPuntaje+=maxPuntajeDePregunta
+                    puntajeTotalPregunta+= maxPuntajeDePregunta
+            }
+            OpcionesDeRespuesta.CompletaPalabra.index->
+            {
+                mPuntaje+=maxPuntajeDePregunta
+                puntajeTotalPregunta+= maxPuntajeDePregunta
+            }
+        }
+    }
 
-                myButton= myView?.findViewById(R.id.opcion)
-                myButton?.text= alfabeto[i].toString()
+    inner class AlfaAdapter1(private var alfabeto:String,private var letrasEditText:ArrayList<EditText>,var preguntaId: Int?): RecyclerView.Adapter<mViewHolder>() {
 
-                myButton?.setOnClickListener {
-                    if(!letrasEditTextEstaLlena(letrasEditText))
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHolder {
+            val mView= LayoutInflater.from(parent.context).inflate(R.layout.item_alfabeto,parent,false)
+            return mViewHolder(mView)
+        }
+
+        override fun getItemCount(): Int {
+            return alfabeto.count()
+        }
+
+        override fun onBindViewHolder(holder: mViewHolder, position: Int) {
+            holder.bindItem(alfabeto[position],letrasEditText,preguntaId)
+        }
+    }
+
+  inner  class mViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var mButton:Button=itemView.opcion
+
+        fun bindItem(letter: Char, letrasEditText: ArrayList<EditText>, preguntaId: Int?) {
+            mButton.text=letter.toString()
+            letrasButton.add(mButton)
+
+            mButton.setOnClickListener {
+                if(!letrasEditTextEstaLlena(letrasEditText))
+                {
+                    for (item in letrasEditText)
                     {
-                        for (item in letrasEditText)
+                        if(item.text.isEmpty())
                         {
-                            if(item.text.isEmpty())
-                            {
-                                item.setText(myButton.text.toString())
-                                break
-                            }
-                        }
-
-                        myButton.isEnabled=false
-                        myButton.setTextColor(Color.TRANSPARENT)
-
-                        if(letrasEditTextEstaLlena(letrasEditText))
-                        {
-                            val palabraRespuesta =StringBuilder()
-
-                            letrasEditText.forEach{palabraRespuesta.append(it.text.toString())}
-
-                            if(respuestas(preguntaId)[0].descripcion?.trim()==palabraRespuesta.toString())
-                                respuestasSelected?.add(letrasEditText[0].id)
-                            else
-                                respuestasSelected?.add(-1)
-
-                            mostrarContiuar(View.VISIBLE,btnContinuar)
+                            item.setText(mButton.text.toString())
+                            break
                         }
                     }
-                    else
+
+                    mButton.isEnabled=false
+                    mButton.setTextColor(Color.TRANSPARENT)
+
+                    if(letrasEditTextEstaLlena(letrasEditText))
+                    {
+                        val palabraRespuesta =obtenerPalabraRespuesta(letrasEditText)
+
+                        if(respuestas(preguntaId)[0].descripcion?.trim()?.toUpperCase(Locale.ROOT) == palabraRespuesta)
+                        {
+                            if(respuestasSelected?.isEmpty()!!)
+                                respuestasSelected?.add(letrasEditText[0].id)
+
+                            puntuar(-1,3)
+                        }
+                        else
+                        {
+                            if(respuestasSelected?.isNotEmpty()!!)
+                                respuestasSelected?.remove(0)
+
+                            desPuntuar(-1,3)
+                        }
+
                         mostrarContiuar(View.VISIBLE,btnContinuar)
+                    }
+                    else
+                        desPuntuar(-1,3)
                 }
-                if (myButton != null) {
-                    letrasButton.add(myButton)
+                else
+                {
+                    mostrarContiuar(View.VISIBLE,btnContinuar)
+                    val palabraRespuesta =obtenerPalabraRespuesta(letrasEditText)
+
+                    if(respuestas(preguntaId)[0].descripcion?.trim()?.toUpperCase(Locale.ROOT) == palabraRespuesta)
+                    {
+                        if(respuestasSelected?.isEmpty()!!)
+                            respuestasSelected?.add(letrasEditText[0].id)
+
+                        puntuar(-1,3)
+                    }
+                    else
+                    {
+                        if(respuestasSelected?.isNotEmpty()!!)
+                            respuestasSelected?.remove(0)
+
+                        desPuntuar(-1,3)
+                    }
                 }
             }
 
-            return myView
         }
 
-        override fun getItem(p0: Int): Any? {
-            return null
-        }
+      private fun obtenerPalabraRespuesta(letrasEditText: ArrayList<EditText>): String {
+          val palabraRespuesta =StringBuilder()
 
-        override fun getItemId(p0: Int): Long {
-            return 0
-        }
-
-        override fun getCount(): Int {
-            return alfabeto.count()
-        }
-        private fun respuestas(preguntaId:Int?):ArrayList<Respuesta>
-        {
-            return RespuestaDAO(context).ListarRespuestas(preguntaId!!)
-        }
+          letrasEditText.forEach{
+              palabraRespuesta.append(it.text.toString())
+          }
+          return palabraRespuesta.toString()
+      }
     }
 
     private fun continuar(chechedList:ArrayList<Int>)
@@ -437,27 +580,34 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         //esto mismo se puede hacer con la variable "respuestas" del metodo opcion de respuestas para no hacer dos llamadas a la bd sino solo 1
         val pageRespuestas=mostrarRespuestasCorrectas(listPreguntas[pos].id)
 
-        pageRespuestas.forEach {
-            if(it.correcta!!)
+        val childElements= myFrags?.get(pos)?.viewMostrarResp?.childCount
+
+        if (childElements != null) {
+            if(childElements<=1)
             {
-                val myTextView=TextView(context)
-                myTextView.text=it.descripcion
-                myTextView.setTextColor(Color.WHITE)
+                pageRespuestas.forEach {
+                    if(it.correcta!!)
+                    {
+                        val myTextView=TextView(context)
+                        myTextView.text=it.descripcion
+                        myTextView.setTextColor(Color.WHITE)
 
-                val params = LinearLayoutCompat.LayoutParams(
-                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT
-                )
-                params.setMargins(16, 0, 0, 0)
+                        val params = LinearLayoutCompat.LayoutParams(
+                            LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                            LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+                        )
+                        params.setMargins(16, 0, 0, 0)
 
-                myTextView.layoutParams = params
-                myTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_succes, 0, 0, 0)
+                        myTextView.layoutParams = params
+                        myTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_succes, 0, 0, 0)
 
-                myTextView.gravity=Gravity.CENTER
-                myTextView.textAlignment=TextView.TEXT_ALIGNMENT_CENTER
+                        myTextView.gravity=Gravity.CENTER
+                        myTextView.textAlignment=TextView.TEXT_ALIGNMENT_CENTER
 
-                myFrags?.get(pos)?.viewMostrarResp?.visibility=View.VISIBLE
-                myFrags?.get(pos)?.viewMostrarResp?.addView(myTextView)
+                        myFrags?.get(pos)?.viewMostrarResp?.visibility=View.VISIBLE
+                        myFrags?.get(pos)?.viewMostrarResp?.addView(myTextView)
+                    }
+                }
             }
         }
     }
@@ -471,7 +621,7 @@ class MainQuizFragment(private var myPpregunta:Pregunta, private var actual:Int,
         quizRespuestas= arrayListOf()
         listPreguntas= arrayListOf()
         myFrags= arrayListOf()
+        mPuntaje=0.0f
         super.onDestroy()
     }
-
 }

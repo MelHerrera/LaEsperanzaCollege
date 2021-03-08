@@ -1,5 +1,7 @@
 package com.app.laesperanzacollege.adaptadores
 
+import Observers.QuizPreguntaAdapterObserver
+import Observers.QuizesAdapterObserver
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -44,7 +46,7 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, private var myListPreg
         holder.bindItem(myListQuiz[position],myListPreguntaFilter,mOperacion)
     }
 
-  inner class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView),NotifyUpdateRecyclerView
+  inner class MyVieHolder(itemView: View) : RecyclerView.ViewHolder(itemView),QuizPreguntaAdapterObserver
     {
         private var myPreguntaDAO:PreguntaDAO?=null
         private var myQuiz: TextView =itemView.textQuiz
@@ -119,9 +121,15 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, private var myListPreg
             }
         }
 
-        override fun updateRecy() {
+        fun updateRecyclerView()
+        {
             myPreguntaAdapter?.notifyDataSetChanged()
             validar(myListPregunta,itemView.context)
+        }
+
+        override fun deleteRecyItem(item: Pregunta) {
+            myListPregunta.remove(item)
+            updateRecyclerView()
         }
     }
 }
