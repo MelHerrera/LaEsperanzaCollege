@@ -2,6 +2,7 @@ package com.app.laesperanzacollege.adaptadores
 
 import Observers.QuizPreguntaAdapterObserver
 import Observers.QuizesAdapterObserver
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -21,6 +22,8 @@ import com.app.laesperanzadao.enums.OperacionesCrud
 import com.app.laesperanzaedm.model.Pregunta
 import com.app.laesperanzaedm.model.Quiz
 import kotlinx.android.synthetic.main.item_list_quiz.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, private var myListPregunta:ArrayList<Pregunta>, val mOperacion:String)
     :RecyclerView.Adapter<QuizPreguntaAdapter.MyVieHolder>() {
@@ -104,6 +107,12 @@ class QuizPreguntaAdapter(var myListQuiz:ArrayList<Quiz>, private var myListPreg
                 myIntent.putExtra("QUIZZ",quiz)
                 myIntent.putExtra("OPERACION",mOperacion)
                 itemView.context.startActivity(myIntent)
+
+                //cerrar la activity para que no de problemas con la pila de activitis despues
+                GlobalScope.launch {
+                    (itemView.context as Activity).finish()
+                }
+
             }
         }
 

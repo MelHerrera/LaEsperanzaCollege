@@ -11,19 +11,20 @@
     android:background="@color/colorPrimary"
     tools:context=".fragmentos.AdminFragment">
 
-    <androidx.cardview.widget.CardView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cardPerfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imagenPerfil"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:src="@drawable/profile"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/secondaryText"
             android:contentDescription="@string/txt_perfil"/>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/capturarFoto"
@@ -32,10 +33,9 @@
             app:fabSize="mini"
             android:contentDescription="@string/txt_tomar_foto"
             style="@style/Theme_Camera"
-            android:layout_margin="@dimen/medium_margin"
             android:layout_gravity="bottom|end" />
 
-    </androidx.cardview.widget.CardView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <TextView
         android:id="@+id/txtnombres"

@@ -5,13 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.laesperanzacollege.adaptadores.QuizzesAdapter
 import com.app.laesperanzadao.QuizDAO
 import com.app.laesperanzadao.enums.OperacionesCrud
@@ -20,7 +17,9 @@ import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Quiz
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.activity_quizzes.*
-import kotlinx.android.synthetic.main.activity_unidades.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -121,15 +120,8 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-       onBackPressed()
+       super.onBackPressed()
         return true
-    }
-
-    fun spanCalc():Int
-    {
-        val viewWidth: Int = recyQuizzes.width
-        val cardViewWidth: Float =resources.getDimension(R.dimen.card_quizzes)
-        return Utils.floorDiv(viewWidth,cardViewWidth.toInt())
     }
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
@@ -177,6 +169,10 @@ class QuizzesActivity : AppCompatActivity(),QuizzObserver, ActionMode.Callback {
                 myQuizzesAdapter?.notifyDataSetChanged()
                 mListQuizSelected= arrayListOf()
                 mode?.finish()
+
+                GlobalScope.launch {
+                    this@QuizzesActivity.finish()
+                }
             }
             else->
                 return false

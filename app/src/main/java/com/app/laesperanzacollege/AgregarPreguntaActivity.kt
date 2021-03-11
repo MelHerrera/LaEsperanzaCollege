@@ -219,7 +219,8 @@ class AgregarPreguntaActivity : AppCompatActivity(),RespuestaObserver {
             startActivity(Intent(this,QuizzesActivity::class.java))
         }
         else
-        onBackPressed()
-        return true
+        super.onBackPressed()
+
+        return false
     }
 }

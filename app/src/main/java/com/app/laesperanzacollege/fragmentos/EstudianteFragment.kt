@@ -4,6 +4,7 @@ import Observers.EstudianteObserver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.Image
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import com.app.laesperanzacollege.*
 import com.app.laesperanzacollege.Utils.Companion.setImage
@@ -19,6 +21,7 @@ import com.app.laesperanzadao.GradoDAO
 import com.app.laesperanzadao.UsuarioDAO
 import com.app.laesperanzadao.enums.TipodeTest
 import com.app.laesperanzaedm.model.Usuario
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_estudiante.view.*
 
 class EstudianteFragment : Fragment(),EstudianteObserver {
@@ -26,7 +29,7 @@ class EstudianteFragment : Fragment(),EstudianteObserver {
     private var myGradoDAO:GradoDAO?=null
     private var myUsuarioDAO:UsuarioDAO? = null
     private var myContext: Context?= null
-    private var myImage:ImageView? = null
+    private var myImage: CircleImageView? = null
     private var estudiante: Usuario?=null
     private var myButton:Button?=null
 
@@ -36,15 +39,17 @@ class EstudianteFragment : Fragment(),EstudianteObserver {
         keyName=getString(R.string.keyNameUser)
         myGradoDAO= GradoDAO(myView.context)
         myContext=container?.context
-        myImage=myView.imageView_photo
+        myImage=myView.imageView_photo as CircleImageView
         myUsuarioDAO=UsuarioDAO(myView.context)
         myButton=myView.btnPractica
+
+        setHasOptionsMenu(true)
 
         estudiante=arguments?.get(keyName) as Usuario
 
         if(estudiante!=null)
         {
-            myView.txtnombres.text= estudiante!!.nombre+" "+ estudiante!!.apellido
+            myView.txtnombres.text= "${estudiante!!.nombre} ${estudiante!!.apellido}"
             myView.txtgrad.text=myGradoDAO?.Buscar(estudiante!!.codGrado.toString())
 
             if(estudiante?.imagen!=null)
@@ -71,38 +76,38 @@ class EstudianteFragment : Fragment(),EstudianteObserver {
             startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),0)
         }
 
-        myView.txtEditPerfil.setOnClickListener {
-            val mIntent=Intent(myView.context,EstudianteEditPerfilActivity::class.java)
-            mIntent.putExtra("USUARIO",estudiante)
-            startActivity(mIntent)
-        }
-
         return myView
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_preferencias,menu)
-        return super.onCreateOptionsMenu(menu,inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId)
         {
             R.id.itemCerrar->
             {
+
                 val myAlert = AlertDialog.Builder(myContext!!)
                 myAlert.setTitle(getString(R.string.text_cerrarsesion))
                 myAlert.setMessage(getString(R.string.confirmar_cerrarsesion))
-                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                myAlert.setNegativeButton(getString(R.string.negativa)) { _, _ ->
                 }
 
-                myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
+                myAlert.setPositiveButton(getString(R.string.afirmativa)) { _, _ ->
                     val mySharedPrefs= Preferencias()
                     if(mySharedPrefs.limpiarSharedPrefs(myContext!!,Preferencias.sharedPrefsFileUser))
-                        startActivity(Intent(myContext!!, LoginActivity::class.java))
+                        startActivity(Intent(myContext, LoginActivity::class.java))
                 }
 
                 myAlert.show()
+            }
+            R.id.item_edit_perfil->
+            {
+                val mIntent=Intent(myContext,EstudianteEditPerfilActivity::class.java)
+                mIntent.putExtra("USUARIO",estudiante)
+                startActivity(mIntent)
             }
         }
         return super.onOptionsItemSelected(item)

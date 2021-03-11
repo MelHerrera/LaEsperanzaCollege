@@ -1,6 +1,7 @@
 package com.app.laesperanzacollege.adaptadores
 
 import Observers.QuizzObserver
+import android.app.Activity
 import android.content.Intent
 import android.view.*
 import android.widget.*

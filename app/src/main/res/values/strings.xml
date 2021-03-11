@@ -16,7 +16,6 @@
     <string name="campo_requerido">Campo Requerido</string>
     <string name="text_cerrarsesion">Cerrar Sesión</string>
     <string name="confirmar_cerrarsesion">¿Seguro que Desea Cerrar Sesión?</string>
-    <string name="no">No</string>
     <string name="txtsearch">Buscar</string>
     <string name="txt_tipoTest">TIPOTEST</string>
     <string name="txt_iniciar">Iniciar al Guardar</string>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dashusuario"
+    tools:context=".fragmentos.EstudianteFragment">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cardPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView_photo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:contentDescription="@string/txt_perfil"
+            android:src="@drawable/admi"
+            app:civ_border_color="@color/secondaryText"
+            app:civ_border_width="2dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/photo_camera"
+            style="@style/Theme_Camera"
+            android:contentDescription="@string/txt_tomar_foto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:fabSize="mini" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <TextView
+        android:id="@+id/txtnombres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardPerfil" />
+
+    <TextView
+        android:id="@+id/txtgrad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/small_margin"
+        android:background="@drawable/estado_menu_quizz"
+        android:padding="@dimen/small_padding"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@id/txtnombres"
+        app:layout_constraintStart_toStartOf="@+id/txtnombres"
+        app:layout_constraintTop_toBottomOf="@+id/txtnombres" />
+
+    <Button
+        android:id="@+id/btnPrueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:background="@drawable/rounded_button"
+        android:drawableStart="@android:drawable/ic_media_play"
+        android:padding="@dimen/large_padding"
+        android:text="@string/prueba"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPractica"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtgrad" />
+
+    <Button
+        android:id="@+id/btnPractica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:background="@drawable/rounded_button"
+        android:drawableStart="@drawable/ic_replay"
+        android:padding="@dimen/large_padding"
+        android:text="@string/practica"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/btnPrueba"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPrueba"
+        app:layout_constraintTop_toTopOf="@+id/btnPrueba" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

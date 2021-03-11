@@ -94,7 +94,7 @@ class PruebaFragment : Fragment(),ViewPagerObserver {
                         myAlert.setIcon(android.R.drawable.ic_dialog_alert)
                         myAlert.setTitle("Abandonar Prueba")
                         myAlert.setMessage("Si Sale de la Prueba Perdera el avance. ¿Esta Seguro que desea Abandonar la Prueba?")
-                        myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
+                        myAlert.setNegativeButton(getString(R.string.negativa)) { _, _ ->
                         }
 
                         myAlert.setPositiveButton("Si") { _, _ ->

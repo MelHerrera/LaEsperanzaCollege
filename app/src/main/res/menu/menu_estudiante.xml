@@ -8,4 +8,5 @@
         android:title="@string/txtsearch"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />
+
 </menu>

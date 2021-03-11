@@ -45,35 +45,6 @@ class DashActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_preferencias,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId)
-        {
-            R.id.itemCerrar->
-            {
-
-                val myAlert = AlertDialog.Builder(this)
-                myAlert.setTitle(getString(R.string.text_cerrarsesion))
-                myAlert.setMessage(getString(R.string.confirmar_cerrarsesion))
-                myAlert.setNegativeButton(getString(R.string.no)) { _, _ ->
-                }
-
-                myAlert.setPositiveButton(android.R.string.ok) { _, _ ->
-                    val mySharedPrefs= Preferencias()
-                    if(mySharedPrefs.limpiarSharedPrefs(this,Preferencias.sharedPrefsFileUser))
-                        startActivity(Intent(this, LoginActivity::class.java))
-                }
-
-                myAlert.show()
-            }
-        }
-        return true
-    }
-
     override fun onBackPressed() {
         if (tiempoPrimerClick + INTERVALO > System.currentTimeMillis()){
             super.onBackPressed()
