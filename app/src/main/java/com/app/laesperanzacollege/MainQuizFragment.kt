@@ -310,7 +310,7 @@ class MainQuizFragment(
                     myChipChoice.text=item.descripcion?.toUpperCase(Locale.ROOT)
                     myChipChoice.id= item.id!!
                     myChipChoice.isCheckable=true
-                    myChipChoice.setPadding(30,30,30,30)
+                    //myChipChoice.setPadding(30,30,30,30)
 
                     myChipChoice.setTextColor(Color.WHITE)
                     myChipChoice.setChipBackgroundColorResource(R.color.colorAccent)

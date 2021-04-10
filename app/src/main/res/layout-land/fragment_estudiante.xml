@@ -20,7 +20,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:contentDescription="@string/txt_perfil"
-            android:src="@drawable/admi"
+            android:src="@drawable/profile"
             app:civ_border_color="@color/secondaryText"
             app:civ_border_width="2dp" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -68,8 +68,8 @@
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
         android:background="@drawable/rounded_button"
-        android:drawableStart="@android:drawable/ic_media_play"
-        android:padding="@dimen/default_padding"
+        android:drawableStart="@drawable/ic_play"
+        android:padding="@dimen/small_padding"
         android:text="@string/prueba"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

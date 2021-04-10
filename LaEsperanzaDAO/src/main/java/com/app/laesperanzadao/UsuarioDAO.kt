@@ -135,6 +135,7 @@ class UsuarioDAO(context: Context) {
                 miUsuario.usuario=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_USUARIO))
                 miUsuario.codGrado=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_CODGRADO))
                 miUsuario.tipoDeUsuarioId=myCursor.getInt(myCursor.getColumnIndex(UsuarioContract.COLUMN_TIPODEUSUARIOID))
+                miUsuario.seccion=myCursor.getString(myCursor.getColumnIndex(UsuarioContract.COLUMN_SECCION))
 
                 val mImagen=myCursor.getBlob(myCursor.getColumnIndex(UsuarioContract.COLUMN_IMAGEN))
 

@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rounded_button"
-                    android:drawableStart="@android:drawable/ic_media_play"
+                    android:drawableStart="@drawable/ic_play"
                     android:gravity="center"
                     android:padding="@dimen/small_padding"
                     android:text="@string/empezar"

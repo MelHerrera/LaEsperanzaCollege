@@ -134,15 +134,6 @@ class AgregarEstuActivity : AppCompatActivity() {
         else
             txtUsuario.helperText=null
 
-        /*if(edtContra.text?.isEmpty()!!)
-        {
-            edtContra.error="Campo Requerido"
-            txtContra.setHelperTextColor(ColorStateList.valueOf(Color.RED))
-            return false
-        }
-        else
-            txtContra.helperText=null*/
-
         if(mySeccion==null)
         {
             val mSnack=crearCustomSnackbar(viewPrincipal,Color.RED,android.R.drawable.stat_notify_error,
@@ -197,10 +188,6 @@ class AgregarEstuActivity : AppCompatActivity() {
         }
 
         edtUsuario.setText(myUsu.usuario)
-        /*edtContra.setText("********")
-        edtContra.transformationMethod = PasswordTransformationMethod.getInstance()
-        edtContra.isEnabled=false*/
-
     }
 
     private fun limpiar()
