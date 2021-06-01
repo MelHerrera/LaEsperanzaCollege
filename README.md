@@ -1,3 +1,2 @@
 # LaEsperanzaCollege
-College App with basic functionalities
-STILL IN PROGRESSSSSSSSSS.
+College App with basic functionalities and using SQLiteDatabase
